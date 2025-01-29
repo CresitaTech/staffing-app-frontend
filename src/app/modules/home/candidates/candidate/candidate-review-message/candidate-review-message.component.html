@@ -1,0 +1,609 @@
+
+<div class="p-4">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+  
+        <div class="form-row mb-3 heading-sec ">
+            <div class="col">
+                <h5 class="card-title" >Add candidate</h5>
+            </div>
+            <div class="col-auto">
+              <button type="button" class="close" aria-label="Close"  (click)="activeModal.dismiss()" >
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+   
+            </div>
+        </div>
+  
+  
+        <!-- Designation -->
+        <div class="card mb-2">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col">
+                        <h6 class="card-title">Personal Details</h6>
+                  
+                    </div>
+
+                </div>
+                <form #f1="ngForm">
+                    <div class="row">
+                        <div class="col form-group">
+                            <label class="asterisk-if-mandatory">First Name</label>
+                            <input type="text" class="form-control" id="firstName"
+                                [(ngModel)]="candidate.first_name" placeholder="" name="firstName"
+                                #firstName="ngModel"
+                                [ngClass]="{ 'is-invalid':firstName.invalid&& firstName.touched }" required />
+                            <div *ngIf="firstName.invalid && firstName.touched" class="invalid-feedback">
+                                <div *ngIf="firstName.errors.required ">First Name is required</div>
+                            </div>
+                        </div>
+                        <div class="col form-group">
+                            <label class="asterisk-if-mandatory">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" [(ngModel)]="candidate.last_name"
+                                placeholder="" name="lastName" #lastName="ngModel"
+                                [ngClass]="{ 'is-invalid':lastName.invalid && lastName.touched }" required />
+                            <div *ngIf="lastName.invalid && lastName.touched" class="invalid-feedback">
+                                <div *ngIf="lastName.errors.required ">Last Name is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label>Date of Birth</label>
+                            <div class="input-group date-input">
+                                <input type="text" class="form-control " id="start_date" placeholder=""
+                                    ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="candidate.date_of_birth"
+                                    #c1="ngModel" name="start_date" [readonly] = "true" (click)="d1.toggle()">
+                                <!-- <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <a (click)="candidate.date_of_birth = today">Today</a>
+                                    </div>
+                                </div> -->
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <a (click)="d1.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col form-group">
+                            <label>Qualification</label>
+                            <input type="text" class="form-control" id="qualification"
+                                [(ngModel)]="candidate.qualification" name="qualification"
+                                placeholder="" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label>Certification</label>
+                            <input type="text" class="form-control" placeholder="" id="certification"
+                                [(ngModel)]="candidate.certification" name="certification">
+                        </div>
+                        <div class="col form-group">
+                            <label>Additional Qualification</label>
+                            <input type="text" class="form-control" placeholder="" id="additional_qualification"
+                                [(ngModel)]="candidate.additional_qualification" name="additional_qualification">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label class="asterisk-if-mandatory">Primary Email</label>
+                            <input type="email" class="form-control" placeholder="" id="primaryEmail" required
+                                [(ngModel)]="candidate.primary_email" name="primaryEmail" #primaryEmail="ngModel"
+                                [ngClass]="{ 'is-invalid':primaryEmail.invalid && primaryEmail.touched }" [pattern]="constants.emailPattern"
+                                email />
+                            <div *ngIf="primaryEmail.invalid && primaryEmail.touched" class="invalid-feedback">
+                                <div *ngIf="primaryEmail.errors.required ">Primary Mail Id is required</div>
+                                <div *ngIf="primaryEmail.errors.pattern">Mail Id should be valid</div>
+                            </div>
+                        </div>
+                        <div class="col form-group">
+                            <label>Secondary Email</label>
+                            <input type="email" class="form-control" placeholder="" [pattern]="constants.emailPattern"
+                                id="secondaryEmail" [(ngModel)]="candidate.secondary_email" name="secondaryEmail"
+                                #secondaryEmail="ngModel" [ngClass]="{ 'is-invalid':secondaryEmail.invalid  }"
+                                 />
+                            <div *ngIf="secondaryEmail.invalid " class="invalid-feedback">
+                                <div *ngIf="secondaryEmail.errors.pattern">Mail Id should be valid</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <!-- (input)="phoneNumberRef($event,inp,f1)" -->
+                            <!-- (keypress)="preventEnter($event,primaryPhone)" #inp  -->
+                            <label class="asterisk-if-mandatory">Primary Phone Number</label>
+                            <input type="text" class="form-control" 
+                             placeholder=""
+                             [(ngModel)]="candidate.primary_phone_number" 
+                             
+                                id="primaryPhone" [pattern]="constants.newPhonePattern"  name="primaryPhone"
+                                #primaryPhone="ngModel"  
+                                [ngClass]="{ 'is-invalid':primaryPhone.invalid && primaryPhone.touched }"
+                                required  />
+                            <div *ngIf="primaryPhone.invalid && primaryPhone.touched" class="invalid-feedback">
+                                <div *ngIf="primaryPhone.errors.required ">Valid Phone number is required</div>
+                                <div *ngIf="primaryPhone.errors.pattern">Invalid phone number. Valid pattern can be like xxx-xxx-xxxx OR (xxx) xxx-xxxx</div>
+                            </div>
+                        </div>
+                        <!-- (input)="phoneNumberRef($event,inp2,f1)"  -->
+                        <!-- (keypress)="preventEnter($event,secondaryPhone)" #inp2  -->
+                        <div class="col form-group">
+                            <label>Secondary Phone Number</label>
+                            <input type="text" class="form-control" placeholder=""
+                            
+                                id="secondaryPhone" [(ngModel)]="candidate.secondary_phone_number" [pattern]="constants.newPhonePattern"
+                               
+                                name="secondaryPhone" #secondaryPhone="ngModel"  
+                                [ngClass]="{ 'is-invalid':secondaryPhone.invalid  }" />
+                            <div *ngIf="secondaryPhone.invalid " class="invalid-feedback">
+                                <div *ngIf="secondaryPhone.errors.pattern">Invalid phone number. Valid pattern can be like xxx-xxx-xxxx OR (xxx) xxx-xxxx</div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    
+
+                    <div class="row">
+                        <div class="col-6 form-group">
+                                                
+                            <label class="asterisk-if-mandatory">Currency</label>
+                            <select class="form-control" id="currency" [(ngModel)]="candidate.currency" name="currency" required (change)="setCurrency($event)" >
+                                <option value="NULL">Select Currency</option>
+                                <option value="USD">United States Dollars</option>
+                                <option value="INR">India Rupees</option>
+                            </select>
+                            <!-- <input type="text" class="form-control" placeholder="Visa" id="visa"
+                                [(ngModel)]="candidate.visa" name="visa" required> -->
+                        </div>
+                        <div class="col form-group">  
+                            <label class="asterisk-if-mandatory">Country</label>
+                            <select class="form-control" name="country" id="" [(ngModel)]="candidate.country" #country="ngModel"
+                             [ngClass]="{ 'is-invalid':country.invalid && country.touched }" required>
+                                <option value="" >Please select a country </option>
+                                <option *ngFor="let country of countries"  [value]="country.country_code" >{{country.country_name}}</option>
+                            </select>
+                            <div *ngIf="country.invalid " class="invalid-feedback" >
+                                <div *ngIf="country.errors.required">Country is required.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+        <!-- Other Details -->
+        <div class="card mb-2">
+            <div class="card-body">
+                
+                <form #f2="ngForm">
+
+                    <div class="row" >
+                        <div class="col">
+                            <h6 class="card-title">Add Job(s)</h6>
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col">
+                            <h6 class="card-title">Job Description(s)</h6>
+                        </div>
+                    </div>
+
+                    <div class="bg-light border form-group p-3">
+                        <!-- <div class="form-row form-group"> -->
+                            <app-job-description-inline 
+                      [item]="candidate.job_description" 
+                      [stage]="candidate.stage"
+                    (changeItemEvt)="candidate.job_description = $event"
+                    (emitJDName)="candidate.jd_name=$event"
+                        >
+                    </app-job-description-inline>
+                        <!-- </div> -->
+                        <div class="form-row form-group">
+                        <div class="col">
+                            <label>Status </label>
+                            <app-candidate-stages [item]="candidate.stage"
+                           
+                                [jobdescription]="candidate.job_description"
+                                (changeItemEvt)="candidate.stage = $event"
+                                (reviewStatus)="reviewStatusData=$event"
+                                (emitStageName)="candidate.stage_name=$event"  name="Status">
+                            </app-candidate-stages> 
+                        </div>
+                        <div class="col form-group">
+                            <label>Submission Date</label>
+                            <div class="input-group date-input">
+                                <input type="text" class="form-control " id="start_date" placeholder="MM-dd-YYYY"
+                                    ngbDatepicker #d2="ngbDatepicker" [(ngModel)]="candidate.submission_date"
+                                    #c2="ngModel" name="start_date" [readonly] = "true" (click)="d2.toggle()">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <a (click)="candidate.submission_date = today">Today</a>
+                                    </div>
+                                </div>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <a (click)="d2.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="row" *ngIf="candidate.stage===constants.SEND_OUT">
+                            <div class="col form-group">
+                                <label>SendOut Date</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control " id="start_date" placeholder=""
+                                        ngbDatepicker #d2="ngbDatepicker" [(ngModel)]="candidate.send_out_date"
+                                        #c2="ngModel" name="send_out_date">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="candidate.send_out_date = today">Today</a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="d2.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Notes</label>
+                                <app-editor [id]="'editor1'" [content]="candidate.notes" (contentChanged)="candidate.notes = $event" [hasTags]="false"></app-editor>
+                                <!-- <angular-editor [(ngModel)]="candidate.remarks"></angular-editor> -->
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <button type="button" class="btn  btn-primary" data-toggle="modal"
+                                        data-target="#popup-AddJobDescription" data-tooltip="tooltip"
+                                        data-placement="bottom" title="Add Another Job" (click)="addJobToArray()"><i
+                                            class="fas fa-plus-square" ></i> Add Submission</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col table-candidate-addjob">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr *ngIf="job_descriptions.length>0">
+                                        <th scope="col" class="border-top-0">Date</th>
+                                        <th scope="col" class="border-top-0">Job Description</th>
+                                        <th scope="col" class="border-top-0">Status</th>
+                                        <th *ngIf="eventId===constants.ADD || eventId===constants.POP_UP" scope="col" class="border-top-0">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let jobs of job_descriptions">
+                                        <td>{{jobs.display_date}}</td>
+                                        <td>{{jobs.jd_name}}</td>
+                                        <td>{{jobs.stage_name}}</td>
+                                        <td *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">
+                                            <button type="button" class="btn btn-sm btn-danger" data-tooltip="tooltip"
+                                            data-placement="bottom"
+                                            title="Delete Selected Job Description and Stage" (click)="deleteJob(jobs.job)"><i
+                                                class="fa fa-trash"></i></button>
+                                                <!-- <button type="button" class="ml-2 btn btn-sm btn-warning" data-tooltip="tooltip"
+                                            data-placement="bottom"
+                                            title="Change Selected edit Job Description"><i
+                                                class="fas fa-highlighter text-light"></i></button> -->
+                                        </td>
+                                    </tr>
+                                  
+                                   
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Other Details</h6>
+                        </div>
+                    </div>
+
+                    <app-designation-inline [item]="candidate.designation"
+                        (changeItemEvt)="candidate.designation = $event;"></app-designation-inline>
+                        <!-- <p>{{candidate.designation}}</p> -->
+                    
+                        <div class="row">
+                        
+                        <div class="col form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label  *ngIf="(candidate.stage===constants.DEFAULT_STAGE && job_descriptions.length == 0) " >Salary or rate (in {{currencyTag}})</label>
+                                    <label *ngIf="(candidate.stage!==constants.DEFAULT_STAGE && candidate.stage) || (isSubmission())" class="asterisk-if-mandatory">Salary or rate (in $)</label>
+                                </div>
+                            </div> 
+                            <div class="form-row">
+                                <div class="col ">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" value="Yes" id="anyOfferInHand"
+                                         name="salaryRate" (click)="selectSalaryOrRate('salary')" [(ngModel)]="candidate.isSalary" />
+                                        <label class="form-check-label" for="inlineRadio1">Salary  </label>
+        
+                                        <input class="form-check-input ml-3" type="radio"    value="No" id="anyOfferInHand"
+                                         name="salaryRate" (click)="selectSalaryOrRate('rate')" [(ngModel)]="candidate.isSalary" />
+                                        <label class="form-check-label" for="inlineRadio1">Rate</label>
+                                       
+                                    </div>    
+                                </div>
+                                <div class="col" *ngIf="selectSalaryRateFlag===false">
+    
+                                    <label  class="form-check-label" style="padding-left: 12px;" >Engagement Type</label>
+                          
+                                </div>
+                                
+                            </div> 
+                            <div class="row">
+                                <div class="col">
+                                    <div class="row" *ngIf="selectSalaryRateFlag===true">
+                                        <div class="col form-group-mobile mt-1">
+                                            <input class="form-control" id="min_salary"  
+                                            appLimitUptoTwoDIgits name="min_salary" [(ngModel)]="candidate.min_salary" 
+                                            placeholder="min" type="number" autocomplete="off" [required]="(candidate.stage && candidate.stage!==constants.DEFAULT_STAGE  && !candidate.max_salary) || (isSubmission() && !candidate.max_salary) "/>
+                                        </div>
+                                        <!-- [readonly]="candidate.salary" -->
+                                        <!-- [required]="candidate.min_salary?true:false" -->
+                                        <div class="col form-group-mobile mt-1">
+                                            <input class="form-control" id="max_salary" appLimitUptoTwoDIgits 
+                                            name="max_salary" [(ngModel)]="candidate.max_salary" placeholder="max" 
+                                            type="number" autocomplete="off"  [required]="(candidate.stage && candidate.stage!==constants.DEFAULT_STAGE && !candidate.min_salary) || (isSubmission() && !candidate.min_salary)" />
+                                        </div>
+                                        <!-- [readonly]="candidate.salary" -->
+                                    </div>
+                                    <div class="row" *ngIf="selectSalaryRateFlag===false">
+                                        <div class="col">
+                                            <div class="form-row">
+                                                <div class="col form-group-mobile mt-1">
+                                                    <input class="form-control" id="min_rate"  
+                                                    appLimitUptoTwoDIgits name="min_rate" [(ngModel)]="candidate.min_rate" 
+                                               placeholder="min" type="number" #minRate="ngModel" autocomplete="off" [required]="(candidate.stage && candidate.stage!==constants.DEFAULT_STAGE && !candidate.max_rate) || (isSubmission() && !candidate.max_rate)" />
+                                                </div>
+                                                <!-- [readonly]="candidate.salary" -->
+                                                <div class="col form-group-mobile mt-1">
+                                                    <input class="form-control" id="max_rate" appLimitUptoTwoDIgits #maxRate="ngModel"
+                                                    name="max_rate" autocomplete="off" [(ngModel)]="candidate.max_rate" placeholder="max" 
+                                                    type="number" [required]="(candidate.stage && candidate.stage!==constants.DEFAULT_STAGE && !candidate.min_rate) || (isSubmission() && !candidate.min_rate)" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col mt-1">
+                                            <div class="form-row">
+                                                <div class="col">
+                                                    <select class="form-control " id="engagement_type" 
+                                                    name="employment_type"  [(ngModel)]="candidate.engagement_type" [value]=""
+                                                    placeholder="Engagement Type"
+                                                    >
+                                                   <option value="">Select one</option>
+                                                   <option value="C2C">C2C</option>
+                                                   <option value="W2" selected>W2</option>
+                                                   <option value="1099">1099</option>
+                                                   </select>
+                                                </div>
+                                            </div>
+                                           
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                
+                            </div>
+                             
+                              
+                        </div>
+                        <!-- [readonly]="candidate.min_rate||candidate.max_rate" -->
+                                    
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                                                    
+                            <label  *ngIf="candidate.stage===constants.DEFAULT_STAGE && (job_descriptions.length == 0 || (!isSubmission()))" >Visa</label>
+                            <label *ngIf="(candidate.stage!==constants.DEFAULT_STAGE && (candidate.stage) || (isSubmission()))" class="asterisk-if-mandatory">Visa</label>
+
+                   <select class="form-control" id="visa" [(ngModel)]="candidate.visa" name="visa" [required]="(candidate.stage && candidate.stage!==constants.DEFAULT_STAGE)  || (isSubmission())"  >
+                                <option>Citizen</option>
+                                <option>Green Card</option>
+                                <option>TN Visa</option>
+                                <option>EAD Visa</option>
+                                <option>H1 B</option>
+                                <option>OPT</option>
+                                <option>CPT</option>
+                                <option>Others</option>
+                              </select>
+                            <!-- <input type="text" class="form-control" placeholder="Visa" id="visa"
+                                [(ngModel)]="candidate.visa" name="visa" required> -->
+                        </div>
+                        <!-- <div class="col">
+                            <label>Status</label>
+                            
+                            <app-candidate-stages [item]="candidate.stage"
+                                (changeItemEvt)="candidate.stage = $event">
+                            </app-candidate-stages>
+                        </div> -->
+                        <div class="col form-group">
+                            <label class="asterisk-if-mandatory">Total Experience</label>
+                            <input type="text" class="form-control" placeholder="" id="totalExp"
+                                [(ngModel)]="candidate.total_experience" name="totalExp" appLimitUptoTwoDIgits autocomplete="off" 
+                            #totalExp="ngModel"  [ngClass]="{ 'is-invalid':totalExp.invalid && totalExp.touched }" required/>
+                            <div *ngIf="totalExp.invalid && totalExp.touched" class="invalid-feedback">
+                                <div *ngIf="totalExp.errors.required ">Total Experience is required</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label>Company Name</label>
+                            <input type="text" class="form-control" placeholder="" id="companyName"
+                                [(ngModel)]="candidate.company_name" name="companyName" />
+                        </div>
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label>Contact Person Name</label>
+                            <input type="text" class="form-control" placeholder="" id="employerName"
+                                [(ngModel)]="candidate.employer_name" name="employerName" />
+                        </div>
+                        <div class="col form-group">
+                            <label>Contact Person Phone Number</label>
+                            <input type="text" class="form-control" placeholder="" id="employerPhone"
+                                [(ngModel)]="candidate.employer_phone_number" name="employerPhone" [pattern]="constants.newPhonePattern"
+                               
+                                name="employerPhone" #employerPhone="ngModel"  
+                                [ngClass]="{ 'is-invalid':employerPhone.invalid  }" />
+                            <div *ngIf="employerPhone.invalid " class="invalid-feedback">
+                                <div *ngIf="employerPhone.errors.pattern">Invalid phone number. Valid pattern can be like xxx-xxx-xxxx OR (xxx) xxx-xxxx</div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label>Contact Person Email</label>
+                            <!-- <input type="text" class="form-control" placeholder="" id="employerEmail"
+                                [(ngModel)]="candidate.employer_email" name="employerEmail" /> -->
+                          <input type="email" class="form-control" placeholder="" [pattern]="constants.emailPattern"
+                                id="employer_email" [(ngModel)]="candidate.employer_email" name="employer_email"
+                                #employer_email="ngModel" [ngClass]="{ 'is-invalid':employer_email.invalid  }"
+                                 />
+                            <div *ngIf="employer_email.invalid " class="invalid-feedback">
+                                <div *ngIf="employer_email.errors.pattern">Mail Id should be valid</div>
+                            </div>
+                        </div>
+                        <div class="col form-group">
+                            <label>Total Exp In USA</label>
+                            <input type="text" class="form-control" placeholder=""  id="totalExpInUSA" autocomplete="off"
+                            [(ngModel)]="candidate.total_experience_in_usa" name="totalExpInUSA" appLimitUptoTwoDIgits/>
+                        </div>
+                       
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label>Current Location</label>
+                            <input type="text" class="form-control" placeholder=""
+                                id="currentLocation" [(ngModel)]="candidate.current_location"
+                                name="currentLocation">
+                        </div>
+                        <div class="col form-group">
+                            <label>Any Offer in Hand</label>
+                            <div class="form-row mt-2">
+                                <div class="col">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="" value="Yes" id="anyOfferInHand"
+                                        [(ngModel)]="candidate.any_offer_in_hand" name="anyOfferInHand" />
+                                        <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio"  value="No" id="anyOfferInHand"
+                                        [(ngModel)]="candidate.any_offer_in_hand" name="anyOfferInHand" />
+                                        <label class="form-check-label" for="inlineRadio2">No</label>
+                                      </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+
+                    </div>
+                  
+                    <div class="row">
+                        <div class="col form-group">
+                            <label>Skills 1</label>
+                            <input type="text" class="form-control" placeholder="" id="skills1" maxlength="255"
+                                [(ngModel)]="candidate.skills_1" name="skills1">
+                        </div>
+                        <div class="col form-group">
+                            <label>Skills 2</label>
+                            <input type="text" class="form-control" placeholder="" id="skills2" maxlength="255"
+                                [(ngModel)]="candidate.skills_2" name="skills2">
+                        </div>
+                    </div>
+            
+                    
+                    <!-- <app-job-description-inline 
+                      [item]="candidate.job_description" 
+                      [stage]="candidate.stage"
+                    (changeItemEvt)="candidate.job_description = $event"
+                    >
+                    </app-job-description-inline> -->
+
+                   
+                   
+                </form>
+            </div>
+        </div>
+
+        <!-- FAQ -->
+     
+
+                <!--<div class="card mb-2"  >
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="card-title">Candidate Documents</h6>
+                            </div>
+    
+                        </div>
+    
+                        <form #f4="ngForm">
+                            <div class="row">
+                            <div class="col form-group">
+                                <label  *ngIf="candidate.stage===constants.DEFAULT_STAGE && job_descriptions.length == 0" >Resume</label>
+                                <label *ngIf="(candidate.stage!==constants.DEFAULT_STAGE && candidate.stage)  || (job_descriptions.length > 0)" class="asterisk-if-mandatory">Resume</label>
+
+                                <div class="custom-file" >
+                                    <input name="resume"  type="file" class="custom-file-upload" id="customFile"
+                                        [(ngModel)]="candidate.resume" #resume="ngModel" 
+                                        [ngClass]="{ 'is-invalid':resume.invalid || resume.touched }"
+                                        (change)="readFile($event,'resume')" ng-required="!candidate.resume" />
+                                    <div *ngIf="(resume.invalid && resume.touched)" class="invalid-feedback">
+                                        <div *ngIf="resume.errors.required ">Resume is required</div>
+                                        </div>
+                                        <small  class="label-value"  [ngModelOptions]="{standalone: true}" [(ngModel)]="candidate.resume" >{{candidate.resume?
+                                            candidate.resume : '--'}}
+                                           
+                                        </small>
+                                    </div>
+                                </div>
+
+                            
+
+                                </div>
+
+                          
+                        </form>
+                    </div>
+                </div>-->
+               
+
+     
+
+        <div class="form-row button-sec">
+        
+         
+            <div class="col-auto ml-auto">
+                <button type="button" class="btn btn-primary "  [disabled]="(f1.invalid||f2.invalid)||(!candidate.designation)||(candidate.currency == 'NULL') || (!candidate.job_description && job_descriptions.length ===0) || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1) || ((candidate.job_description !== null && candidate.job_description !== undefined) &&
+                (candidate.stage === null || candidate.stage === undefined))" (click)="onSubmit() ; f1.resetForm();f2.resetForm();">Save & Close</button>
+            </div>
+           
+        </div>
+  
+  
+      </div>
+    </div>
+  </div>
+  

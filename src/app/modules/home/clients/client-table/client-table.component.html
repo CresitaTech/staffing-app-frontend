@@ -1,0 +1,63 @@
+<div class="search-wrap">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="row mt-3 page-header">
+                    <div class="col">
+                        <h4 class="page-title mb-0">Map your data with existing Database</h4>
+                       
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-3">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="card mb-1 importfile-details">
+                <div class="card-body">
+                    <h6 class="mb-3">You are uploading file : {{fileName?fileName:'--'}}</h6>
+
+                    <div class=" table-importDynamic">
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th scope="col">Database Field</th>
+                                    <th scope="col">Excel Field</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let databasekeys of keysInCollection; let idx =index;" >
+                                    <td>
+                                        {{databasekeys}}
+                                    </td>
+                                    <td>
+                                        <select #selectField (change)="selected(idx,databasekeys)" class="form-control"  >
+                                            <option value="undefined">Select Excel Field</option>
+                                            <!-- <option *ngFor="let keys of keysInJson" [ngValue]="keys">{{keys}}</option> -->
+                                            <ng-container *ngFor="let keys of keysInJson" >
+                                                <option *ngIf="selectField.value === keys || !isSelected(keys)" value={{keys}} [ngValue]="keys">
+                                                {{keys}}
+                                              </option>
+                                              </ng-container>
+                                          </select>
+                                    </td>
+                                </tr>
+                             
+                            </tbody>
+                        </table>  
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <button type="button" class="btn btn-primary mr-2" (click)="onSubmit()" >Submit</button>
+                            <button type="button" class="btn btn-danger" (click)="onReset()" data-dismiss="modal">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

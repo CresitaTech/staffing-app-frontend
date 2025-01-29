@@ -1,0 +1,344 @@
+<button class="btn btn-link closebtn" (click)="closeDetail(false)">&times;</button>
+
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 *ngIf="eventId===constants.ADD || eventId===constants.POP_UP" class="card-title">Add User</h5>
+                    <h5 *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP" class="card-title">Edit User
+                    </h5>
+                </div>
+                <!-- <div class="col-auto ml-auto" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & add another</button>
+                </div> -->
+                
+
+                <div class="col-auto" *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSave(false)"
+                        class="btn btn-primary">Modify</button>
+                </div>
+
+                <div class="col-auto" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSave(true)"
+                        class="btn btn-primary">Save</button>
+                </div>
+            </div>
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Personal Details</h6>
+                        </div>
+                    </div>
+                    <form #f="ngForm" #fe>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">First Name</label>
+                                <input type="text" class="form-control" id="firstName" [(ngModel)]="user.first_name"
+                                    placeholder="" name="firstName" #firstName="ngModel"
+                                    [ngClass]="{ 'is-invalid':firstName.invalid&& firstName.touched }" required />
+                                <div *ngIf="firstName.invalid && firstName.touched" class="invalid-feedback">
+                                    <div *ngIf="firstName.errors.required ">First Name is required</div>
+                                </div>
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" [(ngModel)]="user.last_name"
+                                    placeholder="" name="lastName" #lastName="ngModel"
+                                    [ngClass]="{ 'is-invalid':lastName.invalid && lastName.touched }" required />
+                                <div *ngIf="lastName.invalid && lastName.touched" class="invalid-feedback">
+                                    <div *ngIf="lastName.errors.required ">Last Name is required</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Email</label>
+                                <input type="email" class="form-control" id="email" [(ngModel)]="user.email"
+                                    placeholder="" name="email" #email="ngModel"
+                                    [ngClass]="{ 'is-invalid':email.invalid&& email.touched }" required />
+                                <div *ngIf="email.invalid && email.touched" class="invalid-feedback">
+                                    <div *ngIf="email.errors.required">Email is required</div>
+                                    <div *ngIf="email.errors.email">Email is not in correct format.</div>
+                                </div>
+                            </div>
+
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Country</label>
+                                <!--<ng-multiselect-dropdown
+                                name="countrys" id="country" #country="ngModel" [(ngModel)] = "user.user_countries"
+                                [ngClass]="{ 'is-invalid':country.invalid && country.touched }"
+                                    [placeholder]="'Please select a Country'"
+                                    [settings]="dropdownSettings"
+                                    [data]="countries"
+                                    (onDeSelect) = "onItemDeSelect($event)"
+                                    (onSelect)="onItemSelect($event)"
+                                    (onSelectAll)="onSelectAll($event)"
+                                    required>
+                                </ng-multiselect-dropdown>-->
+
+                               <select class="form-control" name="country" id="country" #country="ngModel" [(ngModel)] = "user.country"
+                                [ngClass]="{ 'is-invalid':country.invalid && country.touched }" required>
+                                    <option value="">Please select a country </option>
+                                    <option *ngFor="let country of countries" [value]="country.country_code">{{country.country_name}}</option>
+                                </select>
+                                
+                            </div>
+                        </div>
+
+                        <div class="form-row" *ngIf="eventId===constants.ADD">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Password</label>
+                                <div class="input-group" id="show_hide_password">
+                                    <input [(ngModel)]="user.password" #password="ngModel" name="password"
+                                        [class.is-invalid]="password.invalid && password.touched" class="form-control"
+                                        type="{{togglePassword ? 'text' : 'password'}}" placeholder="">
+                                    <div *ngIf="password.valid || password.untouched"
+                                        class="input-group-append showpassword"
+                                        (click)="togglePassword = !togglePassword">
+                                        <a class="input-group-text"><i class="fa"
+                                                [ngClass]="togglePassword ? 'fa-eye' : 'fa-eye-slash'"
+                                                aria-hidden="true"></i></a>
+                                    </div>
+                                    <div *ngIf="password.invalid && password.touched"
+                                        class="pass-disabled input-group-append showpassword"
+                                        (click)="togglePassword = !togglePassword">
+                                        <a class="input-group-text"><i class="fa"
+                                                [ngClass]="togglePassword ? 'fa-eye' : 'fa-eye-slash'"
+                                                aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                                <div *ngIf="password.invalid && password.touched" class="text-danger">
+                                    <small *ngIf="password.errors?.required">{{constants.PASSWORD_REQUIRED}}</small>
+                                    <small *ngIf="password.errors?.minlength">{{constants.PASSWORD_MINLENGTH}}</small>
+                                </div>
+
+
+
+                                <!-- <input type="password" class="form-control" id="password" [(ngModel)]="user.password"
+                                    placeholder="Password" name="password" #password="ngModel"
+                                    [ngClass]="{ 'is-invalid':password.invalid&& password.touched }"
+                                    [pattern]="constants.password" required />
+                                <div *ngIf="password.invalid && password.touched" class="invalid-feedback">
+                                    <div *ngIf="password.errors?.required">{{constants.PASSWORD_REQUIRED}}</div>
+                                    <div *ngIf="password.errors?.pattern">{{constants.PASSWORD_MINLENGTH}}</div>
+                                </div> -->
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Confirm Password</label>
+                                <div class="input-group" id="show_hide_password">
+                                    <input [(ngModel)]="user.confirmPassword" #cpassword="ngModel" name="cPassword"
+                                        [class.is-invalid]="password.invalid && password.touched" class="form-control"
+                                        type="{{ctogglePassword ? 'text' : 'password'}}" placeholder="">
+                                    <div *ngIf="cpassword.valid || cpassword.untouched"
+                                        class="input-group-append showpassword"
+                                        (click)="ctogglePassword = !ctogglePassword">
+                                        <a class="input-group-text"><i class="fa"
+                                                [ngClass]="ctogglePassword ? 'fa-eye' : 'fa-eye-slash'"
+                                                aria-hidden="true"></i></a>
+                                    </div>
+                                    <div *ngIf="cpassword.invalid && cpassword.touched"
+                                        class="pass-disabled input-group-append showpassword"
+                                        (click)="ctogglePassword = !ctogglePassword">
+                                        <a class="input-group-text"><i class="fa"
+                                                [ngClass]="ctogglePassword ? 'fa-eye' : 'fa-eye-slash'"
+                                                aria-hidden="true"></i></a>
+                                    </div>
+                                </div>
+                                <div *ngIf="cpassword.invalid && cpassword.touched" class="text-danger">
+                                    <small *ngIf="cpassword.errors?.required">{{constants.PASSWORD_REQUIRED}}</small>
+                                    <small *ngIf="cpassword.errors?.minlength">{{constants.PASSWORD_MINLENGTH}}</small>
+                                </div>
+
+
+                                <!-- <input type="password" class="form-control" id="confirmPassword"
+                                    [(ngModel)]="user.confirmPassword" placeholder="Last name" name="confirmPassword"
+                                    #confirmPassword="ngModel"
+                                    [ngClass]="{ 'is-invalid':confirmPassword.invalid && confirmPassword.touched }"
+                                    required />
+                                <div *ngIf="confirmPassword.invalid && confirmPassword.touched"
+                                    class="invalid-feedback">
+                                    <div *ngIf="confirmPassword.errors.required">Confirm Password is required</div>
+                                    <div *ngIf="submitted && user.password !== user.confirmPassword">Confirm Password
+                                        doesn't match with
+                                        password.</div>
+                                </div> -->
+                            </div>
+                        </div>
+
+
+
+
+                        <!-- allowing only one group for one user -->
+                        <div class="form-row border-top pt-3 mt-3">
+                            <div class="col form-group addGroup-section">
+                                <label class="asterisk-if-mandatory">
+                                    User Groups
+                                    <!-- <button type="button" class="btn btn-sm btn-primary" (click)="openAddGroup()">Add
+                                        Group</button> -->
+                                </label>
+                                <div >
+                                    <select class="form-control with-border" name="user_group" [(ngModel)]="selectedGroup" required>
+                                        <option *ngFor="let g of groups_all" [ngValue]="g.id">{{g.name}}</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <small class="form-text text-muted">
+                                        The groups this user belongs to. A user will get all permissions granted to
+                                        each of their groups.
+                                    </small>
+                                </div>
+                            </div>
+
+                            <div class="col form-group addGroup-section">
+                                <label class="asterisk-if-mandatory">
+                                    Send Notification
+                                </label>
+                                <div >
+                                    <select class="form-control with-border" name="send_notification" [(ngModel)]="user.send_notification" required>
+                                        <option value='true' >Yes</option>
+                                        <option value='false'>No</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-row border-top pt-3 mt-3">
+                            <div class="col form-group addGroup-section">
+                                <h6 class="asterisk-if-mandatory">
+                                    User Groups
+                                    <button type="button" class="btn btn-sm btn-primary" (click)="openAddGroup()">Add
+                                        Group</button>
+                                </h6>
+                                <app-select-deselect [available_all]="groups_all" [choosen_all]="user?.groups"
+                                    [available_title]="'Available Groups'" [choosen_title]="'Chosen Groups'"
+                                    [avoid_pipe]="true"
+                                    [available_hint]="'This is the list of available groups. You may choose some by selecting them in the box below and then clicking the \'Choose\' arrow between the two boxes.'"
+                                    [choosen_hint]="'This is the list of chosen groups. You may remove some by selecting them in the box below and then clicking the \'Remove\' arrow between the two boxes.'"
+                                    (onChangeEvt)="user.groups = $event;"></app-select-deselect>
+                            </div>
+                            
+                        </div> -->
+
+
+                        <div class="form-row border-top pt-3 mt-3">
+                            <div class="col form-group addGroup-section">
+                                <h6 class="asterisk-if-mandatory">User Permissions</h6>
+                                <app-select-deselect [available_all]="available_all"
+                                    [choosen_all]="user?.user_permissions"
+                                    [available_title]="'Available User Permissions'"
+                                    [choosen_title]="'Chosen User Permissions'"
+                                    [available_hint]="'This is the list of available user permissions. You may choose some by selecting them in the box below and then clicking the \'Choose\' arrow between the two boxes.'"
+                                    [choosen_hint]="'This is the list of chosen user permissions. You may remove some by selecting them in the box below and then clicking the \'Remove\' arrow between the two boxes.'"
+                                    (onChangeEvt)="user.user_permissions = $event;"></app-select-deselect>
+                                <small class="form-text text-muted">Specific permissions for this
+                                    user. Hold down “Control”, or “Command” on a Mac, to select more
+                                    than one.</small>
+                            </div>
+                        </div>
+
+
+                        <!-- <div class="form-row border-top pt-3 mt-3">
+                            <div class="col form-group">
+                                <h6>Avatar</h6>
+                                <div>
+                                    <input name="avatar" type="file" class="custom-file-upload" id="customFile"
+                                        [(ngModel)]="user.avatar" #avatar="ngModel"
+                                        [ngClass]="{ 'is-invalid':avatar.invalid || avatar.touched }"
+                                        (change)="readFile($event)" />
+                                </div>
+                            </div>
+                        </div> -->
+
+
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Is Active</label>
+                                <div class="form-row mt-2">
+                                    <div class="col">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" [value]="true"
+                                                id="inlineRadio1" [(ngModel)]="user.is_active" name="is_active" />
+                                            <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" [value]="false"
+                                                id="inlineRadio2" [(ngModel)]="user.is_active" name="is_active" />
+                                            <label class="form-check-label" for="inlineRadio2">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col form-group">
+                                <label>Is Deleted</label>
+                                <div class="form-row mt-2">
+                                    <div class="col">
+                                       {{user.is_deleted  ? "Yes" : "No"}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark"
+                        *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save & add
+                        another</button>
+                </div> -->
+                
+                <div class="col-auto ml-auto" *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSave(false)"
+                        class="btn btn-primary">Modify</button>
+                </div>
+
+                <div class="col-auto ml-auto" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSave(true)"
+                        class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#show_hide_password a").on('click', function (event) {
+            event.preventDefault();
+            if ($('#show_hide_password input').attr("type") == "text") {
+                $('#show_hide_password input').attr('type', 'password');
+                $('#show_hide_password i').addClass("fa-eye-slash");
+                $('#show_hide_password i').removeClass("fa-eye");
+            } else if ($('#show_hide_password input').attr("type") == "password") {
+                $('#show_hide_password input').attr('type', 'text');
+                $('#show_hide_password i').removeClass("fa-eye-slash");
+                $('#show_hide_password i').addClass("fa-eye");
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $("#show_hide_confirmpassword a").on('click', function (event) {
+            event.preventDefault();
+            if ($('#show_hide_confirmpassword input').attr("type") == "text") {
+                $('#show_hide_confirmpassword input').attr('type', 'password');
+                $('#show_hide_confirmpassword i').addClass("fa-eye-slash");
+                $('#show_hide_confirmpassword i').removeClass("fa-eye");
+            } else if ($('#show_hide_confirmpassword input').attr("type") == "password") {
+                $('#show_hide_confirmpassword input').attr('type', 'text');
+                $('#show_hide_confirmpassword i').removeClass("fa-eye-slash");
+                $('#show_hide_confirmpassword i').addClass("fa-eye");
+            }
+        });
+    });
+</script>

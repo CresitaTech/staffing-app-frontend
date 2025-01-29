@@ -1,0 +1,371 @@
+
+<div class="p-4">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+      <div class="form-row mb-3 heading-sec border-bottom">
+          <div class="col">
+              <h5 class="card-title" >Recommended Candidate for this job</h5>
+          </div>
+          <div class="col-auto">
+            <button type="button" class="close" aria-label="Close"
+                    (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+ 
+          </div>
+      </div>
+
+
+      <div class="search-wrap">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <div class="bg-gray p-2 rounded">
+                        <form (ngSubmit)="fetchCollectionBestJobsList(this.job_id)">
+                            <div class="search-box">
+                                <div class="form-row">
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span href="" class="input-group-text"><i class="fa fa-search"
+                                                        aria-hidden="true"></i></span>
+                                            </div>
+                                            <input class="form-control" type="text" [(ngModel)]="search" name="searchbox"
+                                                placeholder="Search by client name">
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary">Search</button>
+                                    </div>
+                                    
+                                    
+                                    <!-- [routerLink]="['/home/job-descriptions/job-description/my-jobs']" -->
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Designation -->
+      <div class="form-row shortby-section mt-2 mb-2">
+    
+        <div class="col-auto line-height-38">Page Size:</div>
+        <div class="col-auto">
+          <select id="page-size" class="form-control" (change)="setBestCandidatePageSize(this.job_id)">
+            <option value="10" selected="">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option> 
+          </select>
+        </div> 
+        
+        <div class="col-auto line-height-38">
+          {{ count }} of {{ collectionSize }} selected
+        </div>
+        
+        <div class="col-auto  ml-auto shortby-dropdown">
+          <select
+            id="sortAs"
+            class="form-control"
+            (change)="changeSortingOrder(); fetchCollectionBestJobsList(this.job_id)"
+          >
+            <option value="" disabled>Sort by date</option>
+            <option value="true">Latest</option>
+            <option value="false">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <div
+        class="card mb-1 candidate-details"
+        [ngClass]="{
+          'bg-green-light': selectedItemIndex === index,
+          'border-green-light': selectedItemIndex === index
+        }"
+        *ngFor="let c of collection; let index = index"
+      >
+        <div class="card-body">
+          <div class="form-row">
+           
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value" *ngIf="c.first_name || c.last_name">
+                {{ c.first_name }} {{ c.last_name }}
+              </div>
+              <div class="label-value" *ngIf="!c.first_name && !c.last_name">
+                --
+              </div>
+              <div class="label-name">Candidate Name</div>
+            </div>
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ c.primary_email ? c.primary_email : "--" }}
+              </div>
+              <div class="label-name">Email</div>
+            </div>
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ c.designation?.name ? c.designation?.name : "--" }}
+              </div>
+              <div class="label-name">Designation</div>
+            </div>
+            <div class="col-auto mr-4" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{
+                  c.total_experience_in_usa ? c.total_experience_in_usa : "--"
+                }}
+                Year(s)
+              </div>
+              <div class="label-name">Total Experience</div>
+            </div>
+            <div class="col-auto ml-auto">
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-light dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Action
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  
+                  <a class="dropdown-item"
+                    (click)="doAction(constants.ACTIVITY, index)" >Submit Job</a>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="candidate-details-full border-top"
+          *ngIf="selectedItemIndex === index"
+        >
+          <div class="row">
+            <div class="col">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="row">
+                      <div class="col-auto">
+                        <div *ngIf="c.job_description" class="label-value multiple-JD">
+                          <div *ngFor="let j of c.job_description; let i = index">
+                            {{ i + 1 }}. {{ j.job_title }}
+                          </div>
+                        </div>
+                      <div *ngIf="!c.job_description" class="label-value">--</div>
+                      <div class="label-name">Job Description</div>
+                      </div>
+                      <div class="col-auto">
+                        <button type="submit" class="btn btn-sm btn-primary" (click) = "doAction(constants.SUBMITTED_FOR, index)">Submitted For</button>
+                      </div>
+                    </div>
+                    <!-- <div class="label-value">{{c.job_description?c.job_description.job_title :
+                      '--'}}</div> -->
+                   
+                  </div>
+                  <div class="col" *ngIf="c.min_rate && !c.max_rate">
+                    <div class="label-value">
+                      {{ c.min_rate | currency: "INR" }}
+                    </div>
+                    <div class="label-name">Rate</div>
+                  </div>
+                  <div class="col" *ngIf="!c.min_rate && c.max_rate">
+                    <div class="label-value">
+                      {{ c.max_rate | currency: "INR" }}
+                    </div>
+                    <div class="label-name">Rate</div>
+                  </div>
+                  <div class="col" *ngIf="!c.min_rate && !c.max_rate">
+                    <div class="label-value">--</div>
+                    <div class="label-name">Rate</div>
+                  </div>
+                  <div class="col" *ngIf="c.min_rate && c.max_rate">
+                    <div class="label-value">
+                      {{ c.min_rate | currency: "INR" }}-{{
+                        c.max_rate | currency: "INR"
+                      }}
+                    </div>
+                    <div class="label-name">Rate</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.date_of_birth ? c.date_of_birth : "--" }}
+                    </div>
+                    <div class="label-name">Date of Birth</div>
+                  </div>
+                  <div class="col" *ngIf="c.min_salary && !c.max_salary">
+                    <div class="label-value">
+                      {{ c.min_salary | currency: "INR" }}
+                    </div>
+                    <div class="label-name">Salary</div>
+                  </div>
+                  <div class="col" *ngIf="!c.min_salary && c.max_salary">
+                    <div class="label-value">
+                      {{ c.max_salary | currency: "INR" }}
+                    </div>
+                    <div class="label-name">Salary</div>
+                  </div>
+                  <div class="col" *ngIf="!c.min_salary && !c.max_salary">
+                    <div class="label-value">--</div>
+                    <div class="label-name">Salary</div>
+                  </div>
+                  <div class="col" *ngIf="c.min_salary && c.max_salary">
+                    <div class="label-value">
+                      {{ c.min_salary | currency: "INR" }}-{{
+                        c.max_salary | currency: "INR"
+                      }}
+                    </div>
+                    <div class="label-name">Salary</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.company_name ? c.company_name : "--" }}
+                    </div>
+                    <div class="label-name">Company Name</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value">
+                      {{
+                        c.primary_phone_number ? c.primary_phone_number : "--"
+                      }}
+                    </div>
+                    <div class="label-name">Phone</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{
+                        c.total_experience_in_usa
+                          ? c.total_experience_in_usa
+                          : "--"
+                      }}
+                    </div>
+                    <div class="label-name">Total Exp In USA</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.qualification ? c.qualification : "--" }}
+                    </div>
+                    <div class="label-name">Qualification</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.current_location ? c.current_location : "--" }}
+                    </div>
+                    <div class="label-name">Current Location</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.resume ? c.resume : "--" }}
+                      <!-- <a class="btn-link">View Resume</a> -->
+                      <a
+                        type="button"
+                        class="btn btn-sm p-0 ml-2 text-success"
+                        (click)="
+                          openResumePopUp(c.resume, index, c.primary_email)
+                        "
+                        data-tooltip="tooltip"
+                        data-placement="bottom"
+                        title="View Resume"
+                        ><i class="fa fa-eye"></i
+                      ></a>
+                      <!-- ><i class="icon icon-view-resume"></i></a> -->
+                      <a
+                        type="button"
+                        class="btn btn-sm p-0 ml-2 text-success"
+                        *ngIf="c.resume"
+                        href="{{ ip }}{{ c.resume }}"
+                        target="_blank"
+                        data-tooltip="tooltip"
+                        data-placement="bottom"
+                        title="Download Resume"
+                        ><i class="fas fa-download"></i
+                      ></a>
+
+                      <!-- <button>  <ngx-doc-viewer  [url]="getResumeUrl(c.resume)" viewer="google"
+                         style="width:100%;height:50vh; color:green">
+                        </ngx-doc-viewer> </button> -->
+                    </div>
+                    <div class="label-name">Resume</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">{{ c.visa ? c.visa : "--" }}</div>
+                    <div class="label-name">Visa</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.any_offer_in_hand ? c.any_offer_in_hand : "--" }}
+                    </div>
+                    <div class="label-name">Any Offer in Hand</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.created_at | date: "medium" }}
+                    </div>
+                    <div class="label-name">Created At</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value" *ngIf="c.created_by">
+                      {{ c.created_by.first_name }} {{ c.created_by.last_name }}
+                    </div>
+
+                    <div class="label-value" *ngIf="!c.created_by">--</div>
+                    <div class="label-name">Recruiter Name</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.skills_1 ? c.skills_1 : "--" }}
+                    </div>
+                    <div class="label-name">Skill 1</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.skills_2 ? c.skills_2 : "--" }}
+                    </div>
+                    <div class="label-name">Skill 2</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col mb-mobile">
+                    <div class="label-value">
+                      {{ c.remarks ? c.remarks : "--" }}
+                    </div>
+                    <div class="label-name">Remarks</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> 
+      <app-paging
+        [page]="page"
+        [pageSize]="limit"
+        [collectionSize]="collectionSize"
+        (pageChangeEvt)="page = $event; fetchCollectionBestJobsList(this.job_id)"
+      ></app-paging>
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,113 @@
+<div class="p-4 candidate-fileupload">
+
+
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+  
+        <div class="form-row mb-3 heading-sec ">
+            <div class="col">
+                <h5 class="card-title" >Import</h5>
+            </div>
+            <div class="col-auto">
+                <button type="button" data-dismiss="modal" class="close" #closebutton aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+   
+            </div>
+        </div>
+
+        <form [formGroup]="myForm" > <!--(ngSubmit)="submit()"-->
+
+        <div class="card mb-2 ">
+            <div class="card-body">
+                
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group ">
+                            <label class="sr-only" for="inputFile">File Upload</label><b> File Name : {{fileName}}</b>
+                            <input 
+                                formControlName="file"
+                                id="file" 
+                                type="file" 
+                                multiple
+                                class="form-control"
+                                (change)="onFileChange($event)" />
+
+                           <!-- <div *ngIf="f.file.invalid" class="alert alert-danger">
+                                <div *ngIf="f.file.errors.required">File is required.</div>
+                            </div>-->
+
+                        </div>                   
+                    </div>
+                </div>
+
+
+               
+            </div>
+        </div>
+
+        
+    <div class="d-flex justify-content-center" *ngIf="displayLoder">
+        <div class="spinner-border" role="status">
+            <span class="sr-only" id="loading"></span>
+        </div>
+    </div>
+
+        <div class="card mb-2 candidate-fileupload" *ngIf="displayTable">
+            
+            <div class="card-body">
+
+                <div class="form-row mb-3 heading-sec ">
+                    <div class="col">
+                        <h5 class="card-title" >Imported Files</h5>
+                    </div>
+                  
+                </div>
+                
+                <div class="row">
+                    <div class="col table-candidate-addjob">
+                        <table class="table table-sm table-bordered mb-2">
+                            <thead class="thead-dark">
+                                <tr > <!--*ngIf="job_descriptions.length>0"-->
+                                    <th scope="col" class="border-top-0">Name</th>
+                                    <th  scope="col" class="border-top-0">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let file of myFiles">
+                                    <td>{{file.name}}</td>
+                                    <td>
+  
+                                    <button type="button" class="ml-2 btn btn-sm btn-warning" data-tooltip="tooltip"
+                                    data-placement="bottom"
+                                    title="Edit Selected Job Description and Stage" (click)="createCandidate(file)" (fileUploaded) = "updateButtonStatus($event)" *ngIf="!isDone(file)" ><i
+                                    class="fas fa-plus-square text-light"></i></button>
+                                    
+                                    <button type="button" class="ml-2 btn btn-sm btn-primary" data-tooltip="tooltip"
+                                    data-placement="bottom"
+                                    title="Edit Selected Job Description and Stage"  *ngIf="isDone(file)" ><i
+                                    class="icon-yes-2 text-light"></i></button>
+                                 
+                                    </td>
+                                </tr>
+                              
+                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>        
+
+       
+    </form>
+
+
+
+
+
+
+    </div>
+    </div>
+  </div>
+  

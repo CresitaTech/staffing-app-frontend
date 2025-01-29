@@ -1,0 +1,110 @@
+[
+    {
+        "app_label": "vendors",
+        "models": [
+            "emailtemplatemodel",
+            "mailmodel",
+            "vendoremailtemplatemodel",
+            "vendormailmodel",
+            "vendormodel"
+        ]
+    },
+    {
+        "app_label": "users",
+        "models": [
+            "user"
+        ]
+    },
+    {
+        "app_label": "sessions",
+        "models": [
+            "session"
+        ]
+    },
+    {
+        "app_label": "jobdescriptions",
+        "models": [
+            "jobsubmissionmodel",
+            "jobmodel",
+            "jobassingmentmodel"
+        ]
+    },
+    {
+        "app_label": "interviews",
+        "models": [
+            "zoomobject",
+            "sourcemodel",
+            "mails",
+            "interviewsmodel",
+            "feedbackmodel",
+            "timeslotsmodel"
+        ]
+    },
+    {
+        "app_label": "interviewers",
+        "models": [
+            "interviewersmodel",
+            "interviewers",
+            "designationmodel"
+        ]
+    },
+    {
+        "app_label": "contenttypes",
+        "models": [
+            "contenttype"
+        ]
+    },
+    {
+        "app_label": "clients",
+        "models": [
+            "track",
+            "clientmodel",
+            "album"
+        ]
+    },
+    {
+        "app_label": "candidatesdocumentrepositery",
+        "models": [
+            "candidatesrepositerymodel"
+        ]
+    },
+    {
+        "app_label": "candidates",
+        "models": [
+            "searchtermmodel",
+            "rtrmodel",
+            "rtrmailmodel",
+            "placementcardmodel",
+            "mailmodel",
+            "emailtemplatemodel",
+            "designations",
+            "candidates",
+            "activitystatusmodel"
+        ]
+    },
+    {
+        "app_label": "auth",
+        "models": [
+            "user",
+            "permission",
+            "group"
+        ]
+    },
+    {
+        "app_label": "api",
+        "models": [
+            "track",
+            "rtr",
+            "mail",
+            "emailtemplate",
+            "candidates",
+            "album"
+        ]
+    },
+    {
+        "app_label": "admin",
+        "models": [
+            "logentry"
+        ]
+    }
+]

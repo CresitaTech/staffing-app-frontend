@@ -1,0 +1,107 @@
+.joblist-SetPriority .jobs-data{
+	width:calc((100% - 575px)/ 3);
+}
+.joblist-NotSetPriority .jobs-data{
+	width:calc((100% - 485px)/ 3);
+}
+.job-salary{
+	width:210px;
+}
+
+
+.toggle-box label{
+	margin-bottom:0px;
+}
+.switch {
+	position: relative;
+	display: inline-block;
+	width: 75px;
+	height: 20px;
+  }
+  
+  .switch input {display:none;}
+  
+  .slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: #1d212f;
+	-webkit-transition: .4s;
+	transition: .4s;
+  }
+  
+  .slider:before {
+	position: absolute;
+	content: "";
+	height: 10px;
+	width: 10px;
+	left: 5px;
+	bottom: 5px;
+	background-color: white;
+	-webkit-transition: .4s;
+	transition: .4s;
+  }
+  
+  input:checked + .slider {
+	background-color: #ca2222;
+  }
+  
+  input:focus + .slider {
+	box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+	-webkit-transform: translateX(55px);
+	-ms-transform: translateX(55px);
+	transform: translateX(55px);
+  }
+  
+  /*------ ADDED CSS ---------*/
+  .on
+  {
+	display: none;
+  }
+  
+  .on, .off
+  {
+	color: white;
+	position: absolute;
+	transform: translate(-50%,-50%);
+	top: 50%;
+	left: 50%;
+	font-size: 11px;
+	font-family: Verdana, sans-serif;
+  }
+  
+  input:checked+ .slider .on
+  {display: block;}
+  
+  input:checked + .slider .off
+  {display: none;}
+  
+  /*--------- END --------*/
+  
+  /* Rounded sliders */
+  .slider.round {
+	border-radius: 20px;
+  }
+  
+  .slider.round:before {
+	border-radius: 50%;}
+
+
+
+
+// .job-description-notes{
+// 	background:#e2f1e8;
+// }
+// .job-description-notes tr:nth-child(even) {background: #d6e5dc}
+
+.job-description-notes .label-value{ font-size:21px; margin-bottom:5px;}
+.job-description-notes .thead-dark{
+	color: #fff;
+    background-color: #26ae61;
+}

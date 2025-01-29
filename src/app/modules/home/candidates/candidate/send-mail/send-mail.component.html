@@ -1,0 +1,103 @@
+<!-- Created -->
+
+<div class="p-4">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="form-row mb-3 heading-sec">
+        <div class="col">
+          <h5 class="card-title">Send Mail</h5>
+        </div>
+
+        <!--   <div class="col-auto">
+                                                <button type="button" class="btn btn-primary">Save</button>
+                                            </div>-->
+        <div *ngIf="eventId === constants.POP_UP">
+          <button
+            #closebutton
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="activeModal.dismiss()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="card mb-2">
+        <div class="card-body">
+          <form #f="ngForm">
+            <div class="row">
+              <div class="col form-group">
+                <label>Email To</label>
+                <!-- <input type="text" class="form-control form-control-sm" id="" placeholder=""
+                                                value="sherod_williamson@gmail.com"> -->
+                <textarea
+                  class="form-control"
+                  id="emailTo"
+                  name="emailTo"
+                  [(ngModel)]="mailModel.email_to"
+                  rows="1"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col form-group">
+                <div *ngIf="tagName === constants.CANDIDATE">
+                  <app-template-inline
+                    [item]="mailModel.candidate_template"
+                    (changeItemEvt)="mailModel.candidate_template = $event"
+                  >
+                  </app-template-inline>
+                </div>
+                <div *ngIf="tagName === constants.VENDOR">
+                  <app-vendor-temp-inline
+                    [item]="mailModel.vendor_template"
+                    (changeItemEvt)="mailModel.vendor_template = $event"
+                  >
+                  </app-vendor-temp-inline>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col form-group-mobile">
+                <label class="asterisk-if-mandatory">Attachment</label>
+                <div
+                  class="custom-file"
+                  *ngIf="tagName === constants.CANDIDATE"
+                >
+                  <input
+                    name="candidateAtt"
+                    type="file"
+                    class="custom-file-upload"
+                    id="customFile"
+                    [(ngModel)]="mailModel.candidate_attachment"
+                    (change)="readFile($event)"
+                  />
+                </div>
+                <div class="custom-file" *ngIf="tagName === constants.VENDOR">
+                  <input
+                    name="vendorAtt"
+                    type="file"
+                    class="custom-file-upload"
+                    id="customFile"
+                    [(ngModel)]="mailModel.vendor_attachment"
+                    (change)="readFile($event)"
+                  />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="form-row button-sec">
+        <div class="col-auto ml-auto">
+          <button type="submit" (click)="onSubmit()" class="btn btn-primary">
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

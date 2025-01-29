@@ -1,0 +1,294 @@
+<a href="javascript:void(0)" class="closebtn" *ngIf="eventId===constants.ADD||eventId===constants.EDIT "
+    (click)="closeInterview();f.resetForm(); activeModal.dismiss()">&times;</a>
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Add Interview
+                    </h5>
+                    <h5 class="card-title" *ngIf="eventId===constants.EDIT">Modify</h5>
+
+                </div>
+
+                <!-- <div class="col-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save
+                        & Continue
+                        editing</button>
+                </div> -->
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid||!interview.candidate_name||!interview.interviewer_name||!interview.meeting_time||!interview.time_zone||
+                    !interview.time_slot||!interview.jd_attachment||!interview.source"
+                        (click)="onSubmit();f.resetForm();" class="btn btn-primary"
+                        *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid||!interview.candidate_name||!interview.interviewer_name||!interview.meeting_time||!interview.time_zone||
+                    !interview.time_slot||!interview.jd_attachment||!interview.source"
+                        (click)="onEdit();f.resetForm();" class="btn btn-primary"
+                        *ngIf="eventId===constants.EDIT">Modify</button>
+
+                </div>
+
+                <button *ngIf="eventId==='pop' || eventId==='edit_pop'" type="button" #closebutton class="close"
+                    aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            <!-- Designation -->
+            <div class="card mb-2">
+                <div class="card-body">
+
+                    <form #f="ngForm">
+                        <div class="form-row">
+                            <div class="col  form-group">
+                                <app-candidate-inline *ngIf="eventId===constants.ADD||eventId===constants.EDIT"
+                                    [item]="interview.candidate_name" [eventId]="eventId"
+                                    (changeItemEvt)="interview.candidate_name = $event">
+                                </app-candidate-inline>
+                                <app-candidate-inline *ngIf="eventId===constants.POP_UP" [itemId]="candidate_id"
+                                    [item]="interview.candidate_name" [eventId]="eventId" [disabled]="true"
+                                    (changeItemEvt)="interview.candidate_name = $event">
+                                </app-candidate-inline>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="col  form-group">
+                                <label class="asterisk-if-mandatory">Interviewer Name</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <app-interviewer-inline (changeItemEvt)="addInterviewer($event)">
+                                        </app-interviewer-inline>
+
+
+                                        <!-- <select class="form-control" id="interviewer_name" [(ngModel)]="interview.interviewer_name" name="interviewer_name">
+                                            <option>Select Interviewer</option>
+                                            <option>Pulkit</option>
+                                            <option>Naresh</option>
+
+                                        </select> -->
+                                    </div>
+                                    <!-- <div class="col-auto">
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="openInterviewer()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Interviewer"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Interviewer"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                    
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Interviewer"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div> -->
+                                </div>
+
+                                <div class="row mt-2"
+                                    *ngIf="interview.interviewer_name && interview.interviewer_name.length > 0">
+                                    <div class="col interviewer-otherName">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="border-top-0">Interviewer Name</th>
+                                                    <th scope="col" class="border-top-0">Email</th>
+                                                    <th scope="col" class="border-top-0">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let intvr of interview.interviewer_name">
+                                                    <td>{{intvr.first_name}}</td>
+                                                    <td>{{intvr.primary_email}}</td>
+
+                                                    <td>
+                                                        <button type="button" class="btn btn-sm btn-danger"
+                                                            data-tooltip="tooltip" data-placement="bottom"
+                                                            title="Delete Selected Job Description and Stage"
+                                                            (click)="removeInterviewer(intvr.primary_email)"><i
+                                                                class="fa fa-trash"></i></button>
+                                                        <!-- <button type="button" class="ml-2 btn btn-sm btn-warning" data-tooltip="tooltip"
+                        data-placement="bottom"
+                        title="Change Selected edit Job Description"><i
+                            class="fas fa-highlighter text-light"></i></button> -->
+                                                    </td>
+                                                </tr>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label class="asterisk-if-mandatory">Time Slot</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <app-timeslott-inline [item]="interview.time_slot" 
+                                            (changeItemEvt)="interview.time_slot = $event"></app-timeslott-inline>
+                                    </div>
+                                    <!-- <select class="form-control" id="time_slot" [(ngModel)]="interview.time_slot" name="time_slot">
+                                            <option>Select Time slot</option>
+                                            <option>07:00PM-07:30PM</option>
+                                            <option>07:30PM-08:00PM</option>
+                                            <option>06:00PM-06:30PM</option>
+                                            <option>05:30PM-06:00PM</option>
+
+                                        </select> -->
+
+                                    <!-- <div class="col-auto">
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="openTimeSlot()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Time Slot"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Time Slot"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                    
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Time Slot"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div> -->
+                                </div>
+                                <!-- <div *ngIf="interview.time_slot === 'Manual'" class="mb-2">
+
+                                    <label class="asterisk-if-mandatory">Manual Time Slot</label>
+                                    <input #manualTimeslot type="text" class="form-control" id="manualTimeslot"
+                                        [(ngModel)]="interview.manual_time_slot" placeholder="" name="manualTimeslot"
+                                        #lastName="ngModel"
+                                        [ngClass]="{ 'is-invalid':manualTimeslot.invalid && manualTimeslot.touched }"
+                                        required />
+                                    <div *ngIf="manualTimeslot.invalid && manualTimeslot.touched"
+                                        class="invalid-feedback">
+                                        <div *ngIf="manualTimeslot.errors.required ">Manual Time Slot is required</div>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label class="asterisk-if-mandatory">Time Zone</label>
+                                <select class="form-control" id="time_zone" [(ngModel)]="interview.time_zone"
+                                    name="time_zone">
+                                    <option value="">Select Time zone</option>
+                                    <option value="IST">IST</option>
+                                    <option value="PST">PST</option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="asterisk-if-mandatory">Meeting Time</label>
+
+                                <div class="input-group date-input">
+                                    <input type="text" class="form-control " id="" placeholder="MM-dd-yyyy"
+                                        ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="interview.meeting_time"
+                                        #c1="ngModel" name="meeting_time" [readonly]="true" (click)="d1.toggle()">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="interview.meeting_time = today">Today</a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="d1.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small>Note: You are 5.5 hours ahead of server time.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <label class="asterisk-if-mandatory">Interview Mode</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <app-source-inline [item]="interview.source"
+                                            (changeItemEvt)="interview.source = $event"
+                                            (changeItemCustom)="isShowManualInvite = $event"></app-source-inline>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row" *ngIf="isShowManualInvite">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Paste here calender meeting invite</label>
+                                <app-editor [id]="'editor3'" [content]="interview.manual_invite" [hasTags]="false"
+                                    (contentChanged)="interview.manual_invite = $event"></app-editor>
+                                <!-- <img src="assets/images/remark-img.jpg" width="100%"> -->
+                            </div>
+                        </div>
+
+                        <!-- <div class="row" *ngIf="(activity.activity_status===constants.CLIENT_INTERVIEW || activity.activity_status===constants.INTERNAL_INTERVIEW || activity.activity_status===constants.CANDIDATE_SUBMISSION) && activity.meeting_mode==='manual' && activity.schedule_interview_now==='yes'">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Paste here calender meeting invite</label>
+                                <app-editor [id]="'editor2'" [content]="activity.manual_invite" [hasTags]="false"
+                                    (contentChanged)="activity.manual_invite = $event"></app-editor>
+                                <img src="assets/images/remark-img.jpg" width="100%"> -->
+                        <!-- </div>
+                        </div> -->
+                        <!-- <div class="form-row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Jd Attachment</label>
+                                <div class="custom-file">
+                                    <!- <input name="jd_attachment"  type="file" class="custom-file-upload" id="customFile"
+                                        [(ngModel)]="interview.jd_attachment" #jd_attachment="ngModel"
+                                        [ngClass]="{ 'is-invalid':jd_attachment.invalid || jd_attachment.touched }"
+                                        (change)="readFile($event)" required /> ->
+                                    
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <app-job-description-inline [item]="interview.jd_attachment"
+                            [disabled]="interview.jd_attachment ? true : false"
+                            (changeItemEvt)="interview.jd_attachment = $event">
+                        </app-job-description-inline>
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label>Remarks</label>
+                                <app-editor [id]="'editor1'" [content]="interview.remarks" [hasTags]="false"
+                                    (contentChanged)="interview.remarks = $event"></app-editor>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save
+                        & add
+                        another</button>
+                </div> -->
+
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid||!interview.candidate_name||
+                    !interview.interviewer_name||!interview.meeting_time||!interview.time_zone||
+                    !interview.time_slot||!interview.jd_attachment||!interview.source" (click)="onSubmit();"
+                        class="btn btn-primary"
+                        *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+
+                    <button type="submit" [disabled]="f.invalid||!interview.candidate_name
+                    ||!interview.interviewer_name||!interview.meeting_time||!interview.time_zone||
+                    !interview.time_slot||!interview.jd_attachment
+                    ||!interview.source" (click)="onEdit();" class="btn btn-primary"
+                        *ngIf="eventId===constants.EDIT">Modify</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

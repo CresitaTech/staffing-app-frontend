@@ -1,0 +1,12 @@
+.btn-primary.disabled, .btn-primary:disabled {
+    color: #fff;
+    background-color: #26ae61;
+    border-color: #26ae61;
+}
+
+
+
+  label.asterisk-if-mandatory::after {
+    content: " *";
+    color:red;
+  }

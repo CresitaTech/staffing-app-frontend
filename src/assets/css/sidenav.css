@@ -1,0 +1,192 @@
+
+ 
+ .sidenav {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #238b50;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+	z-index:11;
+  } 
+  .sidenav a {
+	padding: 8px;
+	text-decoration: none;
+	font-size:16px;
+	color: #fff;
+	display: block;
+	transition: 0.3s;
+  }
+  .sidenav a i{ width:25px;}
+ 
+
+  .sidenav a:hover {
+	color: #2ec770;
+  }
+  
+  .sidenav .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+  }
+   
+  #main {
+	transition: margin-left .5s;
+	padding:0px;
+  }
+
+/*=============================Candidate page sliding slider css :- start============================= */
+/* Import candidate section */
+.sideExport{
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	background-color: #f7f7f7;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+	z-index:11;
+	border-left:1px solid #d1cbcb;
+  } 
+  .sideExport a:hover {
+	color: #2ec770;
+  }
+  
+  .sideExport .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+  }
+
+
+
+/* Import candidate section */
+.sideImport{
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	background-color: #f7f7f7;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+	z-index:11;
+	border-left:1px solid #d1cbcb;
+  } 
+  .sideImport a:hover {
+	color: #2ec770;
+  }
+  
+  .sideImport .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+  }
+
+
+
+/* filter section */
+.sideFilters {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	background-color: #f7f7f7;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+	z-index:11;
+	border-left:1px solid #d1cbcb;
+  } 
+  .sideFilters a:hover {
+	color: #2ec770;
+  }
+  
+  .sideFilters .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+  }
+
+
+
+  /* Add Candidate section */
+.sideCandidate {
+	height: 100%;
+	width: 0;
+	position: fixed;
+	z-index: 1;
+	top: 0;
+	right: 0;
+	background-color: #f7f7f7;
+	overflow-x: hidden;
+	transition: 0.5s;
+	padding-top: 60px;
+	z-index:11;
+	border-left:1px solid #d1cbcb;
+  } 
+  .sideCandidate a{color: #2ec770;}
+  .sideCandidate a:hover {
+	color: #2ec770;
+  }
+  
+  .sideCandidate .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	font-size: 36px;
+	margin-left: 50px;
+	color:#000;
+  }
+
+
+
+
+/*=============================Candidate page sliding slider css :- end============================= */
+
+.sideFilters{ width: 500px; margin-right: -500px; }
+.filter-open { margin-right: 0px; }
+/* 
+.sideCandidate{ width: 800px; margin-right: -800px; }
+.candidate-open { margin-right: 0px; } */
+
+
+
+
+/*======================Candidate page sliding slider css :- end================= */
+
+
+  @media screen and (max-height: 450px) {
+	.sidenav {padding-top: 15px;}
+	.sidenav a {font-size: 18px;}
+
+	
+
+
+  }
+  @media only screen and (max-device-width:960px){
+	.sideFilters{ width: 100%;}
+	/* .heading-sec .col-auto{
+		flex: 0 0 100%;
+    	width: 100%;
+	} */
+  }

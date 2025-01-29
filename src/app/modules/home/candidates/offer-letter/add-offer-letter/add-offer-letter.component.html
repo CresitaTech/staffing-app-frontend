@@ -1,0 +1,377 @@
+
+  <!-- offer letter slider :start -->
+  <div id="addOfferLetterComponent" >
+    <div class="p-4">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                <div class="form-row mb-3 heading-sec">
+                    <div class="col">
+                        <h5 *ngIf="eventId===constants.ADD ||eventId==='pop'" class="card-title">Add Offer Letter Request</h5>
+                        <h5 *ngIf="eventId===constants.EDIT ||eventId==='edit_pop'" class="card-title">Edit Offer Letter Request</h5>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-primary "  *ngIf="eventId === constants.ADD || eventId==='pop'" [disabled]="f1.invalid || f2.invalid" (click)="onSubmit()">Save</button>
+                        <button type="button" class="btn btn-primary "  *ngIf="eventId === constants.EDIT" [disabled]="f1.invalid || f2.invalid" (click)="onEdit()">Modify</button>
+                    </div>
+
+                    <button *ngIf="eventId===constants.POP_UP ||eventId===constants.EDIT_POP_UP" #closebutton type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+  
+                </div>
+                <!-- Designation -->
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="card-title">Candidate Details</h6>
+                            </div>
+  
+                        </div>
+                        <form #f1="ngForm">
+                            <div class="row">
+                            
+                             
+                                <div class="col form-group">
+                                    <app-candidate-inline *ngIf="eventId===constants.ADD||eventId===constants.EDIT" [item]="offerLetterRequest.candidate_name" [eventId]="eventId"
+                                    (changeItemEvt)="offerLetterRequest.candidate_name = $event; changeFormToDirty($event)" name="candidate_name">
+                                    </app-candidate-inline>
+    
+                                    <app-candidate-inline  *ngIf="eventId===constants.POP_UP" [itemId]="candidate_id" [item]="candidate_id" [eventId]="eventId"
+                                    (changeItemEvt)="offerLetterRequest.candidate_name = $event ; detailsOfSelectedCandidate($event); changeFormToDirty($event)"
+                                    (getAllDetails)="getCandidateDetails($event)"
+                                    (getResumeEvt)="getCandidateDetails($event)"
+                                    name="candidate_name">
+                                    </app-candidate-inline>
+                                </div>
+
+                                <div class="col form-group">
+                                    <label>Year of Experience</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.years_of_exp" id="years_of_exp" name="years_of_exp">
+                                </div>
+  
+                            </div>
+  
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>Skill Set</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.skill_set" id="skill_set" name="skill_set">
+                                </div>
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Contact Number</label>
+                                    <input type="text" class="form-control" placeholder=""  [pattern]="constants.newPhonePattern"  [(ngModel)]= "offerLetterRequest.contact_no" id="contact_no" name="contact_no"  #contact_no="ngModel"  
+                                    [ngClass]="{ 'is-invalid':contact_no.invalid && contact_no.touched }"
+                                    required >
+                                    <div *ngIf="contact_no.invalid && contact_no.touched" class="invalid-feedback">
+                                      <div *ngIf="contact_no.errors.required ">Valid Phone number is required</div>
+                                      <div *ngIf="contact_no.errors.pattern">Invalid phone number. Valid pattern can be like xxx-xxx-xxxx OR (xxx) xxx-xxxx</div>
+                                  </div>
+                                </div>
+                            </div>
+  
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Email ID</label>
+                                    <input type="email" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.email" id="email" name="email" #email="ngModel"
+                                    [ngClass]="{ 'is-invalid':email.invalid && email.touched }" [pattern]="constants.emailPattern" required
+                                    >
+                                    <div *ngIf="email.invalid && email.touched" class="invalid-feedback">
+                                      <div *ngIf="email.errors.required ">E-mail id is required</div>
+                                      <div *ngIf="email.errors.pattern">E-Mail id should be valid</div>
+                                  </div>
+                                </div>
+                                <div class="col form-group">
+                                    <label>Date of Birth</label>
+                                    <div class="input-group date-input">
+                                      <input type="text" class="form-control " id="date_of_birth" placeholder="YYYY-MM-DD"
+                                          ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="offerLetterRequest.date_of_birth"
+                                          #c1="ngModel" name="date_of_birth" [readonly] = "true" (click)="d2.toggle()">
+                                      <div class="input-group-append">
+                                          <div class="input-group-text">
+                                              <a (click)="offerLetterRequest.date_of_birth = today">Today</a>
+                                          </div>
+                                      </div>
+                                      <div class="input-group-append">
+                                          <div class="input-group-text">
+                                              <a (click)="d1.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                          </div>
+                                      </div>
+                                  </div> 
+                                </div>
+                            </div>
+  
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Highest Education
+                                        <small>(Degree)</small>
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.degree" id="degree" name="degree"    #degree="ngModel" [ngClass]="{ 'is-invalid':degree.invalid }">
+                                    <div *ngIf="degree.invalid " class="invalid-feedback">
+                                      <div *ngIf="degree.errors.required">Degree is required</div>
+                                  </div>
+                                </div>
+                                <div class="col form-group">
+                                    <label>Highest Education
+                                        <small>(CGPA / Percentage)</small>
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.percentage" id="percentage" name="percentage">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>Highest Education
+                                        <small>(University Name)</small>
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.university_name" id="university_name" name="university_name">
+                                </div>
+                                <div class="col form-group">
+                                    <label>PAN Number</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.pan_no" id="pan_no" name="pan_no">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Highest Qualification Completion
+                                        <small>(Month and year)</small>
+                                    </label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.qualification_completion" id="qualification_completion" name="qualification_completion"    #qualification_completion="ngModel" [ngClass]="{ 'is-invalid':qualification_completion.invalid }" >
+                                    <div *ngIf="qualification_completion.invalid " class="invalid-feedback">
+                                      <div *ngIf="qualification_completion.errors.required">Year of Passing is required</div>
+                                  </div>
+                                </div>
+                                <div class="col form-group">
+                                    <label>Current Location</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.current_location" id="current_location" name="current_location">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>Tentative DOJ with Client</label>
+                                    <!-- <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.tentative_joining_date" id="tentative_joining_date" name="tentative_joining_date"> -->
+                                     <div class="input-group date-input">
+                                      <input type="text" class="form-control " id="tentative_joining_date" placeholder="YYYY-MM-DD"
+                                          ngbDatepicker #d3="ngbDatepicker" [(ngModel)]="offerLetterRequest.tentative_joining_date"
+                                          #c3="ngModel" name="tentative_joining_date" [readonly] = "true" (click)="d3.toggle()">
+                                      <div class="input-group-append">
+                                          <div class="input-group-text">
+                                              <a (click)="offerLetterRequest.tentative_joining_date = today">Today</a>
+                                          </div>
+                                      </div>
+                                      <div class="input-group-append">
+                                          <div class="input-group-text">
+                                              <a (click)="d3.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                          </div>
+                                      </div>
+                                  </div> 
+                                </div>
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Name of the Client</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.client_name" id="client_name" name="client_name"   #client_name="ngModel" [ngClass]="{ 'is-invalid':client_name.invalid && client_name.touched }"
+                                     required>
+                                    <div *ngIf="client_name.invalid && client_name.touched" class="invalid-feedback">
+                                      <div *ngIf="client_name.errors.required ">Client Name is required</div>
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Client Location</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.client_location" id="client_location" name="client_location"  #client_location="ngModel"  
+                                    [ngClass]="{ 'is-invalid':client_location.invalid && client_location.touched }"
+                                    required >
+                                    <div *ngIf="client_location.invalid && client_location.touched" class="invalid-feedback">
+                                      <div *ngIf="client_location.errors.required ">Client Location is required</div>
+                                     
+                                  </div>
+                                </div>
+                                <div class="col form-group">
+                                    <label>ECMS ID</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.ecms_id" id="ecms_id" name="ecms_id">
+                                </div>
+                            </div>
+                        </form>
+  
+                    </div>
+                </div>
+  
+                <!-- Details Needed -->
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="card-title">Details Needed</h6>
+                            </div>
+  
+                        </div>
+  
+                        <form #f2="ngForm">
+  
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Our Submission Rate (LPA) - CTC of the candidate</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.candidate_ctc" id="candidate_ctc" name="candidate_ctc"  #candidate_ctc="ngModel"  
+                                    [ngClass]="{ 'is-invalid':candidate_ctc.invalid && candidate_ctc.touched }"
+                                    required>
+                                    <div *ngIf="candidate_ctc.invalid && candidate_ctc.touched" class="invalid-feedback">
+                                      <div *ngIf="candidate_ctc.errors.required ">Candidate CTC is required</div>
+                                     
+                                  </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>Client Rate - Billing Rate</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.client_rate" id="client_rate" name="client_rate">
+                                </div>
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Joining Date</label>
+                                    <!-- <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.joining_date" id="joining_date" name="joining_date"> -->
+                                     <div class="input-group date-input">
+                                      <input type="text" class="form-control " id="joining_date" placeholder="MM-dd-YYYY"
+                                          ngbDatepicker #d4="ngbDatepicker" [(ngModel)]="offerLetterRequest.joining_date"
+                                          #c4="ngModel" name="joining_date" [readonly] = "true" (click)="d4.toggle()" #joining_date="ngModel"
+                                          [ngClass]="{ 'is-invalid':joining_date.invalid && joining_date.touched }" required>
+                                      <div class="input-group-append">
+                                          <div class="input-group-text">
+                                              <a (click)="offerLetterRequest.joining_date = today">Today</a>
+                                          </div>
+                                      </div>
+                                      <div class="input-group-append">
+                                          <div class="input-group-text">
+                                              <a (click)="d4.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div *ngIf="joining_date.invalid && joining_date.touched" class="invalid-feedback">
+                                    <div *ngIf="joining_date.errors.required ">Joining Date is required</div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>Contract Duration</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.contract_duration" id="contract_duration" name="contract_duration">
+                                </div>
+                                <div class="col form-group">
+                                    <label>Expected Start date</label>
+                                    <!-- <input type="text" class="form-control" placeholder=""[(ngModel)]= "offerLetterRequest.expected_start_date" id="expected_start_date" name="expected_start_date"> -->
+                                    <div class="input-group date-input">
+                                      <input type="text" class="form-control " id="expected_start_date" placeholder="MM-dd-YYYY"
+                                          ngbDatepicker #d2="ngbDatepicker" [(ngModel)]="offerLetterRequest.expected_start_date"
+                                          #c2="ngModel" name="expected_start_date" [readonly] = "true" (click)="d2.toggle()">
+                                      <div class="input-group-append">
+                                          <div class="input-group-text">
+                                              <a (click)="offerLetterRequest.expected_start_date = today">Today</a>
+                                          </div>
+                                      </div>
+                                      <div class="input-group-append">
+                                          <div class="input-group-text">
+                                              <a (click)="d2.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                          </div>
+                                      </div>
+                                  </div>
+                                </div>
+                            </div>
+  
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>BGC Steps if any</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.bgc_steps" id="bgc_steps" name="bgc_steps">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>Expected working hours/timing on the projects</label>
+                                    <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.expected_working_hours" id="expected_working_hours" name="expected_working_hours">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>Details about whether the laptop will be provided by the client or otherwise</label>
+                                    <div class="form-row">
+                                        <div class="col">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="laptop_provided" id="" [(ngModel)]= "offerLetterRequest.laptop_provided" value="Yes">
+                                                <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="laptop_provided" id="" value="No" >
+                                                <label class="form-check-label" for="inlineRadio2">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+  
+                           
+                            <div class="form-row">
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Resume</label>
+                                    <div class="custom-file" *ngIf="eventId==='add' || eventId==='pop'">
+                                        <input name="resume"  type="file" class="custom-file-upload" id="customFile"
+                                            [(ngModel)]="offerLetterRequest.resume" #resume="ngModel"
+                                            [ngClass]="{ 'is-invalid':resume.invalid  }"
+                                            (change)="readFile($event,'resume')" required />
+                                        <div *ngIf=" resume.invalid && resume.touched" class="invalid-feedback">
+                                            <div *ngIf="resume.errors.required ">Resume is required</div>
+                                          </div>
+                                    </div>
+      
+                                    <div class="custom-file" *ngIf="eventId==='edit' || eventId==='edit_pop'" >
+                                      <input name="resume"  type="file" class="custom-file-upload" id="customFile"
+                                              [(ngModel)]="offerLetterRequest.resume" #resume="ngModel" 
+                                              [ngClass]="{ 'is-invalid':resume.invalid || resume.touched }"
+                                              (change)="readFile($event,'resume')" ng-required="!offerLetterRequest.resume" />
+                                          <div *ngIf="(resume.invalid && resume.touched)" class="invalid-feedback">
+                                              <div *ngIf="resume.errors.required ">Resume is required</div>
+                                          </div>
+                                          <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value"  [ngModelOptions]="{standalone: true}" [(ngModel)]="offerLetterRequest.resume" >{{offerLetterRequest.resume?
+                                            offerLetterRequest.resume : '--'}}
+                                              <a type="button" style="color: #26ae61;" *ngIf="offerLetterRequest.resume"
+                                                  href="{{_api.ip}}{{offerLetterRequest.resume}}" target="_blank">View PDF</a>
+                                          </small>
+                                      </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label class="asterisk-if-mandatory">Candidate is opting for Provident Fund.</label>
+                                    <div class="form-row">
+                                        <div class="col">
+                                          <!-- <input type="text" class="form-control" placeholder="" [(ngModel)]= "offerLetterRequest.provident_fund" id="provident_fund" name="provident_fund"> -->
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="provident_fund" id="" [(ngModel)]= "offerLetterRequest.provident_fund" [value]=0  #provident_fund="ngModel"  
+                                                [ngClass]="{ 'is-invalid':provident_fund.invalid && provident_fund.touched }"
+                                                required>
+                                                <label class="form-check-label" for="inlineRadio1">Yes</label>
+                                              
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="provident_fund" id="" [(ngModel)]= "offerLetterRequest.provident_fund" [value]=1 #provident_fund="ngModel"  
+                                                [ngClass]="{ 'is-invalid':provident_fund.invalid && provident_fund.touched }"
+                                                required>
+                                                <label class="form-check-label" for="inlineRadio2">No</label>
+                                            </div>
+                                            <div *ngIf=" provident_fund.invalid && provident_fund.touched" class="invalid-feedback">
+                                              <div *ngIf="provident_fund.errors.required ">Provident Fund Input is required</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="form-row button-sec">
+                    <div class="col-auto ml-auto">
+                        <!-- <button type="button" class="btn btn-primary" (click)="onSubmit()" >Save</button> -->
+                        <button type="button" class="btn btn-primary "  *ngIf="eventId === constants.ADD ||eventId==='pop' "  (click)="onSubmit()">Save</button>
+                        <button type="button" class="btn btn-primary "  *ngIf="eventId === constants.EDIT" [disabled]="f1.invalid || f2.invalid" (click)="onEdit()">Modify</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <!-- offer letter slider close -->

@@ -1,0 +1,686 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Job assignment - {{job_title}}</h5>
+                    <h5 class="card-title" *ngIf="eventId===constants.EDIT">Edit {{job_title}} Assignment</h5>
+                    <span *ngIf="reviewError" id='reviewError' style="color:red">{{reviewError}}</span>  
+                </div>
+               
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save
+                        & add another</button>
+                </div> -->
+
+
+                <div class="col-auto ml-auto">
+                    <button type="submit"
+                        [disabled]="f.invalid || !assignment.primary_recruiter_name ||!assignment.primary_recruiter_email || isDisable"
+                        (click)="onSubmit()" class="btn btn-primary"
+                        *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+                    <button type="submit"
+                        [disabled]="f.invalid || !assignment.primary_recruiter_name ||!assignment.primary_recruiter_email || isDisable"
+                        (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+                </div>
+                <div class="col-auto ml-auto">
+                <button *ngIf="eventId===constants.POP_UP" #closebutton type="button" class="close" aria-label="Close"
+                    (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            </div>
+           
+            <!-- Other Details -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form #f="ngForm">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Primary Recruiter Name</label>
+                                <app-users-inline [item]="assignment.primary_recruiter_name"
+                                    [actionName]=constants.ASSIGNMENT
+                                    (changeItemEvt)="assignment.primary_recruiter_name = $event"
+                                    (changeEmailEvt)="assignment.primary_recruiter_email = $event">
+                                </app-users-inline>
+                            </div>
+                            <div class="col form-group">
+                                <label>Secondary Recruiter Name</label>
+                                <app-users-inline [item]="assignment.secondary_recruiter_name"
+                                    [actionName]=constants.ASSIGNMENT
+                                    
+                                    (changeItemEvt)="assignment.secondary_recruiter_name = $event"
+                                    (changeEmailEvt)="assignment.secondary_recruiter_email = $event">
+                                </app-users-inline>
+                                <!-- [isDisabled]="!assignment.primary_recruiter_name || collection.length > 0" -->
+                                <!-- <app-users-inline [item]="assignment.secondary_recruiter_name"
+                                [actionName]=constants.ASSIGNMENT
+                                
+                                (changeItemEvt)="assignment.secondary_recruiter_name = $event"
+                                (changeEmailEvt)="assignment.secondary_recruiter_email = $event"> -->
+                            <!-- </app-users-inline> -->
+                                <div [ngClass]="{'secondary-recruiter-email-error':collection.length > 0, 'secondary-recruiter-email-error-hide':collection.length === 0}" class="bg-danger"><i class="fas fa-info-circle"></i> Please assign primary recruiter to all Unassigned jobs first</div>
+                            </div>
+                        </div>
+                        <!-- <div class="form-row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Primary Recruiter Email</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    id="p_recruiter_mail" [(ngModel)]="assignment.primary_recruiter_email"
+                                    name="p_recruiter_mail" #p_recruiter_mail="ngModel" >
+                            </div>
+                        </div> -->
+                        <!-- <div class="form-row">
+                            <div class="col form-group">
+                                <label>Secondary Recruiter Name</label>
+                                <app-users-inline [item]="assignment.secondary_recruiter_name"
+                                [actionName]=constants.ASSIGNMENT
+                                    (changeItemEvt)="assignment.secondary_recruiter_name = $event"
+                                    (changeEmailEvt)="assignment.secondary_recruiter_email = $event">
+                                </app-users-inline>
+                            </div>
+                            <div class="col form-group">
+                                <label>Secondary Recruiter Email</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    id="s_recruiter" [(ngModel)]="assignment.secondary_recruiter_email"
+                                    name="s_recruiter" #s_recruiter="ngModel">
+                            </div>
+                        </div> -->
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Assignee Name</label>
+                                <input type="text" class="form-control" placeholder="" id="assignee_name"
+                                    [(ngModel)]="assignment.assignee_name" name="assignee_name" required
+                                    #assignee_name="ngModel">
+                            </div>
+                            <div class="col form-group">
+                                <label>Assignee Email</label>
+                                <input type="text" class="form-control" placeholder="" id="assignee_email"
+                                    [(ngModel)]="assignment.assignee_email" name="assignee_email"
+                                    #assignee_email="ngModel">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Job Id</label>
+                                <div>
+                                    <div *ngIf="eventId=== constants.POP_UP">
+                                        {{job_id}}
+                                    </div>
+                                    <div *ngIf="eventId=== constants.POP_UP" class="label-value"
+                                        [(ngModel)]="assignment.job_id">{{jobPDFName?
+                                        jobPDFName : '--'}}
+                                        <a type="button" style="color: #26ae61;" *ngIf="job_pdf"
+                                            href="{{service.ip}}{{job_pdf}}" target="_blank">View PDF</a>
+                                    </div>
+                                </div>
+                                <div class="custom-file" *ngIf="eventId=== constants.ADD||eventId=== constants.EDIT">
+                                    <input type="text" class="custom-file-input" id="customFile"
+                                        [(ngModel)]="assignment.job_id" name="filename">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+
+                            <div class="col form-group">
+                                <label>Time Window</label>
+                                <select class="form-control" id="time_window" #time_window="ngModel"
+                                    [(ngModel)]="assignment.time_window" name="time_window">
+                                    <option value="">Select Time Window</option>
+                                    <option value="FH">First Half</option>
+                                    <option value="SH">Second Half</option>
+                                </select>
+
+                            </div>
+
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label>Remarks</label>
+                                <app-editor [id]="'editor1'" [content]="assignment.remarks" [hasTags]="false"
+                                    (contentChanged)="assignment.remarks = $event"></app-editor>
+                            </div>
+                        </div>
+
+                    </form>
+
+                   
+                </div>
+            </div>
+
+            <div class="form-row button-sec">
+               
+
+                <div class="col-auto ml-auto">
+                    <button type="submit"
+                        [disabled]="f.invalid || !assignment.primary_recruiter_name ||!assignment.primary_recruiter_email || isDisable"
+                        (click)="onSubmit()" class="btn btn-primary"
+                        *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+                    <button type="submit"
+                        [disabled]="f.invalid || !assignment.primary_recruiter_name ||!assignment.primary_recruiter_email || isDisable"
+                        (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="(eventId===constants.ADD || eventId===constants.POP_UP) ">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mt-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Unassigned Jobs:</h5>
+                </div>
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save
+                        & add another</button>
+                </div> -->
+
+               
+            </div>
+
+            <!-- Other Details -->
+            <div class="card mb-2">
+                <div class="card-body">
+                   
+
+                    <div class="form-row">
+                        <div class="col">
+                            
+                            <div class="form-row shortby-section">
+                                <div class="col-auto">
+                                    <div class="form-check form-group mt-2">
+                                        <input class="form-check-input" [(ngModel)]="masterSelected" name="JD_list" type="checkbox"
+                                            value="c1" (change)="checkUncheckAll()" id="">
+                                        <label class="form-check-label">
+                                            Select All
+                                        </label>
+                                    </div>
+                                </div>
+                
+                                <div class="col-auto">
+                                    <select id="actionType" class="form-control">
+                                        <option>Select Action</option>
+                                        <option value="delete">Delete Selected JDs</option>
+                                        <option *ngIf= "presentRole!== role.RECRUITER" value="priority">Set Selected JDs to High Priority</option>
+                
+                                    </select>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit"
+                                    *ngIf="count === 0"
+                                    disabled
+                                    id="goButton"
+                                    (click)="selectHandler()"
+                                    class="btn btn-primary"
+                                  >
+                                    Go
+                                  </button>
+                                  <button
+                                    type="submit"
+                                    *ngIf="count !== 0"
+                                    id="goButton"
+                                    (click)="selectHandler()"
+                                    class="btn btn-primary"
+                                  >
+                                    Go
+                                  </button>
+                      
+                                </div>
+                                <div class="col-auto line-height-38">
+                                    {{count}} of {{collectionSize}} selected
+                                </div>
+                                <div class="col-auto line-height-38 ml-auto"> Page Size:</div>
+                                <div class="col-auto">
+                                  <select  id="page-size" class="form-control" (change)="setPageSize()">
+                                    <option value="10" selected="">10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                    <option value="500">500</option>
+                                    <option value="1000">1000</option>
+                                  </select>
+                                </div>
+                                <div class="col-auto shortby-dropdown">
+                                    <select id="sortAs" class="form-control" (change)="changeSortingOrder(); fetchCollectionList()">
+                                        <option value="" disabled>Sort by date</option>
+                                        <option value="true">Latest</option>
+                                        <option value="false">Oldest</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="card mb-1 candidate-details bg-green-light border-green-light"
+                                [ngClass]="{'bg-green-light':selectedItemIndex === index, 'border-green-light': selectedItemIndex === index}"
+                                *ngFor="let jd of collection; let index = index;">
+
+                                <div class="card-body"
+                                    [ngClass]="(jd.status==='Inactive')?'inActive-Job':(jd.status==='Rejected'?'inReject-Job':'candidate-details')">
+                                    <div class="form-row"
+                                        [ngClass]="(this.presentRole!==role.RECRUITER)?'joblist-SetPriority':'joblist-NotSetPriority'">
+                                        <div class="col-auto candidate-checkbox">
+                                            <div class="form-check form-group">
+                                                <input class="form-check-input" [(ngModel)]="jd.isSelected"
+                                                    type="checkbox" value="" id="" value="{{jd.id}}" name="jd_list"
+                                                    (change)="isAllSelected()">
+                                            </div>
+                                        </div>
+                                        <div class="col-auto jobs-data">
+                                            <div class="label-value">{{jd.job_title ? jd.job_title : '--'}}</div>
+                                            <div class="label-name">Job title</div>
+                                        </div>
+                                        <div class="col-auto jobs-data">
+                                            <div class="label-value">{{jd.client_name?.company_name?
+                                                jd.client_name?.company_name :
+                                                '--'}}</div>
+                                            <div class="label-name">Client name</div>
+                                        </div>
+                                        <div class="col-auto jobs-data ">
+                                            <div class="label-value">{{jd.location? jd.location : '--'}}</div>
+                                            <div class="label-name">Location</div>
+                                        </div>
+                                        <div class="col-auto  " *ngIf="jd.min_salary|| jd.max_salary">
+                                            <div class="job-salary">
+                                                <div *ngIf="jd.min_salary && !jd.max_salary">
+                                                    <div class="label-value">{{currencyTag}}{{jd.min_salary}} </div>
+                                                    <!--| currency:'USD'-->
+                                                    <div class="label-name">Salary</div>
+                                                </div>
+                                                <div *ngIf="!jd.min_salary && jd.max_salary ">
+                                                    <div class="label-value">{{currencyTag}}{{jd.max_salary}}</div>
+                                                    <div class="label-name">Salary</div>
+                                                </div>
+                                                <div *ngIf="!jd.min_salary && !jd.max_salary ">
+                                                    <div class="label-value">--</div>
+                                                    <div class="label-name">Salary</div>
+                                                </div>
+                                                <div *ngIf="jd.min_salary && jd.max_salary ">
+                                                    <div class="label-value">
+                                                        {{currencyTag}}{{jd.min_salary}}-{{currencyTag}}{{jd.max_salary}}
+                                                    </div>
+                                                    <div class="label-name">Salary</div>
+                                                </div>
+                                            </div>
+                                            <!-- *ngIf="jd.salary!=='0.00' && jd.salary " -->
+
+                                        </div>
+                                        <div *ngIf="!jd.min_salary&& !jd.max_salary " class="col-auto">
+                                            <div class="job-salary">
+                                                <div *ngIf="jd.min_rate && !jd.max_rate">
+                                                    <div class="label-value">{{jd.min_rate| currency:'USD'}}</div>
+                                                    <div class="label-name">Rate</div>
+                                                </div>
+                                                <div *ngIf="!jd.min_rate && jd.max_rate ">
+                                                    <div class="label-value">{{jd.max_rate| currency:'USD'}}</div>
+                                                    <div class="label-name">Rate</div>
+                                                </div>
+                                                <div *ngIf="!jd.min_rate && !jd.max_rate ">
+                                                    <div class="label-value">--</div>
+                                                    <div class="label-name">Rate</div>
+                                                </div>
+                                                <div *ngIf="jd.min_rate && jd.max_rate ">
+                                                    <div class="label-value">{{jd.min_rate|
+                                                        currency:'USD'}}-{{jd.max_rate| currency:'USD'}}</div>
+                                                    <div class="label-name">Rate</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto ml-2 mr-2">
+                                            <div class="jobs-status-dropdown">
+                                                <select class="form-control form-control-sm" id={{jd.id}} name="status"
+                                                    [value]="jd.status" (change)="onStatusChange(jd.id)">
+                                                    <option disabled>Select Status</option>
+                                                    <option value="Active">Active</option>
+                                                    <option value="Inactive">In Active</option>
+                                                    <option value="Rejected">Rejected</option>
+                                                    <option value="SubmissionNotAccepted">Not Accepting Submissions</option>
+
+                                                </select>
+                                            </div>
+                                            <div class="label-name">Job Status</div>
+                                        </div>
+
+
+                                        <!-- <div class="col-auto " 
+                                            *ngIf="this.presentRole!==role.RECRUITER"> -->
+                                        <!-- <div class="label-value">{{jd.priority===true? 'Yes' : 'No'}}</div> -->
+                                        <!-- <div class="toggle-box">
+                                                <label class="switch">
+                                                    <input type="checkbox" *ngIf="jd.priority===true" checked
+                                                        [value]="jd.priority" (click)="onPriorityChange(jd.id)">
+                                                    <input type="checkbox" *ngIf="jd.priority===false"
+                                                        [value]="jd.priority" (click)="onPriorityChange(jd.id)">
+
+                                                    <div class="slider round" id="togBtn"> -->
+                                        <!--ADDED HTML -->
+                                        <!-- <span value="true" class="on">High</span>
+                                                        <span value="false" class="off">Low</span> -->
+                                        <!--END-->
+                                        <!-- </div>
+
+
+                                                </label>
+                                            </div>
+                                            <div class="label-name label-setPriority">Set Priority</div>
+                                        </div> -->
+
+                                        <div class="col-auto  ml-auto">
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-light dropdown-toggle"
+                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Action
+                                                </button>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <!-- <a class="dropdown-item"
+                                                        (click)="openJobDescription(Constants.EDIT, index)"><i
+                                                            class="fas fa-user-edit"></i>
+                                                        Edit</a> -->
+                                                    <a class="dropdown-item" (click)="openDeleteModal(jd)"><i
+                                                            class="fa fa-trash" aria-hidden="true"></i>
+                                                        Delete</a>
+                                                    <!-- <a class="dropdown-item" (click)="cloneJob(jd)"><i
+                                                            class="fas fa-clone" aria-hidden="true"></i>
+
+                                                        Clone this Job</a>
+                                                    <a class="dropdown-item"
+                                                        (click)="openNotesOnJobModel(Constants.EDIT, index)"><i
+                                                            class="fas fa-clone" aria-hidden="true"></i>
+                                                        Update Notes</a>
+
+                                                    <a class="dropdown-item"
+                                                        (click)="openMatchedCandidatesOnJobModel(jd)">
+                                                        <i class="fas fa-clone" aria-hidden="true"></i>Recommend
+                                                        candidates</a> -->
+
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item"
+                                                        (click)="doAction(Constants.ASSIGNMENT,index)">Assignment</a>
+                                                    <!--*ngIf="isPermission"-->
+                                                    <!-- <a class="dropdown-item"
+                                (click)="doAction(Constants.SUBMISSION,index)">Submission</a> -->
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="candidate-details-full border-top" *ngIf="selectedItemIndex === index"
+                                    [ngClass]="(jd.status==='Inactive')?'inActive-Job':(jd.status==='Rejected'?'inReject-Job':'candidate-details')">
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card-body">
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <div class="row">
+                                                            <div class="col"
+                                                                *ngIf="jd.min_years_of_experience && !jd.max_years_of_experience">
+                                                                <div class="label-value">{{jd.min_years_of_experience}}
+                                                                    year(s)</div>
+                                                                <div class="label-name">Years of Experience</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col"
+                                                                *ngIf="!jd.min_years_of_experience && jd.max_years_of_experience ">
+                                                                <div class="label-value">{{jd.max_years_of_experience}}
+                                                                    year(s)</div>
+                                                                <div class="label-name">Years of Experience</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col"
+                                                                *ngIf="!jd.min_years_of_experience && !jd.max_years_of_experience ">
+                                                                <div class="label-value">--</div>
+                                                                <div class="label-name">Years of Experience</div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col"
+                                                                *ngIf="jd.min_years_of_experience && jd.max_years_of_experience ">
+                                                                <div class="label-value">
+                                                                    {{jd.min_years_of_experience}}-{{jd.max_years_of_experience}}
+                                                                    year(s)</div>
+                                                                <div class="label-name">Years of Experience</div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="col">
+                                                        <div class="label-value">{{jd.job_recruiter_pdf?
+                                                            jd.job_recruiter_pdf : '--'}}
+                                                            <a type="button" class="btn btn-sm btn-primary ml-2"
+                                                                *ngIf="jd.job_recruiter_pdf"
+                                                                href="{{ip}}{{jd.job_recruiter_pdf}}"
+                                                                target="_blank">View
+                                                                PDF</a>
+                                                        </div>
+                                                        <div class="label-name">Recruiter Job PDF</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    
+                                                    <div class="col ">
+                                                        <div class="label-value">{{jd.visa_type ? jd.visa_type : '--'}}
+                                                        </div>
+                                                        <div class="label-name">Visa Type</div>
+                                                    </div>
+                                                    <div class="col" *ngIf="presentRole!== role.RECRUITER">
+                                                        <div class="label-value">{{jd.job_pdf? jd.job_pdf : '--'}}
+                                                            <a type="button" class="btn btn-sm btn-primary ml-2"
+                                                                *ngIf="jd.job_pdf" href="{{ip}}{{jd.job_pdf}}"
+                                                                target="_blank">View
+                                                                PDF</a>
+                                                        </div>
+                                                        <div class="label-name">Job PDF</div>
+                                                    </div>
+                                                    <div class="col" *ngIf="presentRole=== role.RECRUITER">
+
+                                                        <div class="label-value">{{jd.industry_experience?
+                                                            jd.industry_experience :
+                                                            '--'}}</div>
+                                                        <div class="label-name">Industry Experience</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        
+                                                        <div class="label-value" *ngIf="!jd.roles_and_responsibilities">
+                                                            --</div>
+                                                        <div class="label-value" *ngIf="jd.roles_and_responsibilities">
+                                                            <app-read-more [text]="jd.roles_and_responsibilities" [maxHeight]="60"></app-read-more>
+                                                            <!-- <app-read-more>
+                                                                {{jd.roles_and_responsibilities}}
+                                                            </app-read-more> -->
+                                                        </div>
+                                                        <div class="label-name">Roles and Responsibilities</div>
+                                                    </div>
+                                                    <div class="col ">
+                                                        <div class="label-value" *ngIf="jd.created_at">{{jd.created_at|
+                                                            date:'medium'}}
+                                                        </div>
+                                                        <div class="label-value" *ngIf="!jd.created_at">--</div>
+                                                        <div class="label-name">Created At</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <div class="label-value" *ngIf="!jd.job_description">--</div>
+                                                        
+                                                        <div class="label-value" *ngIf="jd.job_description">
+                                                            <app-read-more [text]="jd.job_description" [maxHeight]="60"></app-read-more>
+                                                            <!-- <app-read-more>
+                                                                {{jd.job_description}}
+                                                            </app-read-more> -->
+                                                        </div>
+                                                        <div class="label-name">Job Description</div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <div class="label-value">{{jd.key_skills? jd.key_skills : '--'}}
+                                                        </div>
+                                                        <div class="label-name">Key skills</div>
+                                                    </div>
+                                                    <div class="col ">
+                                                        <div class="label-value">{{jd.education_qualificaion?
+                                                            jd.education_qualificaion
+                                                            : '--'}}</div>
+                                                        <div class="label-name">Education Qualificaion</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <div class="label-value">{{jd.start_date? jd.start_date : '--'}}
+                                                        </div>
+                                                        <div class="label-name">Contract Start Date</div>
+                                                    </div>
+                                                    <div class="col ">
+                                                        <div class="label-value">{{jd.employment_type?
+                                                            jd.employment_type : '--'}}</div>
+                                                        <div class="label-name">Employment Type</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <div class="label-value">{{jd.end_client_name ?
+                                                            jd.end_client_name : '--'}}
+                                                        </div>
+                                                        <div class="label-name">End Client Name</div>
+                                                    </div>
+                                                    <div class="col" *ngIf="presentRole=== role.RECRUITER">
+                                                        <div class="label-value">{{jd.contract_duration?
+                                                            jd.contract_duration : '--'}}
+                                                        </div>
+                                                        <div class="label-name">Contract Duration</div>
+                                                    </div>
+                                                    <div class="col"
+                                                        *ngIf="presentRole=== role.BDMMANAGER || presentRole=== role.RECRUITERMANAGER || presentRole===role.ADMIN">
+
+                                                        <div *ngIf="jd.min_client_rate && !jd.max_client_rate">
+                                                            <div class="label-value">{{jd.min_client_rate|
+                                                                currency:'INR'}}</div>
+                                                            <div class="label-name">Client Rate</div>
+                                                        </div>
+                                                        <div *ngIf="!jd.min_client_rate && jd.max_client_rate ">
+                                                            <div class="label-value">{{jd.max_client_rate|
+                                                                currency:'INR'}}</div>
+                                                            <div class="label-name">Client Rate</div>
+                                                        </div>
+                                                        <div *ngIf="!jd.min_client_rate && !jd.max_client_rate ">
+                                                            <div class="label-value">--</div>
+                                                            <div class="label-name">Client Rate</div>
+                                                        </div>
+                                                        <div *ngIf="jd.min_client_rate && jd.max_client_rate ">
+                                                            <div class="label-value">{{jd.min_client_rate|
+                                                                currency:'INR'}}-{{jd.max_client_rate| currency:'INR'}}
+                                                            </div>
+                                                            <div class="label-name">Client Rate</div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <div class="label-value">{{jd.job_id ? jd.job_id : '--'}}</div>
+                                                        <div class="label-name">Job Id</div>
+                                                    </div>
+
+                                                    <div class="col ">
+                                                        <div class="label-value">{{jd.job_posted_date | date:'medium'}}
+                                                        </div>
+                                                        <div class="label-name">Job Posted Date</div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <div class="label-value">{{jd.status ? jd.status : '--'}}</div>
+                                                        <div class="label-name">Status</div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="label-value" *ngIf="jd.created_by">
+                                                            {{jd.created_by.first_name}} {{jd.created_by.last_name}}
+                                                        </div>
+                                                        <div class="label-value" *ngIf="!jd.created_by">--</div>
+                                                        <div class="label-name">BDM Name</div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row mb-3">
+                                                    <div class="col">
+                                                        <div class="label-value">Candidate Submissions
+                                                            <button type="button" class="btn btn-sm btn-primary ml-2"
+                                                                (click)="ViewAllCandidates(jd.id)">View
+                                                            </button>
+                                                        </div>
+                                                        
+
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="label-value">Assignment History
+                                                            <button type="button" class="btn btn-sm btn-primary ml-2"
+                                                                (click)="ViewAssignmentHistory(jd.id)">View
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mb-3"
+                                                    *ngIf="(presentRole=== role.RECRUITERMANAGER || presentRole=== role.RECRUITER) ">
+                                                    <div class="col">
+                                                        <div class="label-value">{{jd.primary_recruiter_name ?
+                                                            jd.primary_recruiter_name : '--'}}</div>
+                                                        <div class="label-name">Primary Recruiter</div>
+                                                    </div>
+                                                    <div class="col">
+                                                        <div class="label-value">{{jd.secondary_recruiter_name ?
+                                                            jd.secondary_recruiter_name :
+                                                            '--'}}</div>
+                                                        <div class="label-name">Secondary Recruiter</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="card-body job-description-notes">
+                                                <div class="label-value">Job description notes </div>
+                                                <table class="table table-striped">
+                                                    <thead class="thead-dark">
+                                                        <tr>
+                                                            <th>Date</th>
+                                                            <th>User</th>
+                                                            <th>Note</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let jd of notes; let index = index;">
+                                                            <td>{{jd.created_at}}</td>
+                                                            <td>{{jd.created_by.first_name}}</td>
+                                                            <td>{{jd.job_description_notes}}</td>
+                                                        </tr>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                            <app-paging [page]="page" [pageSize]="limit" [collectionSize]="collectionSize"
+                            (pageChangeEvt)="page = $event; fetchCollectionList();"></app-paging>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        
+        </div>
+    </div>
+</div>

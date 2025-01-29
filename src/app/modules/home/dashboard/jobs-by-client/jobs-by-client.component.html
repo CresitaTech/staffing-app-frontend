@@ -1,0 +1,270 @@
+<div class="card shadow-sm p-0">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <h5 class="card-title mb-0">{{title}} </h5>
+            </div>
+            <div class="col-auto ml-auto mobile">
+              <div class="form-row">
+            <!-- <div class="col-auto"> -->
+
+                    <!-- <ng-select #selectFilter [items]="allUsers" [searchable]="false" [(ngModel)]="xAxisFilter" (ngModelChange)="filterOnTableJBCLIENT($event, xAxisFilterBDM, xAxisFilterCountry);"
+                    bindLabel="bdm_name"  placeholder="Select city"
+                    #_item="ngModel" [ngClass]="{ 'is-invalid':_item.invalid && _item.touched }">
+                    <ng-template ng-header-tmp >
+                    <input style="width: 100%; line-height: 24px" type="text" (input)="selectFilter.filter($event.target.value)"/>
+                    </ng-template>
+                    </ng-select> -->
+
+                    <!-- <ng-select [items]="allBDMS"
+                    class="form-control form-control-sm" aria-label="Default select example"
+                   bindLabel="bdm_name"
+                   placeholder="Select city"
+                   [(ngModel)]="xAxisFilter"
+                   labelForId="city">
+        </ng-select> -->
+        <app-filter-search-dropdown [item]="xAxisFilterBDM" [user_role]="'9'" [role]="'BDM'" (changeItemAllData)="allBDMS=$event"
+        (changeItemEvt)="onXAxisFilterBDMChange($event)" name="FilterSearch">
+    </app-filter-search-dropdown>
+
+                <app-filter-search-dropdown [item]="xAxisFilter" [user_role]="'client'" [role]="'client'" (changeItemAllData)="allUsers=$event"
+                    (changeItemEvt)="onXAxisFilterChange($event)" name="FilterSearch">
+                </app-filter-search-dropdown>
+            <!-- </div> -->
+            <!-- <div class="col-auto">
+                <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                    [ngModel]="xAxisFilter"
+                    (ngModelChange)="xAxisFilter = $event;filterOnTableJBCLIENT($event, xAxisFilterBDM, xAxisFilterCountry); filterJobsByClientClient($event, xAxisFilterBDM,  xAxisFilterCountry);">
+                    <option selected value="none">Select Client</option>
+                    <option value="ALL">ALL</option>
+                    <option *ngFor="let r of setForJobSummary;" [ngValue]="r">{{r}}
+                    </option>
+                </select>
+            </div> -->
+
+            <!-- <div class="col-auto">
+                <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                    [ngModel]="xAxisFilterBDM"
+                    (ngModelChange)="xAxisFilterBDM = $event;filterOnTableJBCLIENT(xAxisFilter, $event, xAxisFilterCountry); filterJobsByClientClient(xAxisFilter, $event, xAxisFilterCountry);">
+                    <option selected value="none">Select BDM</option>
+                    <option value="ALL">ALL</option>
+                    <option *ngFor="let r of setBDMS;" [ngValue]="r">{{r}}
+                    </option>
+                </select>
+            </div> -->
+            <!-- <div class="col-auto" *ngIf="!isTabular && chartType === ChartTypeEnum.BAR">
+                <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                    [ngModel]="xAxisFilter" (ngModelChange)="filterRecruiter($event);xAxisFilter = $event;">
+                    <option selected value="none">Select Client</option>
+                    <option value="ALL">ALL</option>
+                    <option *ngFor="let r of setForJobsByClient;" [ngValue]="r">{{r}}</option>
+                </select>
+            </div>
+
+            <div class="col-auto" *ngIf="isTabular">
+            <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                [ngModel]="xAxisFilter" (ngModelChange)="filterOnTable($event); xAxisFilter = $event;">
+                <option selected value="none">Select Client</option>
+                <option value="ALL">ALL</option>
+                <option *ngFor="let r of setForJobsByClient;" [ngValue]="r">{{r}}</option>
+            </select>
+            </div> -->
+
+            <app-filter-search-dropdown [item]="xAxisFilterCountry" [user_role]="'Country'" [role]="'Country'"
+            (changeItemEvt)="onXAxisFilterCountryChange($event)" name="FilterSearch">
+        </app-filter-search-dropdown>
+
+
+            <!-- <div class="col-auto">
+                <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                    [ngModel]="xAxisFilterCountry"
+                    (ngModelChange)="xAxisFilterCountry = $event; filterOnTableJBCLIENT(xAxisFilter, xAxisFilterBDM, $event); filterJobsByClientClient(xAxisFilter, xAxisFilterBDM, $event); ">
+                    <option selected value="none">Select Country</option>
+                    <option value="ALL">ALL</option>
+                    <option *ngFor="let r of setForJobSummaryCountry;" [ngValue]="r">
+                        {{r}}
+                    </option>
+                </select>
+
+            </div> -->
+
+
+
+
+            <!-- <div class="col-auto pt-1 ml-4" *ngIf="dateRange === allDateRange.CUSTOM">
+                <b>From</b> {{startDate}} <b> to </b> {{endDate}}
+            </div>
+            <div class="col-auto pr-0  pl-0">
+                <a class="chart-icon btn-link" (click)="openDateRangeModal()" *ngIf="dateRange === allDateRange.CUSTOM">
+                    <i class="fas fa-calendar-alt"></i>
+                </a>
+            </div> -->
+            <div class="col-auto">
+                <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                    [ngModel]="dateRange" (ngModelChange)="dateRangeChangedInitial($event)">
+                    <option *ngFor="let r of dateRangeKeys" value="{{allDateRange[r]}}">{{allDateRange[r] | titlecase}}
+                    </option>
+                </select>
+            </div>
+
+            <div>
+              <button class="btn btn-primary mr-2 ml-2" (click)="applyFilters()">Go</button>
+            </div>
+
+            <div class="col-auto text-right">
+
+                <ng-container *ngIf="!isTabular">
+                    <a class="chart-icon btn-link mr-2"
+                        (click)="isTabular = true; filterOnTableJBCLIENT(xAxisFilter, xAxisFilterBDM, xAxisFilterCountry);"
+                        *ngIf="show_tabular" title="Table View">
+                        <i class="fas fa-table"></i>
+                    </a>
+                    <a class="chart-icon btn-link" *ngIf="chartType === ChartTypeEnum.LINE"
+                        (click)="chartType = ChartTypeEnum.BAR; setBackground(); isTabular = false; filterOnTableJBCLIENT(xAxisFilter, xAxisFilterBDM, xAxisFilterCountry);" title="Bar Graph">
+                        <i class="fas fa-chart-bar"></i>
+                    </a>
+                    <a class="chart-icon btn-link" *ngIf="chartType !== ChartTypeEnum.LINE"
+                        (click)="chartType = ChartTypeEnum.LINE; setBackground(); isTabular = false; filterOnTableJBCLIENT(xAxisFilter, xAxisFilterBDM, xAxisFilterCountry);" title="Line Graph">
+                        <i class="fas fa-chart-line"></i>
+                    </a>
+                </ng-container>
+                <ng-container *ngIf="isTabular">
+                    <a class="chart-icon btn-link mr-2"
+                        (click)="chartType = ChartTypeEnum.BAR; setBackground(); isTabular = false; filterJobsByClientClient(xAxisFilter, xAxisFilterBDM, xAxisFilterCountry);" title="Bar Graph">
+                        <i class="fas fa-chart-bar"></i>
+                    </a>
+                    <a class="chart-icon btn-link"
+                        (click)="chartType = ChartTypeEnum.LINE; setBackground(); isTabular = false; filterJobsByClientClient(xAxisFilter,xAxisFilterBDM, xAxisFilterCountry);" title="Line Graph">
+                        <i class="fas fa-chart-line"></i>
+                    </a>
+                </ng-container>
+                <a class="chart-icon btn-link ml-2" (click)="downloadFile('job_submissions_by_client')"
+                    *ngIf="show_download" title="Download CSV">
+                    <i class="fas fa-file-excel"></i>
+                </a>
+            </div>
+            </div>
+
+            <div class="col-auto text-right mr-5" *ngIf="dateRange === allDateRange.CUSTOM">
+              <b>From</b> {{startDate}} <b> to </b> {{endDate}}
+              <a class="chart-icon btn-link" (click)="openDateRangeModal()"
+                  *ngIf="dateRange === allDateRange.CUSTOM">
+                  <i class="fas fa-calendar-alt"></i>
+              </a>
+            </div>
+
+          </div>
+        </div>
+    </div>
+    <div class="card-body pt-0 pb-0">
+        <div class="row">
+            <div class="col graph" *ngIf="!isTabular">
+
+                <ng-container *ngIf="chartData.length > 0">
+                    <ng-container *ngIf="isCompleted && chartType === ChartTypeEnum.BAR">
+                        <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions"
+                            [legend]="true" [chartType]="ChartTypeEnum.BAR" [plugins]="[]">
+                        </canvas>
+                    </ng-container>
+                    <ng-container *ngIf="isCompleted && chartType === ChartTypeEnum.LINE">
+                        <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions"
+                            [legend]="true" [chartType]="ChartTypeEnum.LINE" [plugins]="[]">
+                        </canvas>
+                    </ng-container>
+                </ng-container>
+                <ng-container
+                    *ngIf="(chartData.length === 0 ||chartData.length===undefined || chartData.length===null )">
+                    <div class="text-center text-muted">
+                        No Data available currently.
+                    </div>
+                </ng-container>
+
+            </div>
+            <div class="col graph" *ngIf="isTabular">
+                <div class="table-responsive">
+                    <!-- <table class="table">
+                        <tr>
+                            <th>Stages</th>
+                            <th *ngFor="let n of chartLabels">{{n}}</th>
+                        </tr>
+                        <tr *ngFor="let d of chartData">
+                            <td>{{d.label}}</td>
+                            <td *ngFor="let u of d.data">{{u}}</td>
+                        </tr>
+                    </table> -->
+                    <!-- <table class="table">
+                        <tr>
+                            <th>Candidate Name</th>
+                            <th>Candidate Stage</th>
+                            <th>Job Title</th>
+                            <th>Total Experience</th>
+                            <th>Salary ($)</th>
+                            <th>Rate ($)</th>
+                            <th>Client Name</th>
+                            <th>Bdm Name</th>
+                            <th>Location</th>
+                            <th>Submission Date</th>
+                            <th>Job Date</th>
+                        </tr>
+                        <tr *ngFor="let d of tabularData;">
+                            <td>{{d.candidate_name ? d.candidate_name : '--'}}</td>
+                            <td>{{d.status ? d.status : '--'}}</td>
+                            <td>{{d.job_title ? d.job_title : '--'}}</td>
+                            <td>{{d.total_experience ? d.total_experience : '--'}}</td>
+                            <td>
+                            <span *ngIf="d.min_salary && !d.max_salary">
+                                {{d.min_salary| currency:'USD'}}
+                            </span>
+                            <span *ngIf="!d.min_salary && d.max_salary">
+                                {{d.max_salary| currency:'USD'}}
+                            </span>
+                            <span *ngIf="d.min_salary && d.max_salary">
+                                {{d.min_salary| currency:'USD'}}-{{d.max_salary| currency:'USD'}}
+                            </span>
+                            <span *ngIf="!d.min_salary && !d.max_salary">
+                                   --
+                            </span>
+                            </td>
+                            <td>
+                                <span *ngIf="d.min_rate && !d.max_rate">
+                                    {{d.min_rate| currency:'USD'}}
+                                </span>
+                                <span *ngIf="!d.min_rate && d.max_rate">
+                                    {{d.max_rate| currency:'USD'}
+                                </span>
+                                <span *ngIf="d.min_rate && d.max_rate">
+                                    {{d.min_rate| currency:'USD'}}-{{d.max_rate| currency:'USD'}}
+                                </span>
+                                <span *ngIf="!d.min_rate && !d.max_rate">
+                                       --
+                                </span>
+                                </td>
+                            <td>{{d.client_name ? d.client_name : '--'}}</td>
+                            <td>{{d.bdm_name ? d.bdm_name : '--'}}</td>
+                            <td>{{d.location ? d.location : '--'}}</td>
+                            <td>{{d.submission_date ? d.submission_date : '--'}}</td>
+                            <td>{{d.job_date ? d.job_date : '--'}}</td>
+                        </tr>
+                    </table> -->
+                    <div class="example-header">
+                        Page Size:
+                        <select (change)="onPageSizeChanged()" id="page-size">
+                            <option value="10" selected="">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                            <option value="500">500</option>
+                            <option value="1000">1000</option>
+                        </select>
+                    </div>
+
+                    <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                        [rowData]="tabularDataForFilter" [columnDefs]="columnDefs" pagination=true
+                        paginationPageSize="10" (gridReady)="onGridReady($event)">
+                    </ag-grid-angular>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

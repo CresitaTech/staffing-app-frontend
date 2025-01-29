@@ -1,0 +1,371 @@
+<div id="addVendor" class="sideCandidate">
+  <!-- <a href="javascript:void(0)" class="closebtn" (click)="closeAddVendor()">&times;</a> -->
+  <app-add-vendors
+    *ngIf="eventId === constants.ADD"
+    (closeAddEditPage)="closeAddVendor(); eventId = undefined"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+  >
+  </app-add-vendors>
+  <app-add-vendors
+    *ngIf="eventId === constants.EDIT"
+    (closeAddEditPage)="closeAddVendor(); eventId = undefined"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+    [indexAsInput]="indexAsInput"
+  ></app-add-vendors>
+</div>
+
+<app-filter
+  #filter
+  [params]="filterOn"
+  (filterEvt)="
+    displayFilter = $event.displayFilter; fetchCollectionList($event.path)
+  "
+>
+</app-filter>
+
+<div id="sendMail" class="sideCandidate">
+  <a href="javascript:void(0)" class="closebtn" (click)="closeSendMail()"
+    >&times;</a
+  >
+  <app-send-mail
+    [tagName]="tagName"
+    (refreshListEvt)="refreshEmailPage()"
+    [mailAddress]="mailAddress"
+  ></app-send-mail>
+</div>
+
+<div class="search-wrap">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="row mt-3 page-header">
+          <div class="col-auto">
+            <h4 class="page-title mb-0">Vendors</h4>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a> Vendors</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Vendors
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <div class="col ml-auto">
+            <div class="form-row">
+              <!-- <div class="col pr-0">
+                                        <select class="form-control" id="">
+                                            <option>Short By</option>
+                                        </select>
+                                    </div> -->
+              <div class="col-auto ml-auto">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  data-toggle="modal"
+                  data-target="#popup-Import"
+                  (click)="openImportModal()"
+                >
+                  <i class="fa fa-download" aria-hidden="true"></i>
+                  Import</button
+                >&nbsp;
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="openExport()"
+                >
+                  <i class="fa fa-share-square" aria-hidden="true"></i>
+                  Export</button
+                >&nbsp;
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="openAddVendor(constants.ADD, undefined)"
+                >
+                  <i class="fa fa-user-plus" aria-hidden="true"></i> Add Vendor
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray mt-2 p-4 rounded">
+          <form (ngSubmit)="fetchCollectionList()">
+            <div class="search-box">
+              <div class="form-row">
+                <div class="col">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span href="" class="input-group-text"
+                        ><i class="fa fa-search" aria-hidden="true"></i
+                      ></span>
+                    </div>
+                    <input
+                      class="form-control"
+                      type="text"
+                      [(ngModel)]="search"
+                      name="searchbox"
+                      placeholder="Search by vendor name"
+                    />
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+                <div class="col-auto">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="openFilter()"
+                  >
+                    Filters
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-3">
+  <app-display-filter
+    [displayFilter]="displayFilter"
+    (removeFilter)="removeFilter($event)"
+  ></app-display-filter>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <!-- Designation -->
+      <div class="form-row shortby-section">
+        <div class="col-auto">
+          <div class="form-check form-group mt-2">
+            <input
+              class="form-check-input"
+              [(ngModel)]="masterSelected"
+              name="vendor_list"
+              type="checkbox"
+              value="c1"
+              (change)="checkUncheckAll()"
+              id=""
+            />
+            <label class="form-check-label"> Select All </label>
+          </div>
+        </div>
+
+        <div class="col-auto">
+          <select id="actionType" class="form-control">
+            <option>Select Action</option>
+            <option value="delete">Mass Delete Vendors</option>
+            <!-- <option value="export">Export Selected</option> -->
+            <option value="sendMail">Send Mail to Selected</option>
+            <option value="createList">Create Vendor List</option>
+          </select>
+        </div>
+        <div class="col-auto">
+          <button
+            *ngIf="count === 0"
+            type="submit"
+            id="goButton"
+            disabled
+            (click)="selectHandler()"
+            class="btn btn-primary"
+          >
+            Go
+          </button>
+
+          <button
+            *ngIf="count !== 0"
+            type="submit"
+            (click)="selectHandler()"
+            class="btn btn-primary"
+          >
+            Go
+          </button>
+        </div>
+        <div class="col-auto line-height-38">
+          {{ count }} of {{ collectionSize }} selected
+        </div>
+
+        <div class="col-auto line-height-38 ml-auto">Page Size:</div>
+        <div class="col-auto">
+          <select id="page-size" class="form-control" (change)="setPageSize()">
+            <option value="10" selected="">10</option>
+            <option value="20">20</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+            <option value="500">500</option>
+            <option value="1000">1000</option>
+            <option value="5000">5000</option>
+          </select>
+        </div>
+
+        <div class="col-auto shortby-dropdown">
+          <select
+            id="sortAs"
+            class="form-control"
+            (change)="changeSortingOrder(); fetchCollectionList()"
+          >
+            <option value="" disabled>Sort by date</option>
+            <option value="true">Latest</option>
+            <option value="false">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <div
+        class="card mb-1 candidate-details bg-green-light border-green-light"
+        [ngClass]="{
+          'bg-green-light': selectedItemIndex === index,
+          'border-green-light': selectedItemIndex === index
+        }"
+        *ngFor="let a of collection; let index = index"
+      >
+        <div class="card-body">
+          <div class="form-row">
+            <div class="col-auto candidate-checkbox">
+              <div class="form-check form-group">
+                <input
+                  class="form-check-input"
+                  [(ngModel)]="a.isSelected"
+                  type="checkbox"
+                  value="{{ a.id }}"
+                  name="card_list"
+                  (change)="isAllSelected()"
+                  id=""
+                />
+              </div>
+            </div>
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.contact_person_first_name }}
+                {{ a.contact_person_last_name }}
+                
+              </div>
+              <div class="label-name">Contact Name</div>
+            </div>
+
+            <div class="col pl-0" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.primary_email ? a.primary_email : "--" }}
+              </div>
+              <div class="label-name">Email</div>
+            </div>
+
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.phone_number ? a.phone_number : "--" }}
+              </div>
+              <div class="label-name">Phone Number</div>
+            </div>
+
+            <div class="col-auto ml-auto">
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-light dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Action
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a
+                    class="dropdown-item"
+                    *ngIf="selectedItemIndex !== index"
+                    (click)="openRowDetail(index)"
+                    ><i class="fa fa-eye" aria-hidden="true"></i> View</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    (click)="openAddVendor(constants.EDIT, index)"
+                    ><i class="fas fa-user-edit"></i> Edit</a
+                  >
+                  <a class="dropdown-item" (click)="openDeleteModel(a.id)"
+                    ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="candidate-details-full border-top"
+          *ngIf="selectedItemIndex === index"
+        >
+          <div class="row">
+            <div class="col">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ a.company_name ? a.company_name : "--" }}
+                    </div>
+                    <div class="label-name">Company Name</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value">
+                      {{ a.specialised_in ? a.specialised_in : "--" }}
+                    </div>
+                    <div class="label-name">Specialised In</div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ a.designation ? a.designation : "--" }}
+                    </div>
+                    <div class="label-name">Designation</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value">
+                      
+                      {{ a.alternate_email ? a.alternate_email : "--" }}
+                    </div>
+                    <div class="label-name">Alternate Email</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ a.about_company ? a.about_company : "--" }}
+                    </div>
+                    <div class="label-name">About Company</div>
+                  </div>
+                  
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ a.company_address ? a.company_address : "--" }}
+                    </div>
+                    <div class="label-name">Company Address</div>
+                  </div>
+                  <div class="col">
+                    <div class="label-value">
+                      {{ a.created_at | date: "medium" }}
+                    </div>
+                    <div class="label-name">Created At</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <app-paging
+        [page]="page"
+        [pageSize]="limit"
+        [collectionSize]="collectionSize"
+        (pageChangeEvt)="page = $event; fetchCollectionList()"
+      ></app-paging>
+    </div>
+  </div>
+</div>

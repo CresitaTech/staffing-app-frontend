@@ -1,0 +1,642 @@
+<div class="p-4">
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+      <div class="form-row  mb-3 heading-sec">
+        <div class="col">
+          <h5 *ngIf="isCreateList" class="card-title">Create List</h5>
+          <h5 *ngIf="!isCreateList" class="card-title">Create Email Campaign</h5>
+        </div>
+
+        <div
+          *ngIf="currentDialog !== 'customerSelect' && currentDialog !== 'submit' && currentDialog !== 'upload' && currentDialog !== 'filter' && currentDialog !== 'resend'"
+          class="col-auto ">
+
+          <button id="okay-button3" name="okay-button3" type="submit" class="btn btn-primary"
+            (click)="checkNextCondition()">Next</button>
+        </div>
+
+        <button #closebutton type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+
+      </div>
+      <app-filter *ngIf="currentDialog === 'filter'" #filter [params]="filterOn" [isDialog]="true" (filterEvt)="
+      displayFilter = $event.displayFilter; fetchCollectionList($event.path); currentDialog = 'list'
+      ">
+      </app-filter>
+      <div *ngIf="currentDialog === 'customerSelect' || currentDialog === 'list'" class="createemailcampaign-step1">
+        <div class="row mb-4">
+          <div class="col mt-4">
+            <select class="form-control" #type [(ngModel)]="selectedType" (change)="changeType(type.value)">
+              <option value=null>Select your Customer type</option>
+              <option value="CANDIDATE">Candidate</option>
+              <option value="CLIENT">Client</option>
+              <option value="VENDOR">Vendors</option>
+            </select>
+          </div>
+          <div *ngIf="currentDialog === 'customerSelect'" class="col-auto orText mt-4">
+            OR
+          </div>
+          <div *ngIf="currentDialog === 'customerSelect'" class="col mt-4">
+            <button id="okay-button4" name="okay-button4" type="submit"
+              (click)="currentDialog = 'upload';  this.dataType = 'Custom'" class="btn btn-primary btn-block">Upload New
+              Data</button>
+          </div>
+
+        </div>
+      </div>
+
+
+
+      <div *ngIf="currentDialog === 'list'" class="bg-gray mt-2 p-4 rounded">
+        <form (ngSubmit)="fetchCollectionList()">
+          <div class="search-box">
+            <div class="form-row">
+              <div class="col">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span href="" class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                  </div>
+                  <input class="form-control" [(ngModel)]="search" name="searchbox" type="text"
+                    placeholder="Search by keywords" />
+                </div>
+              </div>
+              <div class="col-auto">
+                <button type="submit" class="btn btn-primary">Search</button>
+              </div>
+              <div class="col-auto">
+
+                <button type="button" class="btn btn-primary" (click)="currentDialog = 'filter'">
+                  Filters
+                </button>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+      <div *ngIf="currentDialog === 'list'" class="container-fluid mt-3">
+
+        <!-- <app-display-filter [displayFilter]="displayFilter" (removeFilter)="removeFilter($event)"></app-display-filter> -->
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <!-- Designation -->
+            <div class="form-row shortby-section">
+              <div class="col-auto">
+                <div class="form-check form-group mt-2">
+                  <input class="form-check-input" [(ngModel)]="masterSelected" name="vendor_list" type="checkbox"
+                    value="c1" (change)="checkUncheckAll()" id="" />
+                  <label class="form-check-label"> Select All </label>
+                </div>
+              </div>
+
+
+              <div class="col-auto line-height-38">
+                {{ count }} of {{ collectionSize }} selected
+              </div>
+
+              <div class="col-auto line-height-38 ml-auto">Page Size:</div>
+              <div class="col-auto">
+                <select id="page-size" class="form-control" (change)="setPageSize()">
+                  <option value="10" selected="">10</option>
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="500">500</option>
+                  <option value="1000">1000</option>
+                  <option value="5000">5000</option>
+                </select>
+              </div>
+
+              <div class="col-auto shortby-dropdown">
+                <select id="sortAs" class="form-control" (change)="changeSortingOrder(); fetchCollectionList()">
+                  <option value="" disabled>Sort by date</option>
+                  <option value="true">Latest</option>
+                  <option value="false">Oldest</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="card mb-1 candidate-details bg-green-light border-green-light" [ngClass]="{
+                        'bg-green-light': selectedItemIndex === index,
+                        'border-green-light': selectedItemIndex === index
+                      }" *ngFor="let c of collection; let index = index">
+              <div *ngIf="selectedType==='VENDOR'" class="card-body">
+                <div class="form-row">
+                  <div class="col-auto candidate-checkbox">
+                    <div class="form-check form-group">
+                      <input class="form-check-input" [(ngModel)]="c.isSelected" type="checkbox" value="{{ c.id }}"
+                        name="card_list" (change)="isAllSelected()" id="" />
+                    </div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.contact_person_first_name }}
+                      {{ c.contact_person_last_name }}
+
+                    </div>
+                    <div class="label-name">Contact Name</div>
+                  </div>
+
+                  <div class="col pl-0" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.primary_email ? c.primary_email : "--" }}
+                    </div>
+                    <div class="label-name">Email</div>
+                  </div>
+
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.phone_number ? c.phone_number : "--" }}
+                    </div>
+                    <div class="label-name">Phone Number</div>
+                  </div>
+
+                  <!-- <div class="col-auto ml-auto">
+                            <div class="btn-group">
+                              <button
+                                type="button"
+                                class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                              >
+                                Action
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                 <a
+                                  class="dropdown-item"
+                                  *ngIf="selectedItemIndex !== index"
+                                  (click)="openRowDetail(index)"
+                                  ><i class="fa fa-eye" aria-hidden="true"></i> View</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  (click)="openAddVendor(constants.EDIT, index)"
+                                  ><i class="fas fa-user-edit"></i> Edit</a
+                                >
+                                <a class="dropdown-item" (click)="openDeleteModel(c.id)"
+                                  ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a
+                                >
+                              </div>
+                            </div>
+                          </div> -->
+                </div>
+              </div>
+              <div *ngIf="selectedType==='CANDIDATE'" class="card-body">
+                <div class="form-row">
+                  <div class="col-auto candidate-checkbox">
+                    <div class="form-check form-group">
+                      <input class="form-check-input" [(ngModel)]="c.isSelected" type="checkbox" value="{{ c.id }}"
+                        name="candidate_list" (change)="isAllSelected()" id="" />
+                      <!-- <input class="form-check-input" type="checkbox" value="" id=""> -->
+                    </div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value" *ngIf="c.first_name || c.last_name">
+                      {{ c.first_name }} {{ c.last_name }}
+                    </div>
+                    <div class="label-value" *ngIf="!c.first_name && !c.last_name">
+                      --
+                    </div>
+                    <div class="label-name">Candidate Name</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.primary_email ? c.primary_email : "--" }}
+                    </div>
+                    <div class="label-name">Email</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.designation?.name ? c.designation?.name : "--" }}
+                    </div>
+                    <div class="label-name">Designation</div>
+                  </div>
+                  <div class="col-auto mr-4" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{
+                      c.total_experience_in_usa ? c.total_experience_in_usa : "--"
+                      }}
+                      Year(s)
+                    </div>
+                    <div class="label-name">Total Experience</div>
+                  </div>
+                  <!-- <div class="col-auto ml-auto">
+                            <div class="btn-group">
+                              <button
+                                type="button"
+                                class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                              >
+                                Action
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                 <a class="dropdown-item" *ngIf="selectedItemIndex !== index" (click)="openRowDetail(index)"><i
+                                    class="fa fa-eye" aria-hidden="true"></i> View</a> -->
+                  <!-- <a
+                                  class="dropdown-item"
+                                  (click)="openCandidate(constants.EDIT, index)"
+                                  ><i class="fas fa-user-edit"></i> Edit</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  (click)="doAction(constants.DELETE, c.id)"
+                                  ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a
+                                >
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" (click)="singleMail(c.primary_email)"
+                                  >Send Mail</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  (click)="doAction(constants.RTR, index)"
+                                  >Create RTR</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  (click)="doAction(constants.ACTIVITY, index)"
+                                  >Candidate Status</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  (click)="doAction(constants.REPOSITORY, index)"
+                                >
+                                  Repository</a
+                                >
+                                <a
+                                  class="dropdown-item"
+                                  (click)="doAction(constants.CARD, index)"
+                                  >Placement Card</a
+                                >
+
+                                <a class="dropdown-item" (click)="openMatchedJobsOnCandidateModel(c)">
+                                Recommend Jobs</a>
+
+                                <a
+                                  class="dropdown-item"
+                                  (click)="doAction(constants.OFFER_LETTER_REQUEST, index)"
+                                  >Offer Letter Request</a
+                                >
+
+                              </div>
+                            </div>
+                          </div> -->
+                </div>
+              </div>
+              <div *ngIf="selectedType==='CLIENT'" class="card-body">
+                <div class="form-row">
+                  <div class="col-auto candidate-checkbox">
+                    <div class="form-check form-group">
+                      <input class="form-check-input" [(ngModel)]="c.isSelected" type="checkbox" value="{{ c.id }}"
+                        name="cient_list" (change)="isAllSelected()" id="" />
+                    </div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.company_name ? c.company_name : "--" }}
+                    </div>
+                    <div class="label-name">Company Name</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.first_name }} {{ c.last_name }}
+                    </div>
+                    <div class="label-name">Contact Person Name</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.primary_phone_number ? c.primary_phone_number : "--" }}
+                    </div>
+                    <div class="label-name">Phone</div>
+                  </div>
+
+                  <div class="col-auto mr-4" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ c.total_employee ? c.total_employee : "--" }}
+                    </div>
+                    <div class="label-name">Total Employee</div>
+                  </div>
+                  <!-- <div class="col-auto ml-auto">
+                            <div class="btn-group">
+                              <button
+                                type="button"
+                                class="btn btn-light dropdown-toggle"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                              >
+                                Action
+                              </button>
+                              <div class="dropdown-menu dropdown-menu-right">
+                                 <a
+                                  class="dropdown-item"
+                                  *ngIf="selectedItemIndex !== index"
+                                  (click)="openRowDetail(index)"
+                                  ><i class="fa fa-eye" aria-hidden="true"></i> View</a
+                                >
+                                <a class="dropdown-item" (click)="openClient('edit', index)"
+                                  ><i class="fas fa-user-edit"></i> Edit</a
+                                >
+                                <a class="dropdown-item" (click)="openDeleteUserModel(c.id)"
+                                  ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a
+                                >
+                              </div>
+                            </div>
+                          </div> -->
+                </div>
+              </div>
+              <!-- <div
+                        class="candidate-details-full border-top"
+                        *ngIf="selectedItemIndex === index"
+                      >
+                        <div class="row">
+                          <div class="col">
+                            <div class="card-body">
+                              <div class="row mb-3">
+                                <div class="col">
+                                  <div class="label-value">
+                                    {{ c.company_name ? c.company_name : "--" }}
+                                  </div>
+                                  <div class="label-name">Company Name</div>
+                                </div>
+                                <div class="col">
+                                  <div class="label-value">
+                                    {{ c.specialised_in ? c.specialised_in : "--" }}
+                                  </div>
+                                  <div class="label-name">Specialised In</div>
+                                </div>
+                              </div>
+
+                              <div class="row mb-3">
+                                <div class="col">
+                                  <div class="label-value">
+                                    {{ c.designation ? c.designation : "--" }}
+                                  </div>
+                                  <div class="label-name">Designation</div>
+                                </div>
+                                <div class="col">
+                                  <div class="label-value">
+
+                                    {{ c.alternate_email ? c.alternate_email : "--" }}
+                                  </div>
+                                  <div class="label-name">Alternate Email</div>
+                                </div>
+                              </div>
+                              <div class="row mb-3">
+                                <div class="col">
+                                  <div class="label-value">
+                                    {{ c.about_company ? c.about_company : "--" }}
+                                  </div>
+                                  <div class="label-name">About Company</div>
+                                </div>
+
+                              </div>
+
+                              <div class="row">
+                                <div class="col">
+                                  <div class="label-value">
+                                    {{ c.company_address ? c.company_address : "--" }}
+                                  </div>
+                                  <div class="label-name">Company Address</div>
+                                </div>
+                                <div class="col">
+                                  <div class="label-value">
+                                    {{ c.created_at | date: "medium" }}
+                                  </div>
+                                  <div class="label-name">Created At</div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+            </div>
+
+            <app-paging [page]="page" [pageSize]="limit" [collectionSize]="collectionSize"
+              (pageChangeEvt)="page = $event; fetchCollectionList()"></app-paging>
+          </div>
+        </div>
+      </div>
+
+
+      <div *ngIf="currentDialog === 'submit' || currentDialog === 'upload' || currentDialog === 'resend'"
+        class="card mb-2">
+        <div class="card-body">
+          <form #f="ngForm" (ngSubmit)="onSubmit()">
+
+
+            <div *ngIf="currentDialog === 'upload'" appDragDrop (fileDropped)="onFileDropped($event)" class="form-row">
+              <div class="col">
+                <!-- <div class="form-group inputDnD">
+                  <label class="sr-only" for="inputFile">File Upload</label><b> File Name : {{fileName}}</b>
+                  <input type="file" class="form-control form-control-file  font-weight-bold" id="inputFile"
+                    accept="image/*" onchange="readUrl(this)" data-title="Drag and drop a file">
+                </div> -->
+                <div class="form-group inputDnD">
+                  <div class="row">
+                    <div class="col-auto">
+                      <label class="sr-only" for="inputFile">File Upload</label><b> File Name : {{fileName}}</b>
+                    </div>
+                    <div class="col-auto">
+                      <a *ngIf="isFileUloaded" (click)='isFileUloaded=false'><i class="fas fa-sync-alt"></i></a>
+                    </div>
+                    <div class="col-auto ml-auto" *ngIf="isFileUloaded">
+                      <b>Number of records :</b>
+                      {{ emailList.list_size }}
+                    </div>
+                  </div>
+
+                  <input type="file" *ngIf="!isFileUloaded" data-dismiss="modal"
+                    class="form-control-file  font-weight-bold" id="inputFile" accept="all/*" onchange="readUrl(this)"
+                    (change)="onFileSelected($event)" data-title="Drag and drop a file">
+
+                </div>
+              </div>
+
+            </div>
+            <div *ngIf="currentDialog === 'resend'" class="form-row">
+              <div class="col form-group">
+                <b>Selected List Name :</b>
+                {{ campaignListName }}
+              </div>
+            </div>
+            <div class="form-row">
+              <div *ngIf="isCreateList" class="col form-group">
+                <label class="asterisk-if-mandatory"><b>List Name</b></label>
+
+                <input class="form-control" id="emailListName" name="listName" [(ngModel)]="emailList.list_name"
+                  #listName="ngModel" [ngClass]="{
+                            'is-invalid': listName.invalid && listName.touched
+                          }" required />
+                <div *ngIf="listName.touched && listName.invalid" class="invalid-feedback">
+                  <div *ngIf="listName.errors.required">
+                    List name is required
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="!isCreateList" class="col form-group">
+
+                <label class="asterisk-if-mandatory"><b>Campaign Name</b></label>
+
+                <input class="form-control" id="emailCampaignName" name="campaignName"
+                  [(ngModel)]="emailList.campaign_name" #campaignName="ngModel" [ngClass]="{
+                            'is-invalid': campaignName.invalid && campaignName.touched
+                          }" required />
+                <div *ngIf="campaignName.touched && campaignName.invalid" class="invalid-feedback">
+                  <div *ngIf="campaignName.errors.required">
+                    Campaign name is required
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="!isCreateList" class="form-row">
+              <div class="col">
+                <div>
+                  <!--
+                          <app-template-inline
+                            [item]="emailList.email_template"
+                            (changeItemEvt)="emailList.email_template = $event"
+                          >
+                          </app-template-inline>
+                          -->
+                </div>
+                <div *ngIf="tagName === constants.VENDOR_LIST">
+                  <app-email-temp-inline [item]="emailList?.template_name"
+                    (changeItemEvt)="emailList.template_name = $event" required>
+                  </app-email-temp-inline>
+
+                  <!--  -->
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="!isCreateList" class="form-row">
+              <div class="col">
+
+                <div>
+                  <app-email-list-inline [item]="emailList?.list_name" (changeItemEvt)="emailList.list_name = $event"
+                    required>
+                  </app-email-list-inline>
+
+                  <!--  -->
+                </div>
+              </div>
+            </div>
+            <div *ngIf="currentDialog !== 'resend' && currentDialog !== 'upload' && isCreateList" class="form-row">
+              <div class="col form-group">
+                <b>List Size :</b>
+                {{ emailList.list_size }}
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col form-group">
+                <label><b>Description</b></label>
+                <input class="form-control" id="emailListDescription" name="listDescription"
+                  [(ngModel)]="emailList.list_description" />
+              </div>
+            </div>
+
+            <div *ngIf="currentDialog === 'upload' && isCreateList" class="form-group">
+              <div class="form-group row">
+                <div class="col">
+                  <b>List File Mapping :</b>
+                </div>
+              </div>
+
+              <div class="row  ">
+                <div class="col ">
+                  <b>Data Mapping</b>
+                </div>
+                <div class="col ">
+                  <b>ATS Standard Fields</b>
+                </div>
+              </div>
+
+              <div class="row" *ngFor="let a of csvFields; let index = index">
+                <div class="col form-group ">
+                  <select class="form-control">
+                    <option>{{a}}</option>
+                  </select>
+                </div>
+                <div class="col form-group ">
+                  <select class="form-control" [(ngModel)]="mappedFields[a]" #fieldtype="ngModel">
+                    <option value="">Please select type </option>
+                    <option *ngFor="let field of customFields" [hidden]="valueInMap(a, field.field_name)?true:null"
+                      [value]="field.field_name">{{field.field_name}}</option>
+                  </select>
+                </div>
+              </div>
+
+
+
+
+
+              <!-- <div class="form-group row" *ngFor="let a of csvFields; let index = index">
+                <div class="col-auto width-110 pr-0 ml-4">
+
+                  <label>{{a}}</label>
+
+
+                </div>
+                <div class="col-5">
+                  <select class="form-control" name="param" id="customFieldType" [(ngModel)]="mappedFields[a]"
+                    #fieldtype="ngModel" [ngClass]="{
+                      'is-invalid': fieldtype.invalid && fieldtype.touched
+                    }" required>
+                    <option value="">Please select type </option>
+                    <option *ngFor="let field of customFields" [hidden]="mappedFields[a]===field.id?true:null"
+                      [value]="field.id">{{field.field_name}}</option>
+                  </select>
+                  <div *ngIf="fieldtype.touched && fieldtype.invalid" class="invalid-feedback">
+                    <div *ngIf="fieldtype.errors.required">
+                      Field type is required
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+
+            </div>
+            <!-- <div *ngIf="currentDialog === 'resend'" class="form-row">
+              <div class="col form-group">
+                <b>List Size :</b>
+                {{ campaignListSize }}
+              </div>
+            </div> -->
+
+          </form>
+        </div>
+      </div>
+
+
+
+      <div *ngIf="currentDialog !== 'customerSelect' && currentDialog !== 'filter'" class="form-row button-sec mt-3">
+        <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                        another</button>
+                </div>
+                 -->
+        <div *ngIf="currentDialog !== 'customerSelect' && currentDialog !== 'list' && currentDialog !== 'resend'"
+          class="col">
+
+          <button id="okay-button5" name="okay-button2" type="submit" class="btn btn-primary"
+            (click)="checkPreviousCondition()">Previous</button>
+        </div>
+        <div class="col-auto ml-auto">
+
+          <button id="okay-button1" name="okay-button1" type="submit" class="btn btn-primary"
+            (click)="checkNextCondition()">Next</button>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

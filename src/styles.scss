@@ -1,0 +1,95 @@
+@import '~@angular/material/prebuilt-themes/purple-green.css';
+// // Custom Theming for Angular Material
+// // For more information: https://material.angular.io/guide/theming
+// @import '~@angular/material/theming';
+// // Plus imports for other components in your app.
+
+// // Include the common styles for Angular Material. We include this here so that you only
+// // have to load a single css file for Angular Material in your app.
+// // Be sure that you only ever include this mixin once!
+// @include mat-core();
+
+// // Define the palettes for your theme using the Material Design palettes available in palette.scss
+// // (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// // hue. Available color palettes: https://material.io/design/color/
+// $staffing-app-primary: mat-palette($mat-indigo);
+// $staffing-app-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// // The warn palette is optional (defaults to red).
+// $staffing-app-warn: mat-palette($mat-red);
+
+// // Create the theme object (a Sass map containing all of the palettes).
+// $staffing-app-theme: mat-light-theme($staffing-app-primary, $staffing-app-accent, $staffing-app-warn);
+
+// // Include theme styles for core and each component used in your app.
+// // Alternatively, you can import and @include the theme mixins for each component
+// // that you are using.
+// @include angular-material-theme($staffing-app-theme);
+
+/* Importing Bootstrap SCSS file. */
+// @import '~bootstrap/scss/bootstrap';
+// custom.css
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "./assets/css/style.css";
+@import "./assets/css/menu.css";
+@import "./assets/css/custom.css";
+@import "./assets/css/sidenav.css";
+@import "./assets/css/style.css";
+
+@import '~quill/dist/quill.core.css';
+@import '~quill/dist/quill.bubble.css';
+@import '~quill/dist/quill.snow.css';
+
+@import "../node_modules/ag-grid-community/dist/styles/ag-grid.css";
+@import "../node_modules/ag-grid-community/dist/styles/ag-theme-alpine.css";
+@import '~@angular/material/prebuilt-themes/purple-green.css';
+
+:root {
+    --corporate-green-light: #2ec770;
+}
+
+.btn-primary.disabled,
+.btn-primary:disabled {
+    color: #fff;
+    background-color: #26ae61;
+    border-color: #26ae61;
+}
+
+label.asterisk-if-mandatory::after {
+    content: " *";
+    color: var(--red);
+}
+
+ng-select.ng-invalid.ng-touched .ng-select-container {
+    border-color: #dc3545;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.multiselect-dropdown .dropdown-btn{
+    border: 1px  solid #e8e8f7 !important;
+    color: #474D60 !important;
+}
+.multiselect-dropdown .dropdown-btn .dropdown-multiselect__caret:before{
+    border-width:6px 6px 0px !important;
+    color:#999999 !important;
+    top:64% !important;
+}
+.multiselect-item-checkbox input[type=checkbox] + div:before{
+    border:2px solid #474D60 !important;
+    color:#333 !important;
+}
+.multiselect-item-checkbox input[type=checkbox]:checked + div:before{
+    background: #474D60 !important;
+}
+.multiselect-dropdown .dropdown-btn .selected-item a{
+    padding-left: 5px!important;
+    font-weight: bold;
+    color:#000 !important;
+}
+.multiselect-dropdown .dropdown-btn .selected-item{
+ border: 1px solid #ebf5ff !important;
+ background: #ebf5ff !important;
+ color:#000 !important;
+}

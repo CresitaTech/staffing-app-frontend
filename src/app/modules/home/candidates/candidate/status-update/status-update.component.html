@@ -1,0 +1,356 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row  mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD ||eventId===constants.POP_UP">Candidate Status</h5>
+                  
+                </div>
+
+               
+                <div class="col-auto ml-auto">
+                    <!-- <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD|| eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button> -->
+                  <!--  <button type="submit" #closebutton type="button" aria-label="Close" (click)="addJobToArray()" class="btn btn-primary"
+                     *ngIf="(eventId===constants.ADD||eventId===constants.POP_UP||eventId===constants.EDIT)&& action==='add'">OK</button>
+                    <button type="submit" #closebutton type="button" aria-label="Close" (click)="onEditJob()"class="btn btn-primary"
+                     *ngIf="(eventId===constants.ADD||eventId===constants.POP_UP ||eventId===constants.EDIT)&& action==='edit'">OK</button>-->
+               
+                </div>
+
+                <button *ngIf="eventId===constants.POP_UP" #closebutton type="button" class="close" aria-label="Close" (click)="onClose()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Created -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form #f="ngForm">
+                        <div class="row">
+                            <div class="col form-group" style="position: relative;">
+                                <label>Candidate Names</label>
+                               <!-- <input type="text" class="form-control "   id="candidate_name" name="candidate_name"
+                                [value]="c" readonly="true"> -->
+                                <!--<label *ngFor = "let candidateName of candidatesNameArray">{{candidateName}}</label>-->
+                                <ng-multiselect-dropdown
+                                name="candidate_name" id="candidate_name" #candidate_name="ngModel" [(ngModel)] = "candidatesNameArray"
+                                [ngClass]="{ 'is-invalid':candidate_name.invalid && candidate_name.touched }"
+                                    [settings]="dropdownSettings"
+                                    
+                                    [placeholder]=""
+                                   
+                                    required>
+                                </ng-multiselect-dropdown>
+                                <span class="disable-dropdown"></span>
+                            </div>
+                          <!-- <div class="col form-group">
+                                <app-candidate-inline *ngIf="eventId===constants.ADD||eventId===constants.EDIT" [item]="activity.candidate_name" [eventId]="eventId"
+                                (changeItemEvt)="activity.candidate_name = $event; changeFormToDirty($event)" readonly="true" name="candidateName">
+                                </app-candidate-inline>
+
+                                <app-candidate-inline  *ngIf="eventId===constants.POP_UP" [itemId]="candidate_id" [item]="candidate_id" [eventId]="eventId"
+                                (changeItemEvt)="activity.candidate_name = $event ;detailsOfSelectedCandidate($event); changeFormToDirty($event)" readonly="true" name="candidateName">
+                                </app-candidate-inline>
+                            </div>--> 
+                        </div>
+
+                        <!-- <div class="row">
+                            <div class="col form-group">
+                                <label>Candidate Status</label>
+                                <app-candidate-stages *ngIf="eventId===constants.ADD || eventId===constants.EDIT"
+                                [item]="activity.activity_status"
+                                    (changeItemEvt)="activity.activity_status = $event"
+                                >
+                                </app-candidate-stages>
+                                <app-candidate-stages *ngIf="eventId===constants.POP_UP" 
+                                 [item]="activity.activity_status"
+                                (changeItemEvt)="activity.activity_status = $event"
+                                (getAllDetails)="detailsOfSelectedCandidate($event)"
+                                >
+                            </app-candidate-stages>
+                            </div>
+                        </div> -->
+
+
+                        <!--Now DOne-->
+                <!--
+                        <div class="row" >
+                            <div class="col">
+                                <h6 class="card-title">Candidate Status</h6>
+                            </div>
+                        </div> -->
+                      <div class="bg-light border form-group p-3" >
+                            <!-- <div class="form-row form-group"> -->
+
+                              <!--  <label>Candidate Names</label>
+                                <input type="text" class="form-control "   id="jd_name" name="jd_name"
+                                [value]="activity.jd_name" readonly="true">-->
+                              <!--  <app-job-description-inline  *ngIf="action!=='edit'"
+                          [item]="activity.job_description" 
+                          [stage]="activity.activity_status"
+                            (changeItemEvt)="activity.job_description = $event; changeFormToDirty($event)" name="job"
+                            (emitJDName)="activity.jd_name=$event"
+                        
+                            >
+                            </app-job-description-inline>
+                            -->
+
+                            <!--NOw DONE-->
+                        
+                       <!-- <div class="form-row form-group" *ngIf="action==='edit'">
+                            <label>Candidate Names</label>
+                            <input   type="text" class="form-control "   id="jd_name" name="jd_name"
+                            [value]="activity.jd_name" readonly="true">
+                        </div> -->
+
+
+
+                        <!--<div class="row form-group" *ngIf="activity.job_min_salary || activity.job_max_salary ||activity.job_min_rate|| activity.job_max_rate ">
+                            <div class="col">
+                                <div class="row ">
+                                    <div class="col">
+                                        <label class="asterisk-if-mandatory">Job's Salary or Rate (in $)</label>
+                                    </div>
+                                </div>  
+                                 <div class="row mt-1" *ngIf="activity.job_min_salary || activity.job_max_salary  ">
+                                    <div class="col">
+                                        <input class="form-control" id="job_min_salary"  
+                                        appLimitUptoTwoDIgits name="job_min_salary" [(ngModel)]="activity.job_min_salary" 
+                                        placeholder="min" type="text" autocomplete="off" readonly/>
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control" id="job_max_salary" appLimitUptoTwoDIgits 
+                                        name="job_max_salary" [(ngModel)]="activity.job_max_salary" placeholder="max" 
+                                        type="text" autocomplete="off"  readonly />
+                                    </div>
+                                </div>
+                                <div class="row mt-1" *ngIf="activity.job_min_rate|| activity.job_max_rate  ">
+                                    <div class="col">
+                                        <input class="form-control" id="job_min_rate"  
+                                        appLimitUptoTwoDIgits name="job_min_rate" [(ngModel)]="activity.job_min_rate" 
+                                        placeholder="min" type="text" autocomplete="off" readonly/>
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control" id="job_max_rate" appLimitUptoTwoDIgits 
+                                        name="job_max_rate" [(ngModel)]="activity.job_max_rate" placeholder="max" 
+                                        type="text" autocomplete="off"  readonly />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                            <div class="row form-group">
+                                <div class="col">
+                                    <div class="row ">
+                                        <div class="col">
+                                            <label class="asterisk-if-mandatory">Candidate's Salary or Rate (in $)</label>
+                                        </div>
+                                    </div> 
+                                    <div class="form-row">
+                                        <div class="col ">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" value="Yes" id="anyOfferInHand"
+                                                 name="salaryRate" (click)="selectSalaryOrRate('salary')" [(ngModel)]="activity.isSalary" />
+                                                <label class="form-check-label" for="inlineRadio1">Salary</label>
+                
+                                                <input class="form-check-input ml-3" type="radio"    value="No" id="anyOfferInHand"
+                                                 name="salaryRate" (click)="selectSalaryOrRate('rate')" [(ngModel)]="activity.isSalary" />
+                                                <label class="form-check-label" for="inlineRadio1">Rate</label>
+    
+                                               
+                                            </div>    
+                                        </div>
+                                        
+                                    </div> 
+                                     <div class="row mt-1" *ngIf="selectSalaryRateFlag===true">
+                                        <div class="col">
+                                            <input class="form-control" id="min_salary"  
+                                            appLimitUptoTwoDIgits name="min_salary" [(ngModel)]="activity.min_salary" 
+                                            placeholder="min" type="text" autocomplete="off" />
+                                        </div>
+                                        <div class="col">
+                                            <input class="form-control" id="max_salary" appLimitUptoTwoDIgits 
+                                            name="max_salary" [(ngModel)]="activity.max_salary" placeholder="max" 
+                                            type="text" autocomplete="off"  />
+                                        </div>
+                                    </div>
+                                    <div class="row mt-1" *ngIf="selectSalaryRateFlag===false">
+                                        <div class="col">
+                                            <input class="form-control" id="min_rate"  
+                                            appLimitUptoTwoDIgits name="min_rate" [(ngModel)]="activity.min_rate" 
+                                       placeholder="min" type="text" #minRate="ngModel" autocomplete="off"  />
+                                        </div>
+                                        <div class="col">
+                                            <input class="form-control" id="max_rate" appLimitUptoTwoDIgits #maxRate="ngModel"
+                                            name="max_rate" autocomplete="off" [(ngModel)]="activity.max_rate" placeholder="max" 
+                                            type="text"  />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+                            <div class="form-row form-group">
+                            <div class="col">
+                                <label>Status</label>
+                                
+                                <app-candidate-stages [item]="activity.activity_status"
+                                    (changeItemEvt)="activity.activity_status = $event"
+                                    (emitStageName)="activity.stage_name=$event" name="Status">
+                                </app-candidate-stages>
+                            </div>
+                            <div class="col form-group">
+                                <label>Submission Date</label>
+                                <div class="input-group date-input">
+                                   <!-- <input type="text" class="form-control " id="start_date" placeholder="{{date | date: 'MM/dd/yyyy'}}"
+                                        ngbDatepicker #d2="ngbDatepicker" [(ngModel)]="activity.submission_date"
+                                        #c2="ngModel" name="start_date">-->
+                                        <input type="text" class="form-control " id="start_date" placeholder="{{date | date: 'MM/dd/yyyy'}}" ngbDatepicker #d2="ngbDatepicker" [(ngModel)]="activity.submission_date" [readonly]="true" #c2="ngModel" name="start_date" (click)="d2.toggle()">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="activity.submission_date = today">Today</a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="d2.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          
+                            </div>
+                            <div class="row" *ngIf="activity.activity_status===constants.SEND_OUT">
+                                <div class="col form-group">
+                                    <label>SendOut Date</label>
+                                    <div class="input-group date-input">
+                                        <input type="text" class="form-control " id="submission_date" placeholder="{{date | date: 'mm/dd/yyyy'}}"
+                                            ngbDatepicker #d2="ngbDatepicker" [readonly]="true" (click)="d2.toggle()" [(ngModel)]="activity.submission_date"
+                                            #c2="ngModel" name="submission_date">
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <a (click)="activity.send_out_date = today">Today</a>
+                                            </div>
+                                        </div>
+                                        <div class="input-group-append">
+                                            <div class="input-group-text">
+                                                <a (click)="d2.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <img src="assets/images/remark-img.jpg" width="100%"> -->
+                            <!--
+                            <div class="row">
+                                <div class="col form-group">
+                                    <label>Notes</label>
+                                    <app-editor [id]="'editor1'" [content]="activity.notes" [hasTags]="false"
+                                    (contentChanged)="activity.notes = $event"></app-editor>
+                                    
+                                </div>
+                            </div>-->
+                         <!--   <div class="form-row">
+                                <div class="col" *ngIf="action==='add'">
+                                    <button type="button" class="btn  btn-primary" data-toggle="modal"
+                                            data-target="#popup-AddJobDescription" data-tooltip="tooltip"
+                                            data-placement="bottom" title="Add Another Job" (click)="addJobToArray()"><i
+                                                class="fas fa-plus-square" ></i> Add Job</button>
+                                </div>
+                                <div class="col" *ngIf="action==='edit'">
+                                    <button type="button" class="btn  btn-primary" data-toggle="modal"
+                                            data-target="#popup-AddJobDescription" data-tooltip="tooltip"
+                                            data-placement="bottom" title="Save" (click)="onEditJob()"><i
+                                                class="fas fa-plus-square" ></i> Save</button>
+                                </div>
+                            </div>
+                        -->
+                        </div>
+                      <!--  <div class="row">
+                            <div class="col table-candidate-addjob">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr *ngIf="job_descriptions.length>0">
+                                            <th scope="col" class="border-top-0">Date</th>
+                                            <th scope="col" class="border-top-0">Job Description</th>
+                                            <th scope="col" class="border-top-0">Status</th>
+                                            <th  scope="col" class="border-top-0">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let jobs of job_descriptions">
+                                            <td>{{jobs.display_date}}</td>
+                                            <td>{{jobs.jd_name}}</td>
+                                            <td>{{jobs.stage_name}}</td>
+                                            <td>
+                                              
+                                                    <button type="button" class="ml-2 btn btn-sm btn-warning" data-tooltip="tooltip"
+                                                   data-placement="bottom"
+                                                   title="Edit Selected Job Description and Stage" (click)="modifyJob(jobs.job_description)" ><i
+                                                    class="fas fa-highlighter text-light"></i></button>
+                                                    &nbsp;
+                                                    <button type="button" class="btn btn-sm btn-danger" data-tooltip="tooltip"
+                                                    data-placement="bottom"
+                                                    title="Delete Selected Job Description and Stage" (click)="deleteJob(jobs.id,jobs.jd_name)"><i
+                                                     class="fa fa-trash"></i></button>
+                                            </td>
+                                        </tr>
+                                      
+                                       
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> -->
+                        <!-- <div class="row" *ngIf="activity.activity_status!==constants.DEFAULT_STAGE">
+                            <div class="col form-group">
+                             
+                                <app-job-description-inline 
+                                [item]="activity.job_description" 
+                              [stage]="activity.activity_status" 
+                              [candidate_id]="candidate_id"
+                              [job_description]="job_description"
+                              (changeItemEvt)="activity.job_description = $event"
+                              >
+                              </app-job-description-inline>
+                            </div>
+                        </div> -->
+                        <!-- <div class="row">
+                            <div class="col">
+                                <label>Notes</label>
+                                <app-editor [id]="'editor1'" [content]="activity.notes" [hasTags]="false"
+                                (contentChanged)="activity.notes = $event"></app-editor>
+                            </div>
+                        </div> -->
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                        another</button>
+                </div>
+                 -->
+                <div class="col-auto ml-auto">
+                    <!-- <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD||eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button> -->
+                   
+                    <button id="okay-button"  name="okay-button" type="submit"  (click)="onSaveJob()" class="btn btn-primary"
+                     *ngIf="(eventId===constants.ADD||eventId===constants.POP_UP||eventId===constants.EDIT)">Submit</button>
+                  <!--  <button id="okay-button1"  name="okay-button1" type="submit"   (click)="addEditButton(action)"class="btn btn-primary"
+                     *ngIf="(eventId===constants.ADD||eventId===constants.POP_UP ||eventId===constants.EDIT)&& action==='edit'">OK</button> -->
+                </div>
+                
+                <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+                (click)="onClose()"
+              >
+                Close
+              </button>
+            
+            </div>
+        </div>
+    </div>
+</div>

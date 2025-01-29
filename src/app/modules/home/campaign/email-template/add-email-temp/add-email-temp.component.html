@@ -1,0 +1,212 @@
+<div class="p-4">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="form-row mb-3 heading-sec">
+        <div class="col">
+          <h5 class="card-title" *ngIf="eventId === constants.ADD">
+            Add Email Template
+          </h5>
+          <h5 class="card-title" *ngIf="eventId === constants.EDIT">
+            Edit Email Template
+          </h5>
+        </div>
+        <div class="col-auto ml-auto">
+          <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary"
+            *ngIf="eventId === constants.ADD">Save
+          </button>
+
+          <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary"
+            *ngIf="eventId === constants.EDIT">
+            Modify
+          </button>
+        </div>
+        <!-- <div>
+          <button
+            #closebutton
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="activeModal.dismiss()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div> -->
+
+        <div class="col-auto ml-auto">
+          <!--  <button
+            type="submit"
+            (click)="emailTemplate.dismiss()"
+            [disabled]="f.invalid"
+            (click)="onSubmit()"
+            class="btn btn-primary"
+            *ngIf="eventId === constants.ADD"
+          >
+            Save
+          </button>  
+          <button
+            type="submit"
+            [disabled]="f.invalid"
+            (click)="onEdit()"
+            class="btn btn-primary"
+            *ngIf="eventId === constants.EDIT"
+          >
+            Modify
+          </button> -->
+        </div>
+      </div>
+      <!-- Designation -->
+      <div class="card mb-2">
+        <div class="card-body">
+          <form #f="ngForm">
+            <div class="row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Template Name</label>
+                <input type="text" class="form-control form-control-sm" id="template"
+                  [(ngModel)]="emailTemplate.template_name" name="template" #template="ngModel" [ngClass]="{
+                    'is-invalid': template.invalid && template.touched
+                  }" required />
+                <div *ngIf="template.touched && template.invalid" class="invalid-feedback">
+                  <div *ngIf="template.errors.required">
+                    Template name is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="form-row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Template Type</label>
+
+                <div class="form-group">
+                  <select class="form-control" name="param" id="customDataType" (change)="changeType('CANDIDATE')"
+                    [(ngModel)]="emailTemplate.template_type" #templateType="ngModel" [ngClass]="{
+                    'is-invalid': templateType.invalid && templateType.touched
+                  }" required>
+                    <option value="null">Please select type </option>
+                    <option [value]="'mass_emailing'">Mass Emailing</option>
+                    <option [value]="'submission'">Submission</option>
+                  </select>
+                  <div *ngIf="templateType.touched && templateType.invalid" class="invalid-feedback">
+                    <div *ngIf="templateType.errors.required">
+                      Template type is required
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <div  class="row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Customer Type </label>
+                <select class="form-control" #type [(ngModel)]="selectedType" (change)="changeType(type.value)">
+                  <option value=null>Select your Customer type</option>
+                  <option value="CANDIDATE">Candidate</option>
+                  <option value="CLIENT">Client</option>
+                  <option value="VENDOR">Vendors</option>
+                  <option value="CUSTOM">Custom</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Subject</label>
+                <app-template-editor [id]="'editor1'" [content]="emailTemplate.subject"
+                  (contentChanged)="emailTemplate.subject = $event" [hasTags]="true" [tags]="tags">
+                </app-template-editor>
+                <!-- <app-editor [id]="'editor1'" [content]="emailTemplate.subject" (contentChanged)="emailTemplate.subject = $event"
+                                    [hasTags]="true"
+                                    [tags]="[ 'first_name', 'last_name', 'date_of_birth', 'primary_email', 'secondary_email', 'primary_phone_number', 'secondary_phone_number', 'company_name', 'designation', 'skills_1', 'skills_2', 'salary','rate', 'qualification', 'visa', 'current_location', 'total_experience', 'reason_for_job_change', 'rtr_done', 'willing_to_work_on_our_w2', 'open_for_relocation', 'total_experience_in_usa','any_offer_in_hand']">
+                                </app-editor> -->
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Body</label>
+                <div>
+
+                <app-template-editor-body  [id]="'editor1'"
+                  [content]="emailTemplate.body" (contentChanged)="emailTemplate.body = $event" [hasTags]="true"
+                  [tags]="tags">
+                </app-template-editor-body>
+              </div>
+                <!-- <app-editor [id]="'editor2'" [content]="emailTemplate.body"
+                                    (contentChanged)="emailTemplate.body = $event" [hasTags]="true"
+                                    [tags]="[ 'first_name', 'last_name', 'date_of_birth', 'primary_email', 'secondary_email', 'primary_phone_number', 'secondary_phone_number', 'company_name', 'designation', 'skills_1', 'skills_2', 'salary','rate', 'qualification', 'visa', 'current_location', 'total_experience', 'reason_for_job_change', 'rtr_done', 'willing_to_work_on_our_w2', 'open_for_relocation', 'total_experience_in_usa','any_offer_in_hand']">
+                                </app-editor> -->
+                <!-- <div class="row  ">
+                  <div class="col ">
+                    <b>Data Mapping</b>
+                  </div>
+                  <div class="col ">
+                    <b>ATS Standard Fields</b>
+                  </div>
+                </div>
+
+                <div class="row" *ngFor="let a of customFields; let index = index">
+                  <div class="col form-group ">
+                    <select class="form-control" [(ngModel)]="mappedFields[a]" #fieldtype="ngModel">
+                      <option value="">Please select type </option>
+                      <option *ngFor="let field of customFields" [hidden]="valueInMap(a, field.field_name)?true:null"
+                        [value]="field.field_name">{{field.field_name}}</option>
+                    </select>
+                  </div>
+                  <div class="col form-group ">
+                    <select class="form-control" [(ngModel)]="mappedFields[a]" #fieldtype="ngModel">
+                      <option value="">Please select type </option>
+                      <option *ngFor="let tag of tags" [hidden]="valueInMap(a, tag)?true:null"
+                        [value]="tag">{{tag}}</option>
+                    </select>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col form-group-mobile">
+                <label class="asterisk-if-mandatory">Signature</label>
+                <app-template-editor-body [id]="'editor1'" [content]="emailTemplate.signature"
+                  (contentChanged)="emailTemplate.signature= $event" [hasTags]="false" [tags]="tags">
+                </app-template-editor-body>
+                <!-- <textarea
+                  class="form-control"
+                  id="exampleFormControlTextarea1"
+                  id="signature"
+                  [(ngModel)]="emailTemplate.signature"
+                  name="signature"
+                  rows="3"
+                  #sig="ngModel"
+                  [ngClass]="{ 'is-invalid': sig.invalid && sig.touched }"
+                  required
+                ></textarea>-->
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="form-row button-sec">
+        <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save &
+                        add
+                        another</button>
+                </div>
+                -->
+        <div class="col-auto ml-auto">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal"
+            (click)="activeModal.close('Close click')">
+            Close
+          </button>
+        </div>
+        <div class="col-auto">
+          <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary"
+            *ngIf="eventId === constants.ADD">
+            Save
+          </button>
+
+          <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary"
+            *ngIf="eventId === constants.EDIT">
+            Modify
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

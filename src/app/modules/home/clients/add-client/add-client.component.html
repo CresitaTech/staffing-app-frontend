@@ -1,0 +1,246 @@
+<a href="javascript:void(0)"  *ngIf="eventId===constants.ADD||eventId===constants.EDIT"
+class="closebtn" (click)="closeClient();f1.resetForm();f2.resetForm();">&times;</a>
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 *ngIf="eventId===constants.ADD ||eventId===constants.POP_UP" class="card-title">Add Client</h5>
+                    <h5 *ngIf="eventId===constants.EDIT" class="card-title">Edit Client Details</h5>
+                </div>
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" *ngIf="eventId===constants.ADD" class="btn btn-primary">Save & add
+                        another</button>
+                </div> -->
+               
+                <div class="col-auto ml-auto">
+                    <button type="submit" *ngIf="eventId===constants.ADD||eventId===constants.POP_UP"
+                        [disabled]="f1.invalid||f2.invalid" (click)="onSubmit() ;f1.resetForm();f2.resetForm();" class="btn btn-primary">Save</button>
+                    <button type="submit" *ngIf="eventId===constants.EDIT||eventId==='edit_pop_UP'"
+                        [disabled]="f1.invalid||f2.invalid" (click)="onEdit();f1.resetForm();f2.resetForm();" class="btn btn-primary">Modify</button>
+                </div>
+                <button *ngIf="eventId===constants.POP_UP||eventId==='edit_pop_UP'" type="button" #closebutton
+                    class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Other Details -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Company Details</h6>
+                        </div>
+
+                    </div>
+
+                    <form #f1="ngForm">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Company Name</label>
+                                <input type="text" class="form-control" placeholder="" id="company_name"
+                                    [(ngModel)]="client.company_name" name="company_name">
+                            </div>
+                            <div class="col form-group">
+                                <label>Company Federal Id</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    id="company_tin_number" [(ngModel)]="client.company_tin_number"
+                                    name="company_tin_number">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Total Employee</label>
+                                <input type="text" class="form-control" placeholder="" id="total_employee"
+                                    [(ngModel)]="client.total_employee" appLimitUptoTwoDIgits name="total_employee">
+                            </div>
+                            <div class="col form-group">
+                                <label >Rank</label>
+                                <input type="text" class="form-control" placeholder="" id="rank"
+                                    [(ngModel)]="client.rank" placeholder="" name="rank" #rank="ngModel"/>
+                                
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Company Address</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    id="company_address" [(ngModel)]="client.company_address" name="company_address">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Country</label>
+                                    <select class="form-control" name="country" id="country" [(ngModel)]="client.country"
+                                     #country="ngModel"     [ngClass]="{ 'is-invalid':country.invalid && country.touched }" required>
+                                     <option value="" >Please select a country </option>
+                                        <option *ngFor="let country of countries" [value]="country.country_code">{{country.country_name}}</option>
+                                   </select>
+                                   <div *ngIf="country.invalid " class="invalid-feedback" >
+                                    <div *ngIf="country.errors.required">Country is required.</div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col">
+                                <label>About Company</label>
+                                <div class="row">
+                                    <div class="col">
+                                        <input class="form-control" placeholder="" id="about_company"
+                                            [(ngModel)]="client.about_company" name="about_company">
+                                        <!-- <img src="assets/images/remark-img.jpg" width="100%"> -->
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Designation -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Personal Details</h6>
+                        </div>
+
+                    </div>
+                    <form #f2="ngForm">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Skype Id</label>
+                                <input type="text" class="form-control" placeholder="" id="skype_id"
+                                    [(ngModel)]="client.skype_id" name="skype_id" #skype_id="ngModel"
+                                    [pattern]="constants.skypeIdPattern" [ngClass]="{ 'is-invalid':skype_id.invalid  }" />
+                                <div *ngIf="skype_id.invalid " class="invalid-feedback">
+                                    <div *ngIf="skype_id.errors.pattern">Skype Id should be valid</div>
+                                </div>
+                            </div>
+                            <div class="col form-group">
+                                <label>Linkedin Id</label>
+                                <input type="text" class="form-control" placeholder="" id="linkedin_id"
+                                    [(ngModel)]="client.linkedin_id" name="linkedin_id" #linkedin_id="ngModel"
+                                    [pattern]="constants.linkedInIdPattern" [ngClass]="{ 'is-invalid':linkedin_id.invalid  }" />
+                                <div *ngIf="linkedin_id.invalid " class="invalid-feedback">
+                                    <div *ngIf="linkedin_id.errors.pattern">Linkedin Id should be valid</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">First Name</label>
+                                <input type="text" class="form-control" 
+                                    [(ngModel)]="client.first_name" placeholder="" name="firstName"
+                                    #firstName="ngModel"
+                                    [ngClass]="{ 'is-invalid':firstName.invalid&& firstName.touched }" required />
+                                <div *ngIf="firstName.invalid && firstName.touched" class="invalid-feedback">
+                                    <div *ngIf="firstName.errors.required ">First Name is required</div>
+                                </div>
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Last Name</label>
+                                <input type="text" class="form-control"  id="lastName"
+                                    [(ngModel)]="client.last_name" placeholder="" name="lastName"
+                                    #lastName="ngModel"
+                                    [ngClass]="{ 'is-invalid':lastName.invalid && lastName.touched }" required />
+                                <div *ngIf="lastName.invalid && lastName.touched" class="invalid-feedback">
+                                    <div *ngIf="lastName.errors.required ">Last Name is required</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Primary Email</label>
+                                <input type="email" class="form-control" placeholder="" id="primaryEmail"
+                                    [(ngModel)]="client.primary_email" name="primaryEmail" #primaryEmail="ngModel"
+                                    [ngClass]="{ 'is-invalid':primaryEmail.invalid && primaryEmail.touched }" required
+                                    [pattern]="constants.emailPattern" />
+                                <div *ngIf="primaryEmail.invalid && primaryEmail.touched" class="invalid-feedback">
+                                    <div *ngIf="primaryEmail.errors.required ">Primary Mail Id is required</div>
+                                    <div *ngIf="primaryEmail.errors.pattern">Mail Id should be valid</div>
+                                </div>
+                            </div>
+                            <div class="col form-group">
+                                <label>Secondary Email</label>
+                                <input type="email" class="form-control" placeholder=""
+                                    id="secondaryEmail" [(ngModel)]="client.secondary_email" name="secondaryEmail"
+                                    #secondaryEmail="ngModel" [ngClass]="{ 'is-invalid':secondaryEmail.invalid  }"
+                                    [pattern]="constants.emailPattern" />
+                                <div *ngIf="secondaryEmail.invalid " class="invalid-feedback">
+                                    <div *ngIf="secondaryEmail.errors.pattern">Mail Id should be valid</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- (input)="phoneNumberRef($event,inp,f2)"
+                        (keypress)="preventEnter($event,primaryPhone)" #inp  -->
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Primary Phone Number</label>
+                                <input type="text" class="form-control" placeholder=""
+                                [pattern]="constants.newPhonePattern" 
+                               
+                                    id="primaryPhone" [(ngModel)]="client.primary_phone_number" name="primaryPhone"
+                                    #primaryPhone="ngModel" 
+                                    [ngClass]="{ 'is-invalid':primaryPhone.invalid && primaryPhone.touched }"
+                                   
+                                    required />
+                                    <div *ngIf="primaryPhone.invalid && primaryPhone.touched" class="invalid-feedback">
+                                        <div *ngIf="primaryPhone.errors.required ">Valid Phone number is required</div>
+                                        <div *ngIf="primaryPhone.errors.pattern">Invalid phone number. Valid pattern can be like xxx-xxx-xxxx OR (xxx) xxx-xxxx</div>
+                                    </div>
+                            </div>
+                            <!-- (input)="phoneNumberRef($event,inp2,f2)" #inp2
+                                   (keypress)="preventEnter($event,secondaryPhone)" -->
+                            <div class="col form-group">
+                                <label>Secondary Phone Number</label>
+                                <input type="text" class="form-control" placeholder="" id="secondaryPhone"  [pattern]="constants.newPhonePattern" 
+                                    id="secondaryPhone" [(ngModel)]="client.secondary_phone_number"
+                                    name="secondaryPhone" #secondaryPhone="ngModel" 
+                
+                                    [ngClass]="{ 'is-invalid':secondaryPhone.invalid  }" />
+                                    <div *ngIf="secondaryPhone.invalid " class="invalid-feedback">
+                                        <div *ngIf="secondaryPhone.errors.pattern">Invalid phone number. Valid pattern can be like xxx-xxx-xxxx OR (xxx) xxx-xxxx</div>
+                                    </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group-mobile">
+                                <label>Primary Skills</label>
+                                <input type="text" class="form-control" placeholder="" id="skills1"
+                                    [(ngModel)]="client.primary_skills" name="skills1">
+                            </div>
+                            <div class="col form-group-mobile">
+                                <label>Secondary Skills</label>
+                                <input type="text" class="form-control" placeholder="" id="skills2"
+                                    [(ngModel)]="client.secondary_skills" name="skills2">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+
+            <div class="form-row button-sec">
+             
+                
+                <div class="col-auto ml-auto">
+                    <button type="submit" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP"
+                        [disabled]="f1.invalid||f2.invalid" (click)="onSubmit();f1.resetForm();f2.resetForm();" class="btn btn-primary">Save</button>
+                    <button type="submit" *ngIf="eventId===constants.EDIT || eventId==='edit_pop_UP'"
+                        [disabled]="f1.invalid||f2.invalid" (click)="onEdit();f1.resetForm();f2.resetForm();" class="btn btn-primary">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

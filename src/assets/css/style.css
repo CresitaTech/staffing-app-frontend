@@ -1,0 +1,767 @@
+a:hover{cursor: pointer;}
+.mTop-28{ margin-top: 28px;}
+.interviewer-otherName thead tr th:last-child,
+.interviewer-otherName tbody tr td:last-child{ width:55px;}
+.header-right .notification{position: relative;  width:40px; height:40px; border-radius:4px;}
+.header-right .notification .fa-bell{color:#333; position: relative; top:10px; left:10px; font-size:1.3rem;}
+.header-right .notification span{position: absolute; top:7px; left:20px;}
+
+.email_body {font-family: 'Poppins', sans-serif; overflow-y: auto; max-height:330px; }
+.email_body pre{ font-size: 100%; font-family: 'Poppins', sans-serif; white-space: break-spaces;}
+.email_body p{margin: 0px; }
+
+.date-input input[type="text"]{ background: #fff;}
+.date-range-input .form-control{ background: #fff;}
+.line-height-31{line-height:31px;}
+.line-height-38{ line-height:38px;}
+.other-document-view {
+	font-weight:normal !important; 
+	border: 1px solid #e8e8f7;
+	padding:10px;
+	border-radius: .25rem;
+	font-size:13px;
+    display: block;
+	background:#f3f4f6;
+}
+.other-document-view a{
+	font-weight:bold;
+}
+
+
+.excel-modal{
+	font-size:1.9rem;
+	position: relative;
+	top:5px;
+	margin-right:10px;
+
+}
+.jobs-status-dropdown{
+	width:100px;
+}
+.jobs-status-dropdown .form-control-sm{
+	height: calc(1em + 0.5rem + 2px);
+	padding: 1px;
+	line-height: 1;
+}
+
+.bg-white{
+	padding:16px;
+	background:#fff;
+	border-radius: 0.25rem;
+}
+.bg-gray{
+	background:#3f454c;
+}
+/*.search-wrap{
+	 background: linear-gradient(to bottom, rgb(63, 69, 76) 80%, rgb(231, 234, 244) 20%);	 
+}  */
+.bg-green{background:#26ae61;}
+.bg-green-light{ background:#f1fff7;}
+.border-green-light{ border-color:#7dcb9f;}
+
+.bg-set-priority{background:#fff5f5;}
+.border-set-priority{ border-color:#ff9999;}
+
+.page-title{color: #282d32;}
+.label-value{ font-weight:bold;}
+.label-value .icon-view-resume,
+.label-value .fa-file-download
+{
+	font-size:1.5rem;
+}
+.label-setPriority{
+	position: relative;
+	top:-5px;
+}
+
+.inActive-Job{
+	background:#f3f4f6;
+	border:1px solid #e1e3e5;
+}
+.inReject-Job{
+	background:#ffeeee;
+	border:1px solid #ffd9d9;
+}
+
+/* .inActive-Job{
+	background:#c1c2c4;
+	border:1px solid #a9aaac;
+}
+.inReject-Job{
+	background:#f7b5b5;
+	border:1px solid #f5a2a2;
+} */
+.candidate-details:hover{
+	background:#f1fff7;
+	border-color:#7dcb9f;
+	cursor: pointer;
+	
+}
+.candidate-details-full p{
+	font-weight: bold;
+	color: #1d212f;
+    font-size: 0.875rem;
+}
+.candidate-details-full .emailTemplatList-email_body p{ font-weight: initial; margin:0px;}
+.candidate-details-full ul{
+	padding-left: 20px;
+}
+
+
+
+.dot {
+	background:#2ec770;
+	border-radius: 50%;
+	height: 11px;
+	width: 11px;
+	box-shadow: 0 0 0 0 rgba(21, 155, 80, 1);
+	transform: scale(1);
+	animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+	0% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(21, 155, 80, 0.7);
+	}
+
+	70% {
+		transform: scale(1);
+		box-shadow: 0 0 0 12px rgba(21, 155, 80, 0);
+	}
+
+	100% {
+		transform: scale(0.95);
+		box-shadow: 0 0 0 0 rgba(21, 1155, 80, 0);
+	}
+}
+
+
+/* Filters section */
+.sideFilters .form-group{ 
+    margin-bottom:5px;
+}
+.candidate-details .dropdown-menu a i{ width:25px;}
+
+ 
+.modal label{
+	margin-bottom:3px;
+}
+.modal label.font-weight-bold{
+	font-weight: 600 !important;
+}
+/* .modal .form-group{
+	margin-bottom:10px;
+} */
+.modal a{
+	color: #26ae61;
+}
+.modal .success-icon{
+	display:block;
+	margin-bottom:10px;
+}
+.modal .success-icon i
+{
+	font-size:5rem;
+	color: #26ae61;
+}
+.modal-header .close {
+    outline: 0;
+}
+
+.predefined_values a{ color: #fff !important; font-weight: 100;}
+
+
+.dashboard .table th{border-top:0px;}
+.dashboard .table thead th {
+    vertical-align: top;
+}
+
+
+.dashboard .card-header a:hover, .dashboard .card-header a:focus{color: #26ae61;}
+.dashboard .card-body{ padding:10px 10px 0px;}
+
+/* .dashboard .jobs-table thead tr th:first-child,
+.dashboard .jobs-table tbody tr td:first-child{ width:210px;} */
+.dashboard .jobs-table thead tr th:last-child,
+.dashboard .jobs-table tbody tr td:last-child{ width:90px;}
+
+.dashboard .clients-table-navigationExpend .card-body{ height:auto;}
+.dashboard .clients-table-navigationNotExpend .card-body{ height:auto;}
+
+.graph{ padding:10px;}
+
+.dashboard-statistics .card-body{ padding-bottom:8px;}
+.dashboard-statistics .statistics-label{color:#4e5e73;}
+.dashboard-statistics .statistics-value{ font-size:1.25rem; font-weight:600; line-height:2.5rem;}
+.dashboard-statistics .statistics-icon{ width:4rem; height:4rem; border-radius:50%;}
+.dashboard-statistics .statistics-icon .icon{ font-size:2rem; position: relative; top:15px; left:15px;}
+.dashboard-statistics .bg-orange-light{background-color: #ffefd9; color:#ff950a;}
+.dashboard-statistics .bg-pink-light{background-color: #ffe3e4; color: #ff6f74;}
+.dashboard-statistics .bg-green-light{background-color: #daf7da; color:#17cc17;}
+.dashboard-statistics .bg-blue-light{background-color: #eae3fc; color: #7243ea;}
+.dashboard-statistics .bg-sky-light{background-color: #eae3fc; color: #337AB7;}
+
+.dashboard-statistics .text-orange-light{color:#ff950a;}
+.dashboard-statistics .text-pink-light{color: #ff6f74;}
+.dashboard-statistics .text-green-light{color:#17cc17;}
+.dashboard-statistics .text-blue-light{color: #7243ea;}
+.dashboard-statistics .text-sky-light{color: #337AB7;}
+
+.label-makelaptop{ display:none;}
+.label-desktop{ display:block;}
+
+
+
+.table-candidate-addjob thead tr th:nth-child(1),
+.table-candidate-addjob tbody tr td:nth-child(1){
+	min-width:100px;
+}
+.table-candidate-addjob thead tr th:nth-child(3),
+.table-candidate-addjob tbody tr td:nth-child(3){
+	min-width:160px;
+}
+.table-candidate-addjob thead tr th:nth-child(4),
+.table-candidate-addjob tbody tr td:nth-child(4){
+	min-width:96px;
+}
+
+/* Recruiter dashboard */
+.table-candidates .card-body{ height:200px;}
+.table-candidates thead tr th:nth-child(2),
+.table-candidates tbody tr td:nth-child(2){
+	max-width:128px;
+	
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-candidates thead tr th:nth-child(3),
+.table-candidates tbody tr td:nth-child(3){
+	max-width:200px;
+	
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.table-candidates thead tr th:nth-child(4),
+.table-candidates tbody tr td:nth-child(4){
+	max-width:130px;
+	
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-candidates tbody tr:hover{
+	background:#eafdf2;
+	cursor: pointer;
+}
+
+/*Recruiter - My Jobs table */
+.table-MyJobs .card-body{ height:200px;}
+.table-MyJobs thead tr th:nth-child(2),
+.table-MyJobs tbody tr td:nth-child(2){
+	max-width:200px;
+	
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-MyJobs thead tr th:nth-child(3),
+.table-MyJobs tbody tr td:nth-child(3){
+	max-width:130px;
+	
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.table-MyJobs thead tr th:nth-child(4),
+.table-MyJobs tbody tr td:nth-child(4){
+	max-width:130px;
+	
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-MyJobs tbody tr:hover{
+	background:#eafdf2;
+	cursor: pointer;
+}
+
+/* BDM Dashboard jobs table */
+.table-BDM-jobs .card-body{ height:200px;}
+
+.table-BDM-jobs thead tr th:nth-child(1),
+.table-BDM-jobs tbody tr td:nth-child(1){
+	max-width:200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-BDM-jobs thead tr th:nth-child(2),
+.table-BDM-jobs tbody tr td:nth-child(2){
+	max-width:130px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.table-BDM-jobs thead tr th:nth-child(3),
+.table-BDM-jobs tbody tr td:nth-child(3){
+	max-width:75px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
+
+/* BDM Dashboard High Priority Jobs table */
+/* .table-BDM-HighPriorityJobs .card-body{ height:200px;} */
+/*.table-BDM-HighPriorityJobs thead tr th:nth-child(1),
+.table-BDM-HighPriorityJobs tbody tr td:nth-child(1){
+	max-width:200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-BDM-HighPriorityJobs thead tr th:nth-child(2),
+.table-BDM-HighPriorityJobs tbody tr td:nth-child(2){
+	max-width:130px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+ .table-BDM-HighPriorityJobs thead tr th:nth-child(3),
+.table-BDM-HighPriorityJobs tbody tr td:nth-child(3){
+	width:85px;
+	
+} */
+.table-BDM-HighPriorityJobs .table{ margin-bottom:0px;}
+.table-BDM-HighPriorityJobs thead tr th:nth-child(4),
+.table-BDM-HighPriorityJobs tbody tr td:nth-child(4){
+	width:105px;
+	padding-left:20px;	
+}
+
+.table-BDM-HighPriorityJobs .table-sm tbody tr td{
+	line-height:1;
+}
+.table-BDM-HighPriorityJobs tbody tr:hover{
+	background:#eafdf2;
+	cursor: pointer;
+}
+
+/* BDM Dashboard jobs client */
+
+.table-BDM-Clients .card-body{ height:200px;}
+
+.table-BDM-Clients thead tr th:nth-child(1),
+.table-BDM-Clients tbody tr td:nth-child(1){
+	max-width:130px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-BDM-Clients thead tr th:nth-child(2),
+.table-BDM-Clients tbody tr td:nth-child(2){
+	max-width:200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+
+/* admin Dashboard Last Five Placements */
+.table-lastFivePlacements .card-body{ height:200px;}
+.table-lastFivePlacements thead tr th:nth-child(1),
+.table-lastFivePlacements tbody tr td:nth-child(1){
+	max-width:150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-lastFivePlacements thead tr th:nth-child(2),
+.table-lastFivePlacements tbody tr td:nth-child(2){
+	max-width:150px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.table-lastFivePlacements thead tr th:nth-child(3),
+.table-lastFivePlacements tbody tr td:nth-child(3){
+	max-width:100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* .table-lastFivePlacements tbody tr:hover{
+	background:#eafdf2;
+	cursor: pointer;
+} */
+
+
+/* admin Dashboard Last Five Jobs */
+.table-LastFiveJobs .card-body{ height:200px;}
+.table-LastFiveJobs thead tr th:nth-child(1),
+.table-LastFiveJobs tbody tr td:nth-child(1){
+	max-width:160px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.table-LastFiveJobs thead tr th:nth-child(2),
+.table-LastFiveJobs tbody tr td:nth-child(2){
+	max-width:130px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.table-LastFiveJobs thead tr th:nth-child(3),
+.table-LastFiveJobs tbody tr td:nth-child(3){
+	max-width:100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.table-LastFiveJobs thead tr th:nth-child(4),
+.table-LastFiveJobs tbody tr td:nth-child(4){
+	max-width:100px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	
+}
+
+.table-LastFiveJobs tbody tr:hover{
+	background:#eafdf2;
+	cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* filter section */
+/*.filter-jobTitle{}*/
+
+
+.addGroup-section .available-permissions-height select{
+	min-height:252px;
+}
+.addGroup-section .chosen-permissions-height select{
+	min-height:300px;
+}
+.addGroup-section .arrow-button{
+	padding-top:150px;
+}
+.addGroup-section .btn-link{
+	color:#c4c1c1;
+}
+.addGroup-section .btn-link.active,
+.addGroup-section .btn-link:hover{
+	color:#26ae61;
+	text-decoration:none;
+}
+
+.addGroup-section .btn-secondary{
+	background-color: #e3e1e1;
+	border-color: #e3e1e1;
+}
+.addGroup-section .btn-secondary:hover{
+	background-color: #2ec770;
+	border-color: #2ec770;
+}
+
+.addGroup-section select{ border:0px;}
+
+/* showpassword css */
+.password-section .input-group-append{ border:0px;}
+.password-section #show_hide_password .form-control,
+.password-section #show_hide_confirmpassword .form-control{
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+.password-section .showpassword{ position: absolute; top:9px; right:2px; z-index:10;}
+.password-section .showpassword a{ background-color:none;}
+.password-section .showpassword .input-group-text{ border:0px; background:none;}
+.password-section .showpassword .input-group-text a{display: inline-block;}
+
+
+/* .report-edit .label-row .label-action,
+.report-edit .value-row .value-action{ width:70px;} */
+.width-85{
+	width:85px;
+}
+.width-100{
+	width:100px;
+}
+.width-110{
+	width:110px;
+}
+.width-140{
+	width:140px;
+}
+
+.custom-file-upload{
+	border: 1px solid #e8e8f7 !important;
+    display: inline-block;
+    padding: 5px 10px;
+    cursor: pointer;
+    width: 100%;
+    border-radius: .25rem;
+}
+
+
+
+@media screen and (min-device-width: 1024px) and (max-device-width: 1300px) { 
+	
+	.dashboard-statistics .col-lg-3{
+		flex: 0 0 23.5%;
+		max-width: 23.5%;
+	}
+	.dashboard-statistics .col-lg-3:last-child{
+		flex: 0 0 29.5%;
+		max-width: 29.5%;
+	}
+
+	.dashboard-statistics .statistics-value{
+		font-size: 1rem;
+	}
+	
+	.dashboard-statistics .statistics-icon{
+		width:3rem;
+		height: 3rem;
+	}
+
+	.dashboard-statistics .statistics-icon .icon{
+		font-size: 1.5rem;
+		top:12px;
+		left:12px;
+	}
+	.statistics-label{ font-size: 0.7rem;}
+	
+}
+
+@media screen and (min-device-width: 1024px) and (max-device-width: 1300px) { 
+
+	/* BDM Dashboard High Priority Jobs table */
+	.table-BDM-HighPriorityJobs .card-body{ height:200px;}
+	.table-BDM-HighPriorityJobs thead tr th:nth-child(1),
+	.table-BDM-HighPriorityJobs tbody tr td:nth-child(1){
+		max-width:180px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.table-BDM-HighPriorityJobs thead tr th:nth-child(2),
+	.table-BDM-HighPriorityJobs tbody tr td:nth-child(2){
+		max-width:110px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.table-BDM-HighPriorityJobs thead tr th:nth-child(4),
+	.table-BDM-HighPriorityJobs tbody tr td:nth-child(4){
+		padding-left:10px;	
+	}
+
+}
+
+
+
+@media only screen and (max-device-width:320px){
+	
+	.shortby-section .col-auto:nth-child(2){
+		width:240px;
+	}
+	.shortby-section .col-auto:nth-child(7){
+		width:145px;
+	}
+}
+
+
+@media only screen and (max-device-width:567px){
+	/* dashbard css start */
+	.table-LastFiveJobs .card-header .col,
+	.table-BDM-Clients .card-header .col,
+	.table-candidates .card-header .col,
+	.monthly-trand-table .card-header .mobile{
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: 100%;
+		text-align: left !important;
+	}
+	.monthly-trand-table .card-header .mobile{
+		padding-top:5px;
+	}
+	/* .table-BDM-HighPriorityJobs .card-body {
+		height: auto;
+	} */
+	.table-candidates .card-body,
+	.table-MyJobs .card-body {
+		height: auto;
+	}
+	.table-candidates .table,
+	.table-MyJobs .table{
+		margin-bottom:0px;
+	}
+	.table-candidates .table-sm td, .table-candidates .table-sm th,
+	.table-MyJobs .table-sm td, .table-MyJobs .table-sm th{
+		white-space: nowrap;
+	}
+
+	.page-header .col-auto{
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: 100%;
+	}
+	
+	.page-header .breadcrumb{ margin-bottom:10px !important;}
+	.page-header .btn{ margin-bottom:10px;}
+	.search-box-section{ padding:1rem !important;}
+	.search-box .col{
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: 100%;
+		margin-bottom:10px;
+	}
+	
+	.candidate-details .col{
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: 100%;
+		margin-bottom:10px;
+	}
+	.candidate-details .candidate-checkbox{
+		margin-bottom:10px;
+	}
+	.heading-sec .justify-content-end {
+		justify-content: flex-start !important;
+	}
+	
+	.sideCandidate .col{
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: 100%;
+		margin-bottom:10px;
+	}
+	.sideCandidate .heading-sec .col-auto,
+	.sideCandidate .button-sec .col-auto{
+		flex: 0 0 100%;
+		width: 100%;
+		max-width: 100%;
+		margin-bottom:10px;
+	}
+	.form-group-mobile
+	{
+		margin-bottom:10px;
+	}
+
+    /* candidate css start */
+	.shortby-section {
+		margin-bottom:16px;
+	}
+	.shortby-section .col-auto:nth-child(1),
+	.shortby-section .col-auto:nth-child(4){
+		width: 100%;
+	}
+	.shortby-section .col-auto:nth-child(1) .form-group{
+		margin-bottom:5px;
+	}
+
+	.shortby-section .ml-auto{
+		margin-left:0px !important;
+	}
+	
+	.candidate-details-full {
+		margin-top:16px;
+	}
+	.candidate-details-full .mb-3{
+		margin-bottom: 0px !important;
+
+	}
+	.candidate-details-full .mb-mobile{
+		margin-bottom: 0px;
+	}
+	.paging-section .ml-auto{
+		margin-left:0px !important;
+	}
+	.paging-section .pagination{
+		margin-top:10px;
+	}
+	.candidate-name .col{
+		flex: 0 0 100%;
+    	width: 100%;
+    	max-width: 100%;
+		margin-bottom:10px;
+	}
+
+	/* popup css */
+	.modal-footer{
+		justify-content: flex-start;
+	}
+
+ }
+
+ /* css for iPad */
+ @media screen and (min-device-width: 568px) and (max-device-width: 992px) { 
+	.page-header div:nth-child(1){ 
+		width:100%;
+	}
+	.page-header div:nth-child(2)
+	{
+		margin-left:0px;
+		margin-top: 10px;
+	}
+	.shortby-section{
+		margin-bottom:10px;
+	}
+	.shortby-section .col-auto:nth-child(1){
+		width: auto;
+	}
+	.shortby-section .col-auto:nth-child(4){
+		width: calc(100% - 425px);
+	}
+	.shortby-section .col-auto:nth-child(5),
+	.shortby-section .col-auto:nth-child(6),
+	.shortby-section .col-auto:nth-child(7){
+		margin-top:10px;
+	}
+	.shortby-section .col-auto:nth-child(5){
+		padding-left:16px;
+	}
+	.shortby-section .ml-auto {
+		margin-left:inherit !important;
+		
+   }
+	.paging-section .pagination {
+		margin-top:0px;
+	}
+	.paging-section .ml-auto {
+		 margin-left:auto !important;
+	}
+
+
+}
+
+

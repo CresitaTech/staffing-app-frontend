@@ -1,0 +1,150 @@
+<div class="card shadow-sm p-0">
+    <div class="card-header">
+        <div class="row">
+            <div class="col">
+                <h5 class="card-title mb-0">{{title}} </h5>
+            </div>
+            <div class="col-auto ml-auto mobile">
+              <div class="form-row">
+                <!-- <div class="col-auto"*ngIf="dateRange === allDateRange.CUSTOM">
+                  <b>From</b> {{startDate}} <b> to </b> {{endDate}}</div>
+                <div class="col-auto pr-0 mr-0">
+                    <a class="chart-icon btn-link" (click)="openDateRangeModal()" *ngIf="dateRange === allDateRange.CUSTOM">
+                        <i class="fas fa-calendar-alt"></i>
+                    </a>
+                </div>
+                <div class="col-auto">
+                    <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                        [ngModel]="dateRange" (ngModelChange)="dateRangeChanged($event)">
+                        <option *ngFor="let r of dateRangeKeys" value="{{allDateRange[r]}}">{{allDateRange[r] | titlecase}}
+                        </option>
+                    </select>
+                </div> -->
+                <!-- <div class="col-auto" *ngIf="(role === roles.ADMIN ||role === roles.BDMMANAGER)  && isTabular || chartType === ChartTypeEnum.BAR"> -->
+                <!-- <div class="col-auto" *ngIf="(role === roles.ADMIN ||role === roles.BDMMANAGER)  && !isTabular && chartType === ChartTypeEnum.BAR">
+                    <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                        [ngModel]="xAxisFilter" (ngModelChange)="filterRecruiter($event); xAxisFilter = $event;">
+                        <option selected value="ALL">ALL</option>
+                        <option *ngFor="let r of setForBDMJobs;" [ngValue]="r">{{r}}</option>
+                    </select>
+                </div>
+
+                <div class="col-auto" *ngIf="(role === roles.ADMIN || role === roles.BDMMANAGER )&& isTabular">
+                    <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                        [ngModel]="xAxisFilter" (ngModelChange)="filterOnTable($event); xAxisFilter = $event;">
+                        <option selected value="ALL">ALL</option>
+                        <option *ngFor="let r of setForBDMJobs;" [ngValue]="r">{{r}}</option>
+                    </select>
+                </div> -->
+                <div class="col-auto" *ngIf="(role === roles.ADMIN ||role === roles.BDMMANAGER || role === roles.RECRUITERMANAGER)">
+                  <app-filter-search-dropdown [item]="xAxisFilter" [user_role]="'9'" [role]="'BDM'" (changeItemAllData)="allUsers=$event"
+                        (changeItemEvt)="onXAxisFilterChange($event)" name="FilterSearch">
+                    </app-filter-search-dropdown>
+                </div>
+
+                <div class="col-auto">
+                  <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                      [ngModel]="dateRange" (ngModelChange)="dateRangeChangedInitial($event)">
+                      <option *ngFor="let r of dateRangeKeys" value="{{allDateRange[r]}}">{{allDateRange[r] | titlecase}}
+                      </option>
+                  </select>
+                </div>
+
+                <div>
+                  <button class="btn btn-primary mr-2 ml-2" (click)="applyFilters()">Go</button>
+                </div>
+
+                <div class="col-auto text-right">
+                    <a class="chart-icon btn-link mr-2" (click)="downloadFile('bdm_jobs')" *ngIf="show_download" title="Download CSV">
+                        <i class="fas fa-file-excel"></i>
+                    </a>
+                    <ng-container *ngIf="!isTabular">
+                        <a class="chart-icon btn-link mr-2" (click)="isTabular = true; filterOnTable(bdmName); " *ngIf="show_tabular" title="Table View">
+                            <i class="fas fa-table"></i>
+                        </a>
+                        <a class="chart-icon btn-link mr-2" *ngIf="chartType === ChartTypeEnum.LINE"
+                            (click)="chartType = ChartTypeEnum.BAR; setBackground(); isTabular = false ;filterOnTable(bdmName); " title="Bar Graph">
+                            <i class="fas fa-chart-bar"></i>
+                        </a>
+                        <a class="chart-icon btn-link" *ngIf="chartType !== ChartTypeEnum.LINE"
+                            (click)="chartType = ChartTypeEnum.LINE; setBackground(); isTabular = false ;filterOnTable(bdmName); " title="Line Graph">
+                            <i class="fas fa-chart-line"></i>
+                        </a>
+                    </ng-container>
+                    <ng-container *ngIf="isTabular">
+                        <a class="chart-icon btn-link mr-2"
+                            (click)="chartType = ChartTypeEnum.BAR; setBackground(); isTabular = false; filterRecruiter(bdmName);" title="Bar Graph">
+                            <i class="fas fa-chart-bar"></i>
+                        </a>
+                        <a class="chart-icon btn-link"
+                            (click)="chartType = ChartTypeEnum.LINE; setBackground(); isTabular = false; filterRecruiter(bdmName);" title="Line Graph">
+                            <i class="fas fa-chart-line"></i>
+                        </a>
+
+                    </ng-container>
+                </div>
+
+
+              </div>
+              <div class="col-auto text-right mr-5" *ngIf="dateRange === allDateRange.CUSTOM">
+                <b>From</b> {{startDate}} <b> to </b> {{endDate}}
+                <a class="chart-icon btn-link" (click)="openDateRangeModal()"
+                    *ngIf="dateRange === allDateRange.CUSTOM">
+                    <i class="fas fa-calendar-alt"></i>
+                </a>
+              </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-body pt-0 pb-0">
+        <div class="row">
+            <div class="col graph" *ngIf="!isTabular">
+                <ng-container *ngIf="chartData.length > 0">
+                    <ng-container *ngIf="isCompleted && chartType === ChartTypeEnum.BAR">
+                        <canvas id="canvas" baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions"
+                            [legend]="true" [chartType]="ChartTypeEnum.BAR" [plugins]="[]">
+                        </canvas>
+                    </ng-container>
+                    <ng-container *ngIf="isCompleted && chartType === ChartTypeEnum.LINE">
+                        <canvas baseChart [datasets]="chartData" [labels]="chartLabels" [options]="chartOptions"
+                            [legend]="true" [chartType]="ChartTypeEnum.LINE" [plugins]="[]">
+                        </canvas>
+                    </ng-container>
+                </ng-container>
+                <ng-container *ngIf="isCompleted && chartData.length === 0">
+                    <div class="text-center text-muted">
+                        No Data available currently.
+                    </div>
+                </ng-container>
+            </div>
+            <div class="col graph" *ngIf="isTabular">
+                <div class="table-responsive">
+
+
+                    <div class="example-header">
+                        Page Size:
+                        <select (change)="onPageSizeChanged()" id="page-size">
+                          <option value="10" selected="">10</option>
+                          <option value="20">20</option>
+                          <option value="50">50</option>
+                          <option value="100">100</option>
+                          <option value="500">500</option>
+                          <option value="1000">1000</option>
+                        </select>
+                      </div>
+
+                    <ag-grid-angular
+                    style="width: 100%; height: 500px;"
+                    class="ag-theme-alpine"
+                    [rowData]="tabularDataForFilter"
+                    [columnDefs]="columnDefs"
+                    pagination=true
+                    paginationPageSize="10"
+                    (gridReady)="onGridReady($event)"
+                    >
+                    </ag-grid-angular>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

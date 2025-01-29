@@ -1,0 +1,26 @@
+.btn-primary.disabled, .btn-primary:disabled {
+    color: #fff;
+    background-color: #26ae61;
+    border-color: #26ae61;
+}
+
+
+
+  label.asterisk-if-mandatory::after {
+    content: " *";
+    color:red;
+  }
+
+.ng-select.ng-select-opened>.ng-select-container {
+    background: #fff;
+    border-color: #e8e8f7 #e8e8f7 #e8e8f7;
+}
+.ng-select .ng-select-container{
+    border: 1px solid #e8e8f7;
+}
+.ng-dropdown-panel
+{
+	border: 1px solid #e8e8f7;
+}
+
+

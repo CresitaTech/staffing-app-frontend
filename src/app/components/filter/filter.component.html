@@ -1,0 +1,174 @@
+<div id="filters" [ngClass]="{'sideFilters': isDialog === undefined || isDialog === null || isDialog === false}">
+  <button *ngIf="isDialog === undefined || isDialog === null || isDialog === false"  class="btn btn-link closebtn" (click)="toggle()">&times;</button>
+  <div class="p-4">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="form-row  mb-3 heading-sec">
+          <div class="col">
+            <h5 class="card-title">Filters</h5>
+          </div>
+          <div class="col-auto ml-auto">
+            <button type="button" class="btn btn-outline-primary mr-2" (click)="clearFilters()">Clear all
+              filters</button>
+              <button type="button" class="btn btn-primary" (click)="sendFilterEvt()">Apply Filters</button>
+          </div>
+
+        </div>
+
+        <div class="card mb-2">
+          <div class="card-body">
+            <div class="row">
+              <div class="col" *ngIf="!allNewJobs && !allNewJobsClient" >
+                <h6 class="card-title">Candidate Added At</h6>
+              </div>
+                <div class="col" *ngIf="allNewJobs">
+                  <h6 class="card-title">Jobs Added At</h6>
+                </div>
+                <div class="col" *ngIf="allNewJobsClient">
+                  <h6 class="card-title">Client Added At</h6>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <select name="daterange" class="form-control form-control-sm" [(ngModel)]="filters[filterEnum.DATE_RANGE]">
+                  <option value="">--</option>
+                  <option value="today">Today</option>
+                  <option value="yesterday">Yesterday</option>
+                  <option value="week">Week</option>
+                  <option value="month">Month</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row pt-3" *ngIf="filters[filterEnum.DATE_RANGE] === 'custom'">
+              <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 form-group">
+                <div class="input-group input-group-sm">
+                  <input class="form-control" placeholder="From Date" ngbDatepicker #d1="ngbDatepicker"
+                    [(ngModel)]="filters[filterEnum.START_DATE]" #c1="ngModel" name="filterEnum.START_DATE">
+                  <div class="input-group-append">
+                    <a class="input-group-text" (click)="d1.toggle()">
+                      <i class="far fa-calendar-minus"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 form-group">
+                <div class="input-group input-group-sm">
+                  <input class="form-control" placeholder="To Date" ngbDatepicker #d2="ngbDatepicker"
+                    [(ngModel)]="filters[filterEnum.END_DATE]" #c2="ngModel" name="filterEnum.END_DATE">
+                  <div class="input-group-append">
+                    <a class="input-group-text" (click)="d2.toggle()">
+                      <i class="far fa-calendar-minus"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-container *ngFor="let param of params">
+          <div class="card mb-2" *ngIf="param.type === filterEnum.RANGE">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h6 class="card-title">{{param.model | enumConverter | titlecase}}
+                    <span class="small">({{param.range.param}})</span>
+                  </h6>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <app-min-max-range [placeholder]="'min'" (changed)="filters[param.model + '__lt'] = $event">
+                  </app-min-max-range>
+                </div>
+                <div class="col">
+                  <app-min-max-range [placeholder]="'max'" (changed)="filters[param.model + '__gt'] = $event">
+                  </app-min-max-range>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="card mb-2" *ngIf="param.type === filterEnum.RANGE2">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h6 class="card-title">{{param.model | enumConverter | titlecase}}
+                    <span class="small">({{param.range.param}})</span>
+                  </h6>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <app-min-max-range [placeholder]="'min'" (changed)="filters['min_'+param.model] = $event">
+                  </app-min-max-range>
+                </div>
+                <div class="col">
+                  <app-min-max-range [placeholder]="'max'" (changed)="filters['max_'+param.model] = $event">
+                  </app-min-max-range>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card mb-2" *ngIf="param.type === filterEnum.PICKER">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h6 class="card-title">{{param.model | enumConverter | titlecase}}</h6>
+                </div>
+              </div>
+              <div class="form-group">
+                <select class="form-control" name="param" id="{{param.model}}" [(ngModel)]="filters[param.model]">
+                   <option value="" >Please select a country </option>
+                   <option *ngFor="let country of countries"  [value]="country.country_code" >{{country.country_name}}</option>
+               </select>
+              </div>
+            </div>
+          </div>
+
+
+      <div class="card mb-2" *ngIf="param.type === filterEnum.STATUS">
+        <div class="card-body">
+          <div class="row">
+            <div class="col">
+              <h6 class="card-title">{{param.model | enumConverter | titlecase}}</h6>
+            </div>
+          </div>
+          <div class="form-group">
+            <select class="form-control" name="param" id="{{param.model}}" [(ngModel)]="filters[param.model]">
+               <option value="" >Please select status </option>
+               <option *ngFor="let status of candidateStatus"  [value]="status.id" >{{status.stage_name}}</option>
+           </select>
+          </div>
+        </div>
+      </div>
+          <div class="card mb-2" *ngIf="!param.type">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h6 class="card-title">{{param.model | enumConverter | titlecase}}</h6>
+                </div>
+              </div>
+              <div class="form-group">
+                <input class="form-control" type="text" id="{{param.model}}" name="param"
+                  [(ngModel)]="filters[param.model]" placeholder="{{param.model | enumConverter | titlecase}}" />
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <div class="form-row button-sec">
+          <div class="col"><button type="button" class="btn btn-block btn-outline-primary"
+              (click)="clearFilters()">Clear all
+              filters</button></div>
+          <div class="col">
+            <button type="button" class="btn btn-block btn-primary" (click)="sendFilterEvt()">Apply
+              Filters</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,90 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row  mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title">Filters</h5>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-outline-primary" (click)="clearFilters()">Clear all
+                        filters</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary" (click)="applyFilters()">Apply Filters</button>
+                </div>
+            </div>
+
+            <!-- Created -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Created At</h6>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 form-group">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control" placeholder="From Date" ngbDatepicker #d1="ngbDatepicker"
+                                    [(ngModel)]="selectedFilter[filterEnum.START_DATE]" #c1="ngModel" name="filterEnum.START_DATE">
+                                <div class="input-group-append">
+                                    <a class="input-group-text" (click)="d1.toggle()">
+                                        <i class="far fa-calendar-minus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-6 col-xl-6 form-group">
+                            <div class="input-group input-group-sm">
+                                <input class="form-control" placeholder="To Date" ngbDatepicker #d2="ngbDatepicker"
+                                    [(ngModel)]="selectedFilter[filterEnum.END_DATE]" #c2="ngModel" name="filterEnum.END_DATE">
+                                <div class="input-group-append">
+                                    <a class="input-group-text" (click)="d2.toggle()">
+                                        <i class="far fa-calendar-minus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ng-container *ngFor="let param of params">
+                <div class="card mb-2" *ngIf="param !== filterEnum.START_DATE && param !== filterEnum.END_DATE">
+                    <ng-container *ngIf="param !== 'start_date' && param !== 'end_date'">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h6 class="card-title">{{param | enumConverter | titlecase}}</h6>
+                                </div>
+                            </div>
+                            <ng-select #select [items]="filters[param]" [searchable]="false"
+                                [(ngModel)]="selectedFilter[param]" bindLabel="id" bindValue="id" [multiple]="true"
+                                [closeOnSelect]="false" [searchable]="false"
+                                placeholder="select {{param | enumConverter}}">
+                                <ng-template ng-header-tmp>
+                                    <input style="width: 100%; line-height: 24px" type="text"
+                                        (input)="select.filter($event.target.value)" />
+                                </ng-template>
+                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item}}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+
+
+            <div class="form-row button-sec">
+                <div class="col"><button type="button" class="btn btn-block btn-outline-primary"
+                        (click)="clearFilters()">Clear all
+                        filters</button></div>
+                <div class="col">
+                    <button type="button" class="btn btn-block btn-primary" (click)="applyFilters()">Apply
+                        Filters</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

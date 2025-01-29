@@ -1,0 +1,26 @@
+<div class="modal fade" (click)="activeModal.dismiss()" appDragDrop  (fileDropped)="onFileDropped($event)" id="popup-Import" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Import</h5>
+            <button type="button" data-dismiss="modal" class="close" #closebutton aria-label="Close" (click)="activeModal.dismiss()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <!-- <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button> -->
+        </div>
+        <div class="modal-body">
+            <div class="form-group inputDnD">
+                <label class="sr-only" for="inputFile">File Upload</label><b> File Name : {{fileName}}</b>
+                <input type="file"  data-dismiss="modal" class="form-control-file  font-weight-bold" id="inputFile"
+                    accept="image/*" onchange="readUrl(this)" data-title="Drag and drop a file">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+            <button type="button" class="btn btn-primary" (click)="readHeadersAndDisplay()">Submit</button>
+        </div>
+    </div>
+</div>

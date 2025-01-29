@@ -1,0 +1,398 @@
+<div class="card shadow-sm p-0">
+
+    <mat-tab-group [disableRipple]="true" animationDuration="0ms" [selectedIndex]="selected.value"
+        (selectedIndexChange)="selectedIndexChange($event)">
+        <ng-container *ngFor="let tab of tabs; let index = index">
+            <mat-tab>
+
+                <!-- <ng-template mat-tab-label>
+                    <div class="col my-custom-class">{{tab.name}}</div>
+                    <a  *ngIf="tab.tabType !== 0" [ngClass]="selected.value === index ? 'close-icon-active btn-link mr-2' : 'close-icon btn-link mr-2'" (click)="closeTab(index)"
+                     data-toggle="tooltip" data-placement="top"
+                    title="Close">
+                    <i class="fas fa-window-close"></i>
+                </a>
+
+                </ng-template> -->
+
+                <ng-template matTabContent>
+                    <span [ngSwitch]="tab.tabType">
+                        <div *ngSwitchCase="0">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="card-title mb-0">{{title}} </h5>
+                                    </div>
+
+                                    <div class="col-auto ml-auto mobile">
+                                        <div class="form-row">
+
+
+                                            <!-- <div class="col-auto">
+                                                <select class="form-control form-control-sm"
+                                                    aria-label="Default select example" name="select"
+                                                    [ngModel]="xAxisFilter"
+                                                    (ngModelChange)="filterOnTableJS($event, xAxisFilterCountry, xAxisFilterJobStatus); filterRecruiterJS($event, xAxisFilterCountry); xAxisFilter = $event;">
+                                                    <option selected value="none">Select BDM</option>
+                                                    <option value="ALL">ALL</option>
+                                                    <option *ngFor="let r of setForJobSummary;" [ngValue]="r">{{r}}
+                                                    </option>
+                                                </select>
+                                            </div> -->
+
+                                            <!-- <app-filter-search-dropdown [item]="xAxisFilter" [user_role]="'9'" [role]="'BDM'" (changeItemAllData)="allUsers=$event"
+                                            (changeItemEvt)="xAxisFilter = $event;filterOnTableJS($event, xAxisFilterCountry, xAxisFilterEmpType, xAxisFilterJobStatus); filterRecruiterJS($event, xAxisFilterCountry);" name="FilterSearch">
+                                        </app-filter-search-dropdown> -->
+
+                                            <app-filter-search-dropdown [item]="xAxisFilter" [user_role]="'9'" [role]="'BDM'" (changeItemAllData)="allUsers=$event"
+                                              (changeItemEvt)="onXAxisFilterChange($event)" name="FilterSearch">
+                                            </app-filter-search-dropdown>
+
+                                        <!-- <app-filter-search-dropdown [item]="xAxisFilterCountry" [user_role]="'Country'" [role]="'Country'"
+                                        (changeItemEvt)="xAxisFilterCountry = $event;filterOnTableJS(xAxisFilter, $event, xAxisFilterEmpType, xAxisFilterJobStatus); filterRecruiterJS(xAxisFilter, $event); " name="FilterSearch">
+                                    </app-filter-search-dropdown> -->
+
+                                            <app-filter-search-dropdown [item]="xAxisFilterCountry" [user_role]="'Country'" [role]="'Country'"
+                                              (changeItemEvt)="onXAxisFilterCountryChange($event)" name="FilterSearch">
+                                            </app-filter-search-dropdown>
+
+                                            <!-- <div class="col-auto">
+                                                <select class="form-control form-control-sm"
+                                                    aria-label="Default select example" name="select"
+                                                    [ngModel]="xAxisFilterCountry"
+                                                    (ngModelChange)="filterOnTableJS(xAxisFilter, $event, xAxisFilterJobStatus); filterRecruiterJS(xAxisFilter, $event); xAxisFilterCountry = $event;">
+                                                    <option selected value="none">Select Country</option>
+                                                    <option value="ALL">ALL</option>
+                                                    <option *ngFor="let r of setForJobSummaryCountry;" [ngValue]="r">
+                                                        {{r}}
+                                                    </option>
+                                                </select>
+
+                                            </div> -->
+                                            <div class="col-auto">
+                                                <button class="btn btn-md dropdown-toggle" style="border: 1px solid #dde2eb; background: white; height: 36px; min-width: 200px;" type="button" id="checkboxDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title={{employeeButtonText}}>
+                                                  {{employeeButtonText}}
+                                                    <!-- Employment Type -->
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="checkboxDropdownButton">
+                                                  <label class="dropdown-item" *ngFor="let option of empType">
+                                                    <input type="checkbox" [checked]="selectedEmpType.includes(option)" (change)="handleEmpTypeChange($event, option)">
+                                                    {{ option }}
+                                                  </label>
+                                                </div>
+                                              </div>
+
+                                            <div *ngIf="isTabular" class="col-auto">
+                                                <!-- <select class="form-control form-control-sm"
+                                                    aria-label="Default select example" name="select"
+                                                    [ngModel]="xAxisFilterJobStatus"
+                                                    (ngModelChange)="xAxisFilterJobStatus = $event; filterOnTableJS(xAxisFilter, xAxisFilterCountry, xAxisFilterJobStatus); filterRecruiterJS(xAxisFilter, xAxisFilterCountry); ">
+                                                    <option selected value="none">Select Job status</option>
+                                                    <option value="ALL">ALL</option>
+                                                    <option value="Active">Active</option>
+                                                    <option value="Inactive">In Active</option>
+                                                    <option value="Rejected">Rejected</option>
+                                                    <option value="SubmissionNotAccepted">Not Accepting Submissions</option>
+                                                </select> -->
+                                                <div class="">
+                                                    <button class="btn btn-md dropdown-toggle" style="border: 1px solid #dde2eb; background: white; height: 36px;" type="button" id="checkboxDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" title={{optionButtonText}} >
+                                                      <!-- {{optionButtonText}} -->
+                                                      Select Job Status
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="checkboxDropdownButton">
+                                                      <label class="dropdown-item" *ngFor="let option of options">
+                                                        <input type="checkbox" [checked]="selectedOptions.includes(option)" (change)="handleOptionChange($event, option)">
+                                                        {{ option }}
+                                                      </label>
+                                                    </div>
+                                                  </div>
+
+                                            </div>
+
+
+
+
+                                            <!-- Date -->
+
+                                            <!-- <div class="col-auto pt-1 ml-4" *ngIf="dateRange === allDateRange.CUSTOM">
+                                                <b>From</b> {{startDate}} <b> to </b> {{endDate}}
+                                            </div>
+                                            <div class="col-auto pr-0  pl-0">
+                                                <a class="chart-icon btn-link" (click)="openDateRangeModal()"
+                                                    *ngIf="dateRange === allDateRange.CUSTOM">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </a>
+                                            </div> -->
+                                            <div class="col-auto">
+                                                <select class="form-control form-control-sm"
+                                                    aria-label="Default select example" name="select"
+                                                    [ngModel]="dateRange" (ngModelChange)="dateRangeChangedInitial($event)">
+
+                                                    <option *ngFor="let r of dateRangeKeys" value="{{allDateRange[r]}}">
+                                                        {{allDateRange[r].replaceAll("-", " ") | titlecase}}
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                            <div>
+                                              <button class="btn btn-primary mr-2 ml-2" (click)="applyFilters()">Go</button>
+                                            </div>
+
+                                            <div class="col-auto text-right">
+
+                                                <ng-container *ngIf="!isTabular">
+                                                    <a class="chart-icon btn-link mr-2"
+                                                        (click)="isTabular = true;filterOnTableJS(xAxisFilter, xAxisFilterCountry, xAxisFilterEmpType, xAxisFilterJobStatus);"
+                                                        *ngIf="show_tabular" data-toggle="tooltip" data-placement="top"
+                                                        title="Tabular data view">
+                                                        <i class="fas fa-table"></i>
+                                                    </a>
+                                                    <a class="chart-icon btn-link"
+                                                        *ngIf="chartType === ChartTypeEnum.LINE"
+                                                        (click)="chartType = ChartTypeEnum.BAR; setBackground(); isTabular = false; filterOnTableJS(xAxisFilter, xAxisFilterCountry, xAxisFilterEmpType, xAxisFilterJobStatus);"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Bar graph view">
+                                                        <i class="fas fa-chart-bar"></i>
+                                                    </a>
+                                                    <a class="chart-icon btn-link"
+                                                        *ngIf="chartType !== ChartTypeEnum.LINE"
+                                                        (click)="chartType = ChartTypeEnum.LINE; setBackground(); isTabular = false; filterOnTableJS(xAxisFilter, xAxisFilterCountry, xAxisFilterEmpType, xAxisFilterJobStatus);"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Line graph view">
+                                                        <i class="fas fa-chart-line"></i>
+                                                    </a>
+                                                </ng-container>
+                                                <ng-container *ngIf="isTabular">
+                                                    <a class="chart-icon btn-link mr-2"
+                                                        (click)="chartType = ChartTypeEnum.BAR; setBackground(); isTabular = false;filterRecruiterJS(xAxisFilter, xAxisFilterCountry);"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Bar graph view">
+                                                        <i class="fas fa-chart-bar"></i>
+                                                    </a>
+                                                    <a class="chart-icon btn-link"
+                                                        (click)="chartType = ChartTypeEnum.LINE; setBackground(); isTabular = false ;filterRecruiterJS(xAxisFilter, xAxisFilterCountry);"
+                                                        data-toggle="tooltip" data-placement="top"
+                                                        title="Line graph view">
+                                                        <i class="fas fa-chart-line"></i>
+                                                    </a>
+                                                </ng-container>
+                                                <a class="chart-icon btn-link ml-2"
+                                                    (click)="downloadFile('job_summary')" *ngIf="show_download"
+                                                    data-toggle="tooltip" data-placement="top"
+                                                    title="Download Excel/CSV">
+                                                    <i class="fas fa-file-excel"></i>
+                                                </a>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="col-auto text-right mr-5" *ngIf="dateRange === allDateRange.CUSTOM">
+                                          <b>From</b> {{startDate}} <b> to </b> {{endDate}}
+                                          <a class="chart-icon btn-link" (click)="openDateRangeModal()"
+                                             *ngIf="dateRange === allDateRange.CUSTOM">
+                                              <i class="fas fa-calendar-alt"></i>
+                                          </a>
+                                        </div>
+
+                                    </div>
+
+
+
+
+
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 pb-0">
+                                <div class="row">
+                                    <div class="col graph" *ngIf="!isTabular">
+
+                                        <ng-container *ngIf="chartData.length > 0">
+                                            <ng-container *ngIf="isCompleted && chartType === ChartTypeEnum.BAR">
+                                                <canvas baseChart [datasets]="chartData" [labels]="chartLabels"
+                                                    [options]="chartOptions" [legend]="true"
+                                                    [chartType]="ChartTypeEnum.BAR" [plugins]="[]">
+                                                </canvas>
+                                            </ng-container>
+                                            <ng-container *ngIf="isCompleted && chartType === ChartTypeEnum.LINE">
+                                                <canvas baseChart [datasets]="chartData" [labels]="chartLabels"
+                                                    [options]="chartOptions" [legend]="true"
+                                                    [chartType]="ChartTypeEnum.LINE" [plugins]="[]">
+                                                </canvas>
+                                            </ng-container>
+                                        </ng-container>
+                                        <ng-container
+                                            *ngIf="(chartData.length === 0 ||chartData.length===undefined || chartData.length===null )">
+                                            <div class="text-center text-muted">
+                                                No Data available currently.
+                                            </div>
+                                        </ng-container>
+
+                                    </div>
+                                    <div class="col graph" *ngIf="isTabular">
+
+
+
+                                        <div class="table-responsive">
+
+                                            <div class="example-header">
+                                                Page Size:
+                                                <select (change)="onPageSizeChanged()" id="page-size">
+                                                    <option value="10" selected="">10</option>
+                                                    <option value="20">20</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                    <option value="500">500</option>
+                                                    <option value="1000">1000</option>
+                                                </select>
+                                            </div>
+
+                                            <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                                                (cellClicked)='onSelectionChanged($event)'
+                                                [rowData]="tabularDataForFilter" [columnDefs]="columnDefs"
+                                                pagination=true paginationPageSize="10"
+                                                (gridReady)="onGridReady($event)">
+                                            </ag-grid-angular>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngSwitchCase="1">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="card-title mb-0">{{tab.job_title}} </h5>
+                                    </div>
+
+                                    <div class="col-auto">
+
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" value="Summary" id="summary"
+                                                (click)="selectDataType('Summary', index)" name="summary"
+                                                (click)="tab.dataType = 'Summary'" [(ngModel)]="tab.dataType" />
+                                            <label class="form-check-label" for="inlineRadio1">Summary</label>
+
+                                            <input class="form-check-input ml-3" type="radio" value="All data"
+                                                id="allData" (click)="selectDataType('All data', index)" name="allData"
+                                                (click)="tab.dataType = 'All data'" [(ngModel)]="tab.dataType" />
+                                            <label class="form-check-label" for="inlineRadio1">All data</label>
+                                            <a class="chart-icon btn-link ml-4"
+                                                (click)="downloadCsvFile(tab.bdm, tab.job_id, tab.dataType)"
+                                                data-toggle="tooltip" data-placement="top"
+                                                title="{{tab.dataType === 'Summary' ? 'Download Summary CSV':'Download All Data CSV' }}">
+                                                <i class="fas fa-file-excel"></i>
+                                            </a>
+
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 pb-0">
+                                <div class="row">
+
+                                    <div class="col graph">
+                                        <div class="table-responsive">
+
+                                            <div class="example-header">
+                                                Page Size:
+                                                <select (change)="onPageSizeChanged()" id="page-size">
+                                                    <option value="10" selected="">10</option>
+                                                    <option value="20">20</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                    <option value="500">500</option>
+                                                    <option value="1000">1000</option>
+                                                </select>
+                                            </div>
+
+                                            <ag-grid-angular *ngIf="tab.dataType === 'Summary'"
+                                                style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                                                (cellClicked)='onSelectionChangedSubmission($event, tab.bdm, tab.job_id, tab.job_title, tab.dataType)'
+                                                [rowData]="tab.summaryData" [columnDefs]=" columnDefsSum"
+                                                pagination=true paginationPageSize="10"
+                                                (gridReady)="onGridReady($event)">
+                                            </ag-grid-angular>
+
+                                            <ag-grid-angular *ngIf="tab.dataType !== 'Summary'"
+                                                style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                                                (cellClicked)='onSelectionChangedSubmission($event,  tab.bdm, tab.job_id, tab.job_title, tab.dataType)'
+                                                [rowData]="tab.allData" [columnDefs]="columnDefsAllData" pagination=true
+                                                paginationPageSize="10" (gridReady)="onGridReady($event)">
+                                            </ag-grid-angular>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngSwitchDefault>
+
+
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col">
+                                        <h5 class="card-title mb-0">Submissions of {{tab.rName}} :- {{tab.job_title}}
+                                        </h5>
+                                    </div>
+
+                                    <div class="col-auto">
+
+                                        <div class="form-check form-check-inline">
+                                            <a class="chart-icon btn-link ml-4"
+                                                (click)="downloadCsvFileCandidate(tab.bdm, tab.job_id, tab.rId)"
+                                                data-toggle="tooltip" data-placement="top" title="Download CSV">
+                                                <i class="fas fa-file-excel"></i>
+                                            </a>
+
+                                        </div>
+
+
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 pb-0">
+                                <div class="row">
+
+                                    <div class="col graph">
+                                        <div class="table-responsive">
+
+                                            <div class="example-header">
+                                                Page Size:
+                                                <select (change)="onPageSizeChanged()" id="page-size">
+                                                    <option value="10" selected="">10</option>
+                                                    <option value="20">20</option>
+                                                    <option value="50">50</option>
+                                                    <option value="100">100</option>
+                                                    <option value="500">500</option>
+                                                    <option value="1000">1000</option>
+                                                </select>
+                                            </div>
+
+                                            <ag-grid-angular style="width: 100%; height: 500px;" class="ag-theme-alpine"
+                                                [rowData]="tab.summaryData" [columnDefs]="columnDefsSUMREQ"
+                                                pagination=true paginationPageSize="10"
+                                                (gridReady)="onGridReady($event)">
+                                            </ag-grid-angular>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </span>
+                </ng-template>
+
+            </mat-tab>
+        </ng-container>
+    </mat-tab-group>
+
+</div>

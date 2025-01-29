@@ -1,0 +1,219 @@
+
+
+
+<div class="search-wrap">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="row mt-3 page-header">
+          <div class="col-auto">
+            <h4 class="page-title mb-0">Campaign Dashboard</h4>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a> Campaign</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Campaign Dashboard
+                </li>
+              </ol>
+            </nav>
+          </div>
+
+        </div>
+
+        <div class="form-row dashboard-statistics mt-2 email-campaign-dashboard-statistics">
+          <div class="col mb-3">
+              <div class="card shadow-sm">
+                  <div class="card-body">
+                      <div class="row">
+                          <div class="col">
+
+                              <ng-container >
+                                  <div class="statistics-label">Sent</div>
+                                  <div class="statistics-value text-orange-light">{{dashData?.send ?? 0}}</div>
+                                  <div class="statistics-label mt-2">Total Click</div>
+                                  <div class="statistics-value">{{dashData?.clicked ?? 0}}</div>
+                              </ng-container>
+                          </div>
+                          <div class="col-auto">
+                              <div class="statistics-icon bg-orange-light">
+                                  <i class="icon icon-sent-email"></i>
+
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col mb-3">
+              <div class="card shadow-sm">
+                  <div class="card-body">
+                      <div class="row">
+                          <div class="col">
+
+                              <ng-container >
+                                  <div class="statistics-label">Delivered</div>
+                                  <div class="statistics-value text-green-light">{{dashData?.delivered ?? 0}}</div>
+                                  <div class="statistics-label mt-2">Unique Click</div>
+                                  <div class="statistics-value">0.00</div>
+                              </ng-container>
+                          </div>
+                          <div class="col-auto">
+                              <div class="statistics-icon bg-green-light">
+                                  <i class="icon icon-delivered" ></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col mb-3">
+              <div class="card shadow-sm">
+                  <div class="card-body">
+                      <div class="row">
+                          <div class="col">
+
+                              <ng-container >
+                                  <div class="statistics-label">Deliverability</div>
+                                  <div class="statistics-value text-sky-light">0</div>
+                                  <div class="statistics-label mt-2">Hard Bounce</div>
+                                  <div class="statistics-value">{{dashData?.hard_bounced ?? 0}}</div>
+                              </ng-container>
+                          </div>
+                          <div class="col-auto">
+                              <div class="statistics-icon bg-sky-light">
+                                  <i class="icon icon-deliverability" ></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col mb-3">
+              <div class="card shadow-sm">
+                  <div class="card-body">
+                      <div class="row">
+                          <div class="col">
+
+                              <ng-container>
+                                  <div class="statistics-label">Total Open</div>
+                                  <div class="statistics-value text-pink-light">{{dashData?.opened ?? 0}}</div>
+                                  <div class="statistics-label mt-2">Soft Bounce</div>
+                                  <div class="statistics-value">{{dashData?.soft_bounced ?? 0}}</div>
+                              </ng-container>
+                          </div>
+                          <div class="col-auto">
+                              <div class="statistics-icon bg-pink-light">
+                                  <i class="icon icon-total-open" ></i>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+
+                            <ng-container>
+                                <div class="statistics-label">Unique Open</div>
+                                <div class="statistics-value text-blue-light">0.00(0)</div>
+                                <div class="statistics-label mt-2">Attachment Size</div>
+                                  <div class="statistics-value">0 MB</div>
+                            </ng-container>
+                        </div>
+                        <div class="col-auto">
+                            <div class="statistics-icon bg-blue-light">
+                                <i class="icon icon-unique--open" ></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+      <div class="form-row mt-2">
+        <div class="col mb-3 jobs-table ">
+          <div class="card shadow-sm p-0 monthly-trand-table">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <h5 class="card-title mb-0">Overview </h5>
+                    </div>
+                    <div class="col-auto ml-auto mobile">
+                        <div class="form-row">
+                             <!-- <div class="col-auto"*ngIf="dateRange === allDateRange.CUSTOM">
+                                <b>From</b> {{startDate}} <b> to </b> {{endDate}}</div> -->
+
+                              <!-- <div class="col-auto">
+                                  <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                                      [ngModel]="dateRange" (ngModelChange)="dateRangeChanged($event)">
+                                      <option *ngFor="let r of dateRangeKeys" value="{{allDateRange[r]}}">{{allDateRange[r] | titlecase}}
+                                      </option>
+                                  </select>
+                              </div>
+
+
+                               <div class="col-auto" *ngIf="(role === roles.ADMIN ||role === roles.BDMMANAGER)  && isTabular || chartType === ChartTypeEnum.BAR"> -->
+                              <!-- <div class="col-auto" *ngIf="(role === roles.ADMIN ||role === roles.BDMMANAGER)  && !isTabular && chartType === ChartTypeEnum.BAR">
+                                  <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                                      [ngModel]="xAxisFilter" (ngModelChange)="filterRecruiter($event); xAxisFilter = $event;">
+                                      <option selected value="ALL">ALL</option>
+                                      <option *ngFor="let r of xAxisFilterArray;" [ngValue]="r">{{r}}</option>
+                                  </select>
+                              </div>
+
+                              <div class="col-auto" *ngIf="(role === roles.ADMIN || role === roles.BDMMANAGER )&& isTabular">
+                                  <select class="form-control form-control-sm" aria-label="Default select example" name="select"
+                                      [ngModel]="xAxisFilter" (ngModelChange)="filterOnTable($event); xAxisFilter = $event;">
+                                      <option selected value="ALL">ALL</option>
+                                      <option *ngFor="let r of xAxisFilterArray;" [ngValue]="r">{{r}}</option>
+                                  </select>
+                              </div> -->
+
+
+                               <div class="col-auto text-right">
+                                  <a class="chart-icon btn-link mr-2" >
+                                      <i class="fas fa-file-excel"></i>
+                                  </a>
+                                  <!-- <ng-container *ngIf="!isTabular">
+                                      <a class="chart-icon btn-link mr-2" (click)="isTabular = true; filterOnTable(xAxisFilter);  " *ngIf="show_tabular">
+                                          <i class="fas fa-table"></i>
+                                      </a> -->
+                                      <a class="chart-icon btn-link mr-2" >
+                                          <i class="fas fa-chart-bar"></i>
+                                      </a>
+                                      <a class="chart-icon btn-link">
+                                          <i class="fas fa-chart-line"></i>
+                                      </a>
+                                <!--   </ng-container>
+                                  <ng-container *ngIf="isTabular">
+                                      <a class="chart-icon btn-link mr-2"
+                                          (click)="chartType = ChartTypeEnum.BAR; setBackground(); isTabular = false; filterRecruiter(xAxisFilter);">
+                                          <i class="fas fa-chart-bar"></i>
+                                      </a>
+                                      <a class="chart-icon btn-link"
+                                          (click)="chartType = ChartTypeEnum.LINE; setBackground(); isTabular = false; filterRecruiter(xAxisFilter);">
+                                          <i class="fas fa-chart-line"></i>
+                                      </a>
+                                  </ng-container> -->
+                              </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+             <canvas #lineCanvas style="height:10vh; width:20vw"></canvas>
+          <hr color="red">
+        </div>
+
+        </div>
+    </div>
+      </div>
+    </div>
+  </div>
+</div>
+

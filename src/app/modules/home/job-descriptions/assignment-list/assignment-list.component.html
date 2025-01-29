@@ -1,0 +1,334 @@
+<div id="addJobDescriptionAssignment" class="sideCandidate">
+  <a
+    href="javascript:void(0)"
+    class="closebtn"
+    (click)="closeAddJobDescriptionAssignment()"
+    >&times;</a
+  >
+  <app-jdassign-add-list
+    *ngIf="eventId === constants.ADD"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+  >
+  </app-jdassign-add-list>
+  <app-jdassign-add-list
+    *ngIf="eventId === constants.EDIT"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+    [indexAsInput]="indexAsInput"
+  ></app-jdassign-add-list>
+</div>
+
+<div class="search-wrap">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="row mt-3 page-header">
+          <div class="col-auto">
+            <h4 class="page-title mb-0">Assignment History</h4>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a>Jobs</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Assignment History
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <div class="col ml-auto">
+            <div class="form-row">
+              <div class="col-auto ml-auto">
+                <!-- <button type="button" class="btn btn-primary"
+                                    (click)="openAddJobDescriptionAssignment(constants.ADD, undefined)">
+                                    <i class="fa fa-user-plus" aria-hidden="true"></i> Add Job Description Assignment
+                                </button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="bg-gray mt-2 p-4 rounded">
+          <div class="search-box">
+            <div class="form-row">
+              <div class="col">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span href="" class="input-group-text"
+                      ><i class="fa fa-search" aria-hidden="true"></i
+                    ></span>
+                  </div>
+                  <input
+                    class="form-control"
+                    type="text"
+                    [(ngModel)]="search"
+                    placeholder="Search by primary recruiter first name, assignee name"
+                  />
+                </div>
+              </div>
+              <div class="col-auto">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="fetchCollectionList()"
+                >
+                  Search
+                </button>
+              </div>
+              <!-- <div class="col-auto">
+                                <button type="button" class="btn btn-primary" (click)="openFilters()">Filters</button>
+                            </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <!-- Designation -->
+      <div class="form-row shortby-section">
+        <div class="col-auto">
+          <div class="form-check form-group mt-2">
+            <input
+              class="form-check-input"
+              [(ngModel)]="masterSelected"
+              name="JD_list"
+              type="checkbox"
+              value="c1"
+              (change)="checkUncheckAll()"
+              id=""
+            />
+            <label class="form-check-label"> Select All </label>
+          </div>
+        </div>
+
+        <div id="actionType" class="col-auto">
+          <select class="form-control">
+            <option value="delete">Delete Selected Assignment</option>
+            <!-- <option value="export">Export Selected</option>
+                        <option value="sendMail">Send Mail to Selected</option> -->
+          </select>
+        </div>
+        <div class="col-auto">
+          <button
+            type="submit"
+            *ngIf="count === 0"
+            disabled
+            id="goButton"
+            (click)="selectHandler()"
+            class="btn btn-primary"
+          >
+            Go
+          </button>
+          <button
+            type="button"
+            *ngIf="count !== 0"
+            (click)="selectHandler()"
+            id="goButton"
+            class="btn btn-primary"
+          >
+            Go
+          </button>
+        </div>
+        <div class="col-auto line-height-38">
+          {{ count }} of {{ collectionSize }} selected
+        </div>
+        <div class="col-auto ml-auto shortby-dropdown">
+          <select
+            id="sortAs"
+            class="form-control"
+            (change)="changeSortingOrder(); fetchCollectionList()"
+          >
+            <option value="" disabled>Sort by date</option>
+            <option value="true">Latest</option>
+            <option value="false">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <div
+        class="card mb-1 candidate-details bg-green-light border-green-light"
+        [ngClass]="{
+          'bg-green-light': selectedItemIndex === index,
+          'border-green-light': selectedItemIndex === index
+        }"
+        *ngFor="let a of collection; let index = index"
+      >
+        <div class="card-body">
+          <div class="form-row">
+            <div class="col-auto candidate-checkbox">
+              <div class="form-check form-group">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [(ngModel)]="a.isSelected"
+                  type="checkbox"
+                  (change)="isAllSelected()"
+                />
+              </div>
+            </div>
+            <div class="col pl-0" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.assignee_name ? a.assignee_name : "--" }}
+              </div>
+              <div class="label-name">Assignee Name</div>
+            </div>
+
+            <div class="col" (click)="openRowDetail(index)">
+              <div
+                class="label-value"
+                *ngIf="
+                  a.primary_recruiter_name?.first_name ||
+                  a.primary_recruiter_name?.last_name
+                "
+              >
+                {{ a.primary_recruiter_name?.first_name }}
+                {{ a.primary_recruiter_name?.last_name }}
+              </div>
+              <div
+                class="label-value"
+                *ngIf="
+                  !a.primary_recruiter_name?.first_name &&
+                  !a.primary_recruiter_name?.last_name
+                "
+              >
+                --
+              </div>
+              <div class="label-name">Primary Recruiter Name</div>
+            </div>
+
+            <div class="col" (click)="openRowDetail(index)">
+              <div *ngIf="a.job_id" class="label-value">
+                {{ a.job_id ? a.job_id.job_title : "--" }}
+              </div>
+              <div class="label-name">Job Title</div>
+            </div>
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">{{ a.created_at | date: "medium" }}</div>
+              <div class="label-name">Created At</div>
+            </div>
+            <div class="col-auto ml-auto">
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-light dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Action
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a
+                    class="dropdown-item"
+                    *ngIf="selectedItemIndex !== index"
+                    (click)="openRowDetail(index)"
+                    ><i class="fa fa-eye" aria-hidden="true"></i> View</a
+                  >
+                  <!-- <a class="dropdown-item"
+                                        (click)="openAddJobDescriptionAssignment(constants.EDIT, index)"><i
+                                            class="fas fa-user-edit"></i>
+                                        Edit</a> -->
+                  <a class="dropdown-item" (click)="openDeleteModel(a.id)"
+                    ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="candidate-details-full border-top"
+          *ngIf="selectedItemIndex === index"
+        >
+          <div class="row">
+            <div class="col">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{
+                        a.primary_recruiter_email
+                          ? a.primary_recruiter_email
+                          : "--"
+                      }}
+                    </div>
+                    <div class="label-name">Primary Recruiter Email</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{
+                        a.secondary_recruiter_email
+                          ? a.secondary_recruiter_email
+                          : "--"
+                      }}
+                    </div>
+                    <div class="label-name">Secondary Recruiter Email</div>
+                  </div>
+                </div>
+                <div class="row mb-3" (click)="openRowDetail(index)">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ a.assignee_email ? a.assignee_email : "--" }}
+                    </div>
+                    <div class="label-name">Assignee Email</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div
+                      class="label-value"
+                      *ngIf="
+                        a.secondary_recruiter_name?.first_name ||
+                        a.secondary_recruiter_name?.last_name
+                      "
+                    >
+                      {{ a.secondary_recruiter_name?.first_name }}
+                      {{ a.secondary_recruiter_name?.last_name }}
+                    </div>
+                    <div
+                      class="label-value"
+                      *ngIf="
+                        !a.secondary_recruiter_name?.first_name &&
+                        !a.secondary_recruiter_name?.last_name
+                      "
+                    >
+                      --
+                    </div>
+                    <div class="label-name">Secondary Recruiter Name</div>
+                  </div>
+                  <!-- <div class="col " (click)="openRowDetail(index)">
+                                        <div class="label-value">{{a.job_id?a.job_id.job_id:'--'}}
+                                             <button type="button" class="btn btn-sm btn-primary ml-2">View
+                                                Attachment</button>
+                                        </div> -->
+                  <!--     <a type="button" class="btn btn-sm btn-primary ml-2" *ngIf="a.job_id"
+                                                href="{{ip}}{{a.job_id.job_pdf}}" target="_blank">View Attachment</a>
+                                        </div>
+                                        <div class="label-name">Jd Attachment</div>
+                                    </div> -->
+                </div>
+                <div class="row mb-3">
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ a.remarks ? a.remarks : "--" }}
+                    </div>
+                    <div class="label-name">Remarks</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-paging
+        [page]="page"
+        [pageSize]="limit"
+        [collectionSize]="collectionSize"
+        (pageChangeEvt)="page = $event; fetchCollectionList()"
+      ></app-paging>
+    </div>
+  </div>
+</div>

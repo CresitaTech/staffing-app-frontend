@@ -1,0 +1,262 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row  mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title"  *ngIf="eventId===constants.ADD || eventId==='pop'">Add Candidate Repositery</h5>
+                    <h5 class="card-title"  *ngIf="eventId===constants.EDIT || eventId==='edit_pop'">Edit Candidate Repositery</h5>
+
+                </div>
+                <!-- <div class="col-auto ml-auto" *ngIf="eventId===constants.ADD">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & add another</button>
+                </div>
+                <div class="col-auto" *ngIf="eventId===constants.ADD">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & Continue editing</button>
+                </div> -->
+
+                <div class="col-auto ml-auto" *ngIf="eventId===constants.EDIT || eventId==='edit_pop'">
+                    <button type="submit" [disabled]="f1.invalid" (click)="onEdit()"
+                        class="btn btn-primary">Modify</button>
+                </div>
+
+                <div class="col-auto ml-auto" *ngIf="eventId==='add' ||eventId==='pop'">
+                    <button type="submit" [disabled]="f1.invalid" (click)="onSubmit()"
+                        class="btn btn-primary">Save</button>
+                </div>
+
+                <button *ngIf="eventId===constants.POP_UP ||eventId===constants.EDIT_POP_UP" #closebutton type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+
+            <!-- Created -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form #f1="ngForm">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Repo Name</label>
+                            
+                            <input type="text" class="form-control"   id="repo" placeholder="" [(ngModel)]="candidate_repo.repo_name" 
+                            name="repo" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <!-- <app-candidate-inline [item]="candidate_repo.candidate_name" 
+                                (changeItemEvt)="candidate_repo.candidate_name = $event" >
+                            </app-candidate-inline> -->
+                            <app-candidate-inline *ngIf="eventId===constants.ADD||eventId===constants.EDIT"  [item]="candidate_repo.candidate_name" [eventId]="eventId"
+                            (changeItemEvt)="candidate_repo.candidate_name = $event" >
+                        </app-candidate-inline>
+                            <app-candidate-inline *ngIf="eventId===constants.POP_UP||eventId===constants.EDIT_POP_UP" [itemId]="candidate_id" [item]="candidate_id" [eventId]="eventId"
+                            (changeItemEvt)="candidate_repo.candidate_name = $event"
+                            (getAllDetails)="detailsOfSelectedCandidate($event)" >
+                        </app-candidate-inline>
+                        
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Resume</label>
+                                <!-- <div *ngIf="candidate_repo.resume!== null">{{candidate_repo.resume}}</div> -->
+                                <input   type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.resume" #resume="ngModel"  name="resume"
+                                [ngClass]="{ 'is-invalid':resume.invalid || resume.touched }"
+                                (change)="readFile($event,'resume')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value" name="resume"
+                                [(ngModel)]="candidate_repo.resume" >{{candidate_repo.resume?
+                                    candidate_repo.resume : '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.resume"
+                                        href="{{service.ip}}{{candidate_repo.resume}}" target="_blank">View PDF</a>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Driving License</label>
+                                <!-- <div *ngIf="candidate_repo.driving_license!== null">{{candidate_repo.driving_license}}</div> -->
+                                <input  name="driving_license"  type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.driving_license" #driving_license="ngModel" 
+                                [ngClass]="{ 'is-invalid':driving_license.invalid || driving_license.touched }"
+                                (change)="readFile($event,'driving_license')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value" name="license"
+                                [(ngModel)]="candidate_repo.driving_license" >{{candidate_repo.driving_license?
+                                    candidate_repo.driving_license : '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.driving_license"
+                                        href="{{service.ip}}{{candidate_repo.driving_license}}" target="_blank">View PDF</a>
+                                </small>
+                            <!-- <div *ngIf="(driving_license.invalid && driving_license.touched)" class="invalid-feedback">
+                                <div *ngIf="driving_license.errors.required ">Driving License is required</div>
+                            </div> -->
+
+                                <!-- <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="customFile"
+                                        name="filename">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Offer Letter</label>
+                                <!-- <div *ngIf="candidate_repo.offer_letter!== null">{{candidate_repo.offer_letter}}</div> -->
+                                <input  name="offer_letter"  type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.offer_letter" #offer_letter="ngModel" 
+                                [ngClass]="{ 'is-invalid':offer_letter.invalid || offer_letter.touched }"
+                                (change)="readFile($event,'offer_letter')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value" name="offerLetter"
+                                [(ngModel)]="candidate_repo.offer_letter" >{{candidate_repo.offer_letter?
+                                    candidate_repo.offer_letter: '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.offer_letter"
+                                        href="{{service.ip}}{{candidate_repo.offer_letter}}" target="_blank">View PDF</a>
+                                </small>
+                            <!-- <div *ngIf="(offer_letter.invalid && offer_letter.touched)" class="invalid-feedback">
+                                <div *ngIf="offer_letter.errors.required ">Offer Letter is required</div>
+                            </div> -->
+                                <!-- <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="customFile"
+                                        name="filename">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Passport</label>
+                                <!-- <div *ngIf="candidate_repo.passport!== null">{{candidate_repo.passport}}</div> -->
+                                <!-- <input *ngIf="candidate_repo.passport!== null" [(value)]="passport" [(ngModel)]="candidate_repo.passport"> -->
+                                <input name="passport"  type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.passport" #passport="ngModel" 
+                                [ngClass]="{ 'is-invalid':passport.invalid || passport.touched }"
+                                (change)="readFile($event,'passport')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value" name="passport"
+                                [(ngModel)]="candidate_repo.passport" >{{candidate_repo.passport?
+                                    candidate_repo.passport: '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.passport"
+                                        href="{{service.ip}}{{candidate_repo.passport}}" target="_blank">View PDF</a>
+                                </small>
+                            <!-- <div *ngIf="(passport.invalid && passport.touched)" class="invalid-feedback">
+                                <div *ngIf="passport.errors.required ">Passport is required</div>
+                            </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >RTR</label>
+                                <!-- <div *ngIf="candidate_repo.rtr!== null">{{candidate_repo.rtr}}</div> -->
+                                <!-- <div *ngIf="candidate_repo.rtr!== null">{{candidate_repo.rtr}}</div> -->
+                                <input type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.rtr" #rtr="ngModel"   name="rtr" 
+                                [ngClass]="{ 'is-invalid':rtr.invalid || rtr.touched }"
+                                (change)="readFile($event,'rtr')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value" name="rtr"
+                                [(ngModel)]="candidate_repo.rtr" >{{candidate_repo.rtr? 
+                                    candidate_repo.rtr: '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.rtr"
+                                        href="{{service.ip}}{{candidate_repo.rtr}}" target="_blank">View PDF</a>
+                                </small>
+                            <!-- <div *ngIf="(rtr.invalid && rtr.touched)" class="invalid-feedback">
+                                <div *ngIf="rtr.errors.required ">Rtr is required</div>
+                            </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Salary Slip</label>
+                                <!-- <div *ngIf="candidate_repo.salary_slip!== null" >{{candidate_repo.salary_slip}}</div> -->
+                                <input  type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.salary_slip" #salary_slip="ngModel"  name="salary_slip"
+                                [ngClass]="{ 'is-invalid':salary_slip.invalid || salary_slip.touched }"
+                                (change)="readFile($event,'salary_slip')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value"  name="salarySlip"
+                                [(ngModel)]="candidate_repo.salary_slip" >{{candidate_repo.salary_slip?
+                                    candidate_repo.salary_slip: '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.salary_slip"
+                                        href="{{service.ip}}{{candidate_repo.salary_slip}}" target="_blank">View PDF</a>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >I94</label>
+                                <input   type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.i94_document" #i94_document="ngModel" name="i94"
+                                (change)="readFile($event,'i94_document')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value"  name="i94"
+                                [(ngModel)]="candidate_repo.i94_document" >{{candidate_repo.i94_document?
+                                    candidate_repo.i94_document: '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.i94_document"
+                                        href="{{service.ip}}{{candidate_repo.i94_document}}" target="_blank">View PDF</a>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Visa</label>
+                                <input  type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.visa_copy" #visa_copy="ngModel" name="visa" 
+                                (change)="readFile($event,'visa_copy')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value"  name="visa"
+                                [(ngModel)]="candidate_repo.visa_copy" >{{candidate_repo.visa_copy?
+                                    candidate_repo.visa_copy: '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.visa_copy"
+                                        href="{{service.ip}}{{candidate_repo.visa_copy}}" target="_blank">View PDF</a>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Educational Document</label>
+                                <input   type="file" class="custom-file-upload" id="customFile"
+                                [(ngModel)]="candidate_repo.educational_document" #educational_document="ngModel" name="educational_document"
+                                (change)="readFile($event,'educational_document')"  />
+                                <small *ngIf="eventId=== 'edit' || eventId==='edit_pop'" class="label-value"  name="educational_document"
+                                [(ngModel)]="candidate_repo.educational_document" >{{candidate_repo.educational_document?
+                                    candidate_repo.educational_document: '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="candidate_repo.educational_document"
+                                        href="{{service.ip}}{{candidate_repo.educational_document}}" target="_blank">View PDF</a>
+                                </small>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Description</label>
+                                <textarea class="form-control" id="description"
+                                [(ngModel)]="candidate_repo.description" placeholder="Description" name="repo_name"
+                                #repo_name="ngModel" rows="3"></textarea>
+                            </div>
+                        </div>
+                        
+                        
+
+                        
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto" *ngIf="eventId===constants.ADD">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & add another</button>
+                </div>
+                <div class="col-auto" *ngIf="eventId===constants.ADD">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & Continue editing</button>
+                </div> -->
+
+
+                
+                <div class="col-auto ml-auto" *ngIf="eventId===constants.EDIT || eventId==='edit_pop'">
+                    <button type="submit" [disabled]="f1.invalid" (click)="onEdit()"
+                        class="btn btn-primary">Modify</button>
+                </div>
+                
+                <div class="col-auto ml-auto" *ngIf="eventId==='add' ||eventId==='pop'">
+                    <button type="submit" [disabled]="f1.invalid" (click)="onSubmit()"
+                        class="btn btn-primary">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

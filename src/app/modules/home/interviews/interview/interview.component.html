@@ -1,0 +1,347 @@
+<div id="addInterview" class="sideCandidate">
+  <!-- <a href="javascript:void(0)" class="closebtn" (click)="closeAddInterview()">&times;</a> -->
+  <app-add-interview
+    *ngIf="eventId === constants.ADD"
+    (closeAddEditPage)="closeAddInterview(); eventId = undefined"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+  >
+  </app-add-interview>
+  <app-add-interview
+    *ngIf="eventId === constants.EDIT"
+    (closeAddEditPage)="closeAddInterview(); eventId = undefined"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+    [indexAsInput]="indexAsInput"
+  ></app-add-interview>
+</div>
+
+<div id="interviewReschedule" class="sideCandidate">
+  <a
+    href="javascript:void(0)"
+    class="closebtn"
+    (click)="closeInterviewReschedule()"
+    >&times;</a
+  >
+</div>
+<div id="content">
+  <div class="search-wrap">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <div class="row mt-3 page-header">
+            <div class="col-auto">
+              <h4 class="page-title mb-0">Interviews</h4>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                  <li class="breadcrumb-item"><a> Interviews</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">
+                    Interviews
+                  </li>
+                </ol>
+              </nav>
+            </div>
+            <div class="col ml-auto">
+              <div class="form-row">
+                <!-- <div class="col pr-0">
+                                        <select class="form-control" id="">
+                                            <option>Short By</option>
+                                        </select>
+                                    </div> -->
+                <div class="col-auto ml-auto">
+                  <!-- <button type="button" class="btn btn-primary" onclick="openImportInterview()">
+                                        <i class="fa fa-download" aria-hidden="true"></i> Import
+                                    </button>&nbsp;
+                                    <button type="button" class="btn btn-primary" onclick="openExportInterview()">
+                                        <i class="fa fa-share-square" aria-hidden="true"></i> Export
+                                    </button>&nbsp; -->
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="openAddInterview(constants.ADD, undefined)"
+                  >
+                    <i class="fa fa-user-plus" aria-hidden="true"></i> Add
+                    Interview
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-gray mt-2 p-4 rounded">
+            <form (ngSubmit)="fetchCollectionList()">
+              <div class="search-box">
+                <div class="form-row">
+                  <div class="col">
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span href="" class="input-group-text"
+                          ><i class="fa fa-search" aria-hidden="true"></i
+                        ></span>
+                      </div>
+                      <input
+                        class="form-control"
+                        type="text"
+                        [(ngModel)]="search"
+                        name="searchbox"
+                        placeholder="Search by candidate first name , Interviewer name"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">
+                      Search
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid mt-3">
+    <div class="row">
+      <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <!-- Designation -->
+        <div class="form-row shortby-section">
+          <div class="col-auto">
+            <div class="form-check form-group mt-2">
+              <input
+                class="form-check-input"
+                [(ngModel)]="masterSelected"
+                name="interview_list"
+                type="checkbox"
+                value="c1"
+                (change)="checkUncheckAll()"
+                id=""
+              />
+              <label class="form-check-label"> Select All </label>
+            </div>
+          </div>
+          <div class="col-auto">
+            <select id="actionType" class="form-control">
+              <option>Select Action</option>
+              <option value="delete">Delete Selected Interviews</option>
+              <!-- <option>Export Selected</option> -->
+            </select>
+          </div>
+          <div class="col-auto">
+            <button
+              type="submit"
+              *ngIf="count === 0"
+              disabled
+              id="goButton"
+              (click)="selectHandler()"
+              class="btn btn-primary"
+            >
+              Go
+            </button>
+            <button
+              type="button"
+              *ngIf="count !== 0"
+              id="goButton"
+              (click)="selectHandler()"
+              class="btn btn-primary"
+            >
+              Go
+            </button>
+          </div>
+          <div class="col-auto line-height-38">
+            {{ count }} of {{ collectionSize }} selected
+          </div>
+          <div
+            class="col-auto ml-auto shortby-dropdown"
+            (change)="changeSortingOrder(); fetchCollectionList()"
+          >
+            <select class="form-control">
+              <option value="" disabled>Sort by date</option>
+              <option value="true">Latest</option>
+              <option value="false">Oldest</option>
+            </select>
+          </div>
+        </div>
+        <!-- |orderByDate:'created_at':order -->
+        <div
+          class="card mb-1 candidate-details bg-green-light border-green-light"
+          [ngClass]="{
+            'bg-green-light': selectedItemIndex === index,
+            'border-green-light': selectedItemIndex === index
+          }"
+          *ngFor="let i of collection; let index = index"
+        >
+          <div class="card-body">
+            <div class="form-row">
+              <div class="col-auto candidate-checkbox">
+                <div class="form-check form-group">
+                  <input
+                    class="form-check-input"
+                    [(ngModel)]="i.isSelected"
+                    type="checkbox"
+                    value="{{ i.id }}"
+                    name="card_list"
+                    (change)="isAllSelected()"
+                    id=""
+                  />
+                </div>
+              </div>
+              <div class="col pl-0" (click)="openRowDetail(index)">
+                <div class="label-value">
+                  {{
+                    i.candidate_name?.first_name
+                      ? i.candidate_name?.first_name
+                      : "--"
+                  }}
+                  {{
+                    i.candidate_name?.last_name
+                      ? i.candidate_name?.last_name
+                      : "--"
+                  }}
+                </div>
+                <div class="label-name">Candidate Name</div>
+              </div>
+              <div class="col" (click)="openRowDetail(index)">
+                <div class="label-value">
+                  {{getInterviewerName(i.interviewer_name)}}
+                 
+                </div>
+                <div class="label-name">Interviewer</div>
+              </div>
+              <div class="col" (click)="openRowDetail(index)">
+                <div class="label-value">
+                  {{ i.time_slot?.time_slot ? i.time_slot?.time_slot : "--" }}
+                </div>
+                <div class="label-name">Time Slot</div>
+              </div>
+              <div class="col-auto mr-4" (click)="openRowDetail(index)">
+                <div class="label-value">{{ i.status ? i.status : "--" }}</div>
+                <div class="label-name">Status</div>
+              </div>
+              <div class="col-auto ml-auto">
+                <div class="btn-group">
+                  <button
+                    type="button"
+                    class="btn btn-light dropdown-toggle"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    Action
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-right">
+                    <a
+                      class="dropdown-item"
+                      *ngIf="selectedItemIndex !== index"
+                      (click)="openRowDetail(index)"
+                      ><i class="fa fa-eye" aria-hidden="true"></i> View</a
+                    >
+                    <a
+                      class="dropdown-item"
+                      (click)="openAddInterview(constants.EDIT, index)"
+                      ><i class="fas fa-user-edit"></i> Edit</a
+                    >
+                    <a class="dropdown-item" (click)="openDeleteModel(i.id)"
+                      ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a
+                    >
+                    <div class="dropdown-divider"></div>
+                    <!-- <a class="dropdown-item" (click)="openInterviewReschedule()">Reschedule</a>
+                                        <a class="dropdown-item" (click)="openInterviewCancel()">Cancel</a>
+                                        <a class="dropdown-item" (click)="openInterviewFeedback()">Feedback</a> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="candidate-details-full border-top"
+            *ngIf="selectedItemIndex === index"
+          >
+            <div class="row">
+              <div class="col">
+                <div class="card-body">
+                  <div class="row mb-3">
+                    <div class="col" (click)="openRowDetail(index)">
+                      <div class="label-value">
+                        {{ i.time_zone ? i.time_zone : "--" }}
+                      </div>
+                      <div class="label-name">Time zone</div>
+                    </div>
+                    <div class="col" (click)="openRowDetail(index)">
+                      <div class="label-value">
+                        {{ i.meeting_time ? i.meeting_time : "--" }}
+                      </div>
+                      <div class="label-name">Meeting Time</div>
+                    </div>
+                  </div>
+                  <div class="row mb-3" (click)="openRowDetail(index)">
+                    <div class="col">
+                      <div class="label-value">
+                        {{ i.source?.source ? i.source?.source : "--" }}
+                      </div>
+                      <div class="label-name">Source</div>
+                    </div>
+                    <div class="col" (click)="openRowDetail(index)">
+                      <div class="label-value">
+                        {{ i.jd_attachment ? i.jd_attachment.job_id : "--" }}
+                        <a
+                          type="button"
+                          class="btn btn-sm btn-primary ml-2"
+                          *ngIf="i.jd_attachment"
+                          href="{{ ip }}{{ i.jd_attachment?.job_pdf }}"
+                          target="_blank"
+                          >View Attachment</a
+                        >
+                      </div>
+                      <div class="label-name">Jd Attachment</div>
+                    </div>
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col" (click)="openRowDetail(index)">
+                      <div class="label-value">
+                        {{ i.remarks ? i.remarks : "--" }}
+                      </div>
+                      <div class="label-name">Remarks</div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col" (click)="openRowDetail(index)">
+                      <div class="label-value">
+                        {{ i.created_at | date: "medium" }}
+                      </div>
+                      <div class="label-name">Created At</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col-md-6 col-sm-12">
+            <div class="text-muted showing-entries">
+              Showing {{ (page - 1) * limit + 1 }} to
+              {{
+                collectionSize < limit || collectionSize < page * limit
+                  ? collectionSize
+                  : page * limit
+              }}
+              of {{ collectionSize }} entries
+            </div>
+          </div>
+          <div class="col-auto ml-auto">
+            <ngb-pagination
+              [collectionSize]="collectionSize"
+              [(page)]="page"
+              [pageSize]="limit"
+              [maxSize]="5"
+              [rotate]="true"
+              [ellipses]="false"
+              [boundaryLinks]="true"
+              (pageChange)="page = $event; this.fetchCollectionList()"
+            ></ngb-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

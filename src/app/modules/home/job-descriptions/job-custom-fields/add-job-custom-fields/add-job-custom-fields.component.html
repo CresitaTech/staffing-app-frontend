@@ -1,0 +1,174 @@
+<!-- Created -->
+
+
+<div class="p-4">
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="form-row mb-3 heading-sec">
+        <div class="col">
+          <h5 class="card-title">Add Custom Field</h5>
+        </div>
+
+        <div>
+          <button
+            #closebutton
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="activeModal.dismiss()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="card mb-2">
+        <div class="card-body">
+          <form #f="ngForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Field Name</label>
+
+                <input
+                  class="form-control"
+                  id="customFieldName"
+                  name="fieldName"
+                  [(ngModel)]="customField.field_name"
+                  #fieldName="ngModel"
+                  (change)="formatField($event)"
+                  [ngClass]="{
+                    'is-invalid': fieldName.invalid && fieldName.touched
+                  }"
+                  required
+                />
+                <div
+                  *ngIf="fieldName.touched && fieldName.invalid"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="fieldName.errors.required">
+                    Name is required
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Field Value</label>
+
+                <input
+                  class="form-control"
+                  id="customFieldValue"
+                  name="fieldValue"
+                  [(ngModel)]="customField.field_value"
+                  #fieldValue="ngModel"
+                  [ngClass]="{
+                    'is-invalid': fieldValue.invalid && fieldValue.touched
+                  }"
+                  readonly
+                />
+                <div
+                  *ngIf="fieldValue.touched && fieldValue.invalid"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="fieldValue.errors.required">
+                    Field value is required
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="form-row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Data Type</label>
+
+                <div class="form-group">
+                  <select class="form-control" name="param" id="customDataType" 
+                  [(ngModel)]="customField.data_type"  
+                  #datatype="ngModel" 
+                  [ngClass]="{
+                    'is-invalid': datatype.invalid && datatype.touched
+                  }"
+                  required
+                  >
+                     <option value="" >Please select type </option>
+                     <option [value]="'mass_emailing'" >Mass Emailing</option>
+                     <option [value]="'submission'" >Submission</option>
+                 </select>
+                 <div
+                 *ngIf="datatype.touched && datatype.invalid"
+                 class="invalid-feedback"
+               >
+                 <div *ngIf="datatype.errors.required">
+                  Data type is required
+                 </div>
+               </div>
+                </div>
+              </div>
+            </div> -->
+           
+    
+           
+            <div class="form-row">
+              <div class="col form-group">
+                <label>Description</label>
+                <textarea
+                  class="form-control"
+                  name="listDescription"
+                  id="description"
+                  [(ngModel)]="customField.field_desc"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+            <!-- <div class="form-row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Type</label>
+
+                <input
+                  class="form-control"
+                  id="customFieldType"
+                  name="fieldType"
+                  [(ngModel)]="customField.type"
+                  #fieldType="ngModel"
+                  [ngClass]="{
+                    'is-invalid': fieldType.invalid && fieldType.touched
+                  }"
+                  required
+                />
+                <div
+                  *ngIf="fieldType.touched && fieldType.invalid"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="fieldType.errors.required">
+                    Variable type is required
+                  </div>
+                </div>
+              </div>
+            </div> -->
+          </form>
+        </div>
+      </div>
+
+      <div class="form-row button-sec">
+        <div class="col-auto ml-auto">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+            (click)="activeModal.close('Close click')"
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            [disabled]="f.invalid || customField.field_name === null"
+            (click)="onSubmit()"
+            class="btn btn-primary ml-2"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

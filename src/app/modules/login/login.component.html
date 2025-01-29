@@ -1,0 +1,90 @@
+<div class="login-wrap">
+    <div class="container-fluid h-100">
+        <div class="row align-items-center h-100">
+            <!-- justify-content-center -->
+            <div class="col-sm-12 col-md-12 col-lg-7 col-xl-7">
+                <div class="login-section">
+                    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                        <div class="row mb-4">
+                            <div class="col logo text-center">
+                                <img src="/assets/images/01-logo-black.png">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mb-3 text-center">
+                                <h4>SIGN IN</h4>
+                                <!-- <small class="form-text text-muted">Login with your data that you entered during your registration</small> -->
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>User Name</label>
+                            <input formControlName="username" type="text" class="form-control"
+                                [class.is-invalid]="username.invalid && username.touched" id=""
+                                placeholder="Enter User Name" required>
+                            <div *ngIf="username.invalid && username.touched" class="text-danger">
+                                <small *ngIf="username.errors?.required">{{constants.USERNAME_REQUIRED}}</small>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <div class="input-group" id="show_hide_password">
+                                <input formControlName="password"
+                                    [class.is-invalid]="password.invalid && password.touched"
+                                    class="form-control" type="{{togglePassword ? 'text' : 'password'}}"
+                                    placeholder="Enter Password">
+                                <div *ngIf="password.valid || password.untouched"
+                                    class="input-group-append showpassword" (click)="togglePassword = !togglePassword">
+                                    <a class="input-group-text"><i class="fa"
+                                            [ngClass]="togglePassword ? 'fa-eye' : 'fa-eye-slash'"
+                                            aria-hidden="true"></i></a>
+                                </div>
+                                <div *ngIf="password.invalid && password.touched"
+                                    class="pass-disabled input-group-append showpassword"
+                                    (click)="togglePassword = !togglePassword">
+                                    <a class="input-group-text"><i class="fa"
+                                            [ngClass]="togglePassword ? 'fa-eye' : 'fa-eye-slash'"
+                                            aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                            <div *ngIf="password.invalid && password.touched" class="text-danger">
+                                <small *ngIf="password.errors?.required">{{constants.PASSWORD_REQUIRED}}</small>
+                                <small *ngIf="password.errors?.minlength">{{constants.PASSWORD_MINLENGTH}}</small>
+                            </div>
+                        </div>
+                        <div class=" row form-group">
+                            <div class="col">
+                                <div class="form-check">
+                                    <input formControlName="remember" type="checkbox" class="form-check-input"
+                                        id="keepMeLoggedIn">
+                                    <label class="form-check-label">Remember Me</label>
+                                </div>
+                            </div>
+                            <!-- <div class="col text-forgotpassword">
+                                <i class="icon icon-password"></i> <a>Forgot Password?</a>
+                            </div> -->
+                        </div>
+                        <button [disabled]="loginForm.invalid" type="submit"
+                            class="btn btn-primary btn-primary.disabled btn-block mt-3 mb-2">Log In</button>
+
+                            <div class="col text-right">
+                                <!-- <a class="btn-link" style="cursor:pointer" (click)="openComponent('job')">+ Add New
+                                    </a> -->
+                                <a routerLink="/forgot-password" class="btn-link btn-block mt-3 mb-2">Forgot Password</a>
+                            </div>                    </form>
+                    <!-- {{loginForm.value | json}} -->
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-5 col-xl-5 login-right-section">
+                <div class="row align-items-center h-100">
+                    <div class="col">
+                        <div class="osms-text">
+                            <i class="icon-osms-text"></i>
+                            <h1>A Unique ATS for Unique <br>Professionals.</h1>
+                            <h4></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

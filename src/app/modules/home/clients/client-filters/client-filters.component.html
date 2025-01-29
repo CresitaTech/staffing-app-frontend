@@ -1,0 +1,37 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <app-filter-header (clearFilterEvt)="clearFilters()" (applyFiltersEvt)="applyFilters()"></app-filter-header>
+            <app-create-date-filter [startDate]="selectedFilter[filterEnum.START_DATE]"
+                [endDate]="selectedFilter[filterEnum.END_DATE]"
+                (startDateChange)="selectedFilter[filterEnum.START_DATE] = $event"
+                (endDateChange)="selectedFilter[filterEnum.END_DATE] = $event"></app-create-date-filter>
+            <ng-container *ngFor="let param of params">
+                <div class="card mb-2" *ngIf="param !== filterEnum.START_DATE && param !== filterEnum.END_DATE">
+                    <ng-container *ngIf="param !== 'start_date' && param !== 'end_date'">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <h6 class="card-title">{{param | enumConverter | titlecase}}</h6>
+                                </div>
+                            </div>
+                            <ng-select #select [items]="filters[param]" [searchable]="false"
+                                [(ngModel)]="selectedFilter[param]" bindLabel="id" bindValue="id" [multiple]="true"
+                                [closeOnSelect]="false" [searchable]="false"
+                                placeholder="select {{param | enumConverter}}">
+                                <ng-template ng-header-tmp>
+                                    <input style="width: 100%; line-height: 24px" type="text"
+                                        (input)="select.filter($event.target.value)" />
+                                </ng-template>
+                                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                                    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.id}}
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+            <app-filter-footer (clearFilterEvt)="clearFilters()" (applyFiltersEvt)="applyFilters()"></app-filter-footer>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,202 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title">Interview Reschedule</h5>
+                </div>
+                <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & add another</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & Continue editing</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+
+            </div>
+            <!-- Designation -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Candidate Name</label>
+                                <div class="form-row">
+                                    <div class="col">
+
+                                        <select class="form-control" id="">
+                                            <option>Sherod Williamson</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="openCandidate()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Candidate"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Candidate"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                   
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Candidate"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Interviewer Name</label>
+                                <div class="form-row">
+                                    <div class="col">
+
+                                        <select class="form-control" id="">
+                                            <option>John Smith</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="openInterviewer()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Interviewer"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Interviewer"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                    
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Interviewer"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Time slot</label>
+                                <div class="form-row">
+                                    <div class="col">
+
+                                        <select class="form-control" id="">
+                                            <option>07:00 PM - 07:30 PM</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="openTimeSlot()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Time Slot"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Time Slot"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                    
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Time Slot"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label>Time zone</label>
+                                <select class="form-control" id="">
+                                    <option>IST</option>
+                                    <option>PST</option>
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label>Meeting Time</label>
+
+                                <div class="input-group">
+
+                                    <input type="text" class="form-control" id="" placeholder="" value="01/15/2021">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a href="">Today</a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a href=""><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small>Note: You are 5.5 hours ahead of server time.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Source</label>
+                                <div class="form-row">
+                                    <div class="col">
+
+                                        <select class="form-control" id="">
+                                            <option>Zoom</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="openAddInterviewMode()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Interview Mode"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Interview Mode"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                   
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Interview Mode"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Jd Attachment</label>
+                                <select class="form-control" id="">
+                                    <option>Zensar Technologies-Python, Power BI developer</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label>Remarks</label>
+                                <img src="images/remark-img.jpg" width="100%">
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="form-row button-sec">
+                <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & Add Another</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & Continue
+                        Editing</button>
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

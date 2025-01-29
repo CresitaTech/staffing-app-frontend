@@ -1,0 +1,42 @@
+<div class="container body">
+    <div class="main_container">
+        <div class="col-md-3 left_col">
+            <app-sidebar></app-sidebar>
+        </div>
+        <!-- top navigation -->
+        <div class="top_nav">
+            <div class="nav_menu bg-light shadow-sm">
+                <div class="nav toggle">
+                    <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                </div>
+                <nav class="nav navbar-nav">
+                    <ul class=" navbar-right">
+                        <li class="nav-item dropdown open" style="padding-left: 15px;">
+                            <a href="#" class="user-profile dropdown-toggle" aria-haspopup="true"  
+                                role="button" id="dropdownMenuLink"
+                                 data-toggle="dropdown" aria-expanded="false">
+                                 <strong>Welcome, </strong>
+                                 {{user.first_name}} {{user.last_name}} <small>({{role}}) </small>
+                            </a>
+                            <div class="dropdown-menu dropdown-usermenu pull-right"
+                                aria-labelledby="dropdownMenuLink">
+                                <a class="dropdown-item" (click)="openEmailModel()">Email Configuration</a>
+                                <a class="dropdown-item" (click)="logout()">Logout</a>
+                            </div>
+                        </li> 
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+            <div class="clearfix"></div>
+            <router-outlet></router-outlet>
+
+        </div>
+        <!--page content -->
+    </div>
+</div>

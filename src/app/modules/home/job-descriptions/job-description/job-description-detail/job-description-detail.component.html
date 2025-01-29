@@ -1,0 +1,680 @@
+<button class="btn btn-link closebtn" (click)="closeFunction(true);f.resetForm();" *ngIf="!isPopup">&times;</button>
+<!-- <button class="btn btn-link closebtn" (click)="activeModal.dismiss()" *ngIf="isPopup">&times;</button> -->
+
+
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <form #f="ngForm">
+                <div class="form-row mb-3 heading-sec">
+                    <div class="col">
+                        <h5 *ngIf="eventId==='add'" class="card-title">Add Job Description</h5>
+                        <h5 *ngIf="eventId==='edit' || eventId==='edit_pop'" class="card-title">Edit Job Description</h5>
+                        <h5 *ngIf="action==='view'" class="card-title">View Job Description</h5>
+                    </div>
+                    <!-- <div class="col-auto ml-auto" *ngIf="eventId==='add'">
+                        <button type="button" class="btn btn-primary btn-primary-dark">Save & add another</button>
+                    </div> -->
+                   
+
+                    <div class="col-auto ml-auto" *ngIf="eventId==='edit'|| eventId==='edit_pop'">
+                        <button type="submit" [disabled]="f.invalid||!job_description.client_name||!job_description.default_assignee ||
+                        form.get('min_salary').hasError('invalidSalaryFormat')||
+                        form.get('max_client_rate').hasError('invalidRate')||
+                        form.get('min_client_rate').hasError('invalidRate')||
+                        form.get('max_salary').hasError('invalidSalaryFormat')||
+                        ((!job_description.min_salary && !job_description.max_salary)&&
+                        (!job_description.min_rate && !job_description.max_rate))||
+                        (!job_description.min_years_of_experience&& !job_description.max_years_of_experience)||
+                        (job_description.employment_type!==constants.c2c && !job_description.employment_type_description)
+                        ||(job_description.revenue_frequency !=='One Time' && job_description.revenue_frequency !=='Recurring')
+                        ||(job_description.currency == 'NULL') || ( job_description.isSalary === 'Yes' && job_description.max_salary !==null  && job_description.max_salary  < 1) 
+                        || ( job_description.isSalary === 'Yes' && job_description.min_salary !==null && job_description.min_salary  < 1)
+                        || ( job_description.isSalary === 'No' && job_description.min_rate !==null  && job_description.min_rate  < 1)
+                        || ( job_description.isSalary=== 'No' && job_description.max_rate !==null  && job_description.max_rate  < 1) || !canInactivate" (click)="onEdit();f.resetForm();"
+                            class="btn btn-primary">Modify</button>
+                    </div>
+
+                    <div class="col-auto ml-auto" *ngIf="eventId==='add'">
+                        <button type="submit" [disabled]="f.invalid||!job_description.client_name||!job_description.default_assignee||
+                        form.get('min_salary').hasError('invalidSalaryFormat')||
+                        form.get('max_client_rate').hasError('invalidRate')||
+                        form.get('min_client_rate').hasError('invalidRate')||
+                        form.get('max_salary').hasError('invalidSalaryFormat')||
+                        ((!job_description.min_salary && !job_description.max_salary)&&
+                        (!job_description.min_rate && !job_description.max_rate))
+                        ||(!job_description.min_years_of_experience && !job_description.max_years_of_experience)||
+                        (job_description.employment_type!==constants.c2c && !job_description.employment_type_description) 
+                        ||(job_description.revenue_frequency !=='One Time' && job_description.revenue_frequency !=='Recurring')
+                        ||(job_description.currency == 'NULL') || ( job_description.isSalary === 'Yes' && job_description.max_salary !==null  && job_description.max_salary  < 1) 
+                        || ( job_description.isSalary === 'Yes' && job_description.min_salary !==null && job_description.min_salary  < 1)
+                        || ( job_description.isSalary === 'No' && job_description.min_rate !==null  && job_description.min_rate  < 1)
+                        || ( job_description.isSalary=== 'No' && job_description.max_rate !==null  && job_description.max_rate  < 1)" (click)="onSubmit();f.resetForm()"
+                            class="btn btn-primary">Save</button>
+                    </div>
+
+                    <!-- <button type="button" class="close" (click)="activeModal.dismiss()" *ngIf="isPopup">&times;</button> -->
+                    <div class="col-auto">
+                        <button   type="button" class="close" aria-label="Close" #closebutton (click)="activeModal.dismiss()" *ngIf="isPopup">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        
+                    </div>
+                   
+                   
+                </div>
+
+                <!-- Details -->
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h6>Details</h6>
+                        <div>
+                            <label>Job Id: <strong>{{job_description.job_id}}</strong></label>
+                        </div>
+
+                        <app-client-inline   [item]="job_description.client_name"
+                            (changeItemEvt)="job_description.client_name = $event">
+                        </app-client-inline>
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>End Client Name</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.end_client_name" name="end_client_name" >
+                            </div>
+
+                            <div class="col-6 form-group">
+                                                    
+                                <label class="asterisk-if-mandatory">Currency</label>
+                                <select class="form-control" id="currency" [(ngModel)]="job_description.currency" name="currency" required (change)="setCurrency($event)" (ngModelChange)="setLabelByCurrency(job_description.currency)">
+                                    <option value="NULL">Select Currency</option>
+                                    <option value="USD">United States Dollars</option>
+                                    <option value="INR">India Rupees</option>
+                                </select>
+                                <!-- <input type="text" class="form-control" placeholder="Visa" id="visa"
+                                    [(ngModel)]="candidate.visa" name="visa" required> -->
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Job Title</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.job_title" #jobTitle="ngModel" name="job_title"
+                                    [ngClass]="{ 'is-invalid':jobTitle.invalid && jobTitle.touched }" required>
+                                <div *ngIf="jobTitle.invalid " class="invalid-feedback">
+                                    <div *ngIf="jobTitle.errors.required">Job title is required.</div>
+                                </div>
+                                
+                        <!-- <app-job-description-inline [item]="job_description.job_title" 
+                        (changeItemEvt)="job_description.job_title = $event">
+                        </app-job-description-inline> -->
+                            </div>
+                            </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Client Rate (in {{currencyTag}})</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                    <input class="form-control" id="min_client_rate" name="min_client_rate" 
+                                        [(ngModel)]="job_description.min_client_rate" [formControl]="form.get('min_client_rate')" 
+                                        placeholder="min" type="text" autocomplete="off" />
+                                    <div *ngIf="form.get('min_client_rate').hasError('invalidRate')" class="text-danger">
+                                        Invalid rate format (e.g., Rate must not start with 0).
+                                    </div>
+                                    </div>
+                                    <div class="col">
+                                    <input class="form-control" id="max_client_rate" name="max_client_rate" 
+                                        [(ngModel)]="job_description.max_client_rate" [formControl]="form.get('max_client_rate')" 
+                                        placeholder="max" type="text" autocomplete="off" />
+                                    <div *ngIf="form.get('max_client_rate').hasError('invalidRate')" class="text-danger">
+                                        Invalid rate format (e.g. Rate must not start with 0).
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Years of Experience</label>
+
+                                <div class="form-row">
+                                    <div class="col">
+                                        <input class="form-control" id="min_years_of_experience"  
+                                        appLimitUptoTwoDIgits name="min_years_of_experience" [(ngModel)]="job_description.min_years_of_experience" 
+                                        placeholder="min" type="text"  autocomplete="off"  #minYearsOfExperience="ngModel"
+                                        [ngClass]="{ 'is-invalid':minYearsOfExperience.invalid && minYearsOfExperience.touched }" />
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control" id="max_years_of_experience" appLimitUptoTwoDIgits 
+                                        name="max_years_of_experience" [(ngModel)]="job_description.max_years_of_experience" placeholder="max" 
+                                        type="text"  autocomplete="off"  #maxYearsOfExperience="ngModel"
+                                        [ngClass]="{ 'is-invalid':maxYearsOfExperience.invalid && maxYearsOfExperience.touched }" />
+                                         
+                                    </div>
+                                </div> 
+                                <div *ngIf="minYearsOfExperience.invalid && minYearsOfExperience.touched && maxYearsOfExperience.touched && maxYearsOfExperience.invalid " class="invalid-feedback">
+                                    <div *ngIf="minYearsOfExperience.errors.required">Years of Experience is required</div>
+                                    
+                                </div>
+                                <!-- <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.years_of_experience" #jobDescription="ngModel"
+                                    name="years_of_experience" appLimitUptoTwoDIgits
+                                    [ngClass]="{ 'is-invalid':jobDescription.invalid && jobDescription.touched }"
+                                    required autocomplete="off">
+                                <div *ngIf="jobDescription.invalid " class="invalid-feedback">
+                                    <div *ngIf="jobDescription.errors.required">Years of Experience is required</div> 
+                                </div> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Set Priority</label>
+                                <!-- <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.priority" name="priority"> -->
+                                    <div class="col pl-0">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="" [value]="true" id="highPriority"
+                                            [(ngModel)]="job_description.priority" name="highPriority" />
+                                            <label class="form-check-label" for="inlineRadio1">High</label>
+                                          </div>
+                                          <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio"  [value]="false" id="highPriority"
+                                            [(ngModel)]="job_description.priority" name="highPriority" />
+                                            <label class="form-check-label" for="inlineRadio2">Low</label>
+                                          </div>
+                                    </div>
+                            </div>
+                            <div class="col form-group">
+                                <label>Industry Experience</label>
+                                <input type="text" class="form-control " id="" placeholder="" 
+                                    [(ngModel)]="job_description.industry_experience" name="industry_experience" 
+                                    autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Job Description</label>
+                                <app-editor [id]="'editor1'" [content]="job_description.job_description" [hasTags]="false"
+                                    (contentChanged)="job_description.job_description = $event"></app-editor>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Roles and Responsibilities</label>
+                                <app-editor [id]="'editor2'" [content]="job_description.roles_and_responsibilities" [hasTags]="false"
+                                    (contentChanged)="job_description.roles_and_responsibilities = $event"></app-editor>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col form-group-mobile">
+                                <label class="asterisk-if-mandatory">Top 3 or 5 mandate skills</label>
+                                <input type="text" class="form-control " id="" placeholder="" required
+                                    [(ngModel)]="job_description.mandate_skills" name="mandate_skills" autocomplete="off">
+                            </div>
+                           
+                        </div>
+                        <div class="row">
+                            <div class="col form-group-mobile">
+                                <label>Key Skills</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.key_skills" name="key_skills" autocomplete="off">
+                            </div>
+                            <div class="col form-group-mobile">
+                                <label>Education Qualificaion</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.education_qualificaion" name="education_qualificaion" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contract -->
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h6>Contract</h6>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Start Date</label>
+                                <div class="input-group date-input">
+                                    <input type="text" class="form-control " id="" placeholder="MM-dd-yyyy"
+                                        ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="job_description.start_date"
+                                        #c1="ngModel" name="start_date" [readonly] = "true" (click)="d1.toggle()">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="job_description.start_date = today">Today</a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="d1.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <small>Note: You are 5.5 hours ahead of server time.</small>
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Employment Type</label>
+                                <!-- <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.contract_type" name="contract_type" #contract_type="ngModel" [ngClass]="{ 'is-invalid':contract_type.invalid && contract_type.touched }"
+                                    required>
+                                <div *ngIf="contract_type.invalid " class="invalid-feedback">
+                                    <div *ngIf="contract_type.errors.required">Contract Type is required.</div>
+                                </div> -->
+                                <select class="form-control " id="" [(ngModel)]="job_description.employment_type"
+                                name="employment_type" #employment_type="ngModel"
+                                [ngClass]="{ 'is-invalid':employment_type.invalid && employment_type.touched }" required>
+                                <option disabled>Select Employment Type</option>
+                                <option value="C2C">C2C</option>
+                                <option value="C2H">C2H</option>
+                                <option value="FullTime">Full Time</option>
+                                <option value="W2">W2</option>
+                                </select>
+                                <!-- <p>{{job_description.employment_type}}</p> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group-mobile">
+                                <label *ngIf="(job_description.employment_type===constants.fulltime ) || !job_description.employment_type">Contract Duration</label>
+                                <label *ngIf="(job_description.employment_type===constants.c2h  || job_description.employment_type===constants.c2c || job_description.employment_type===constants.w2 ) && job_description.employment_type" class="asterisk-if-mandatory">Contract Duration</label>
+                                <textarea type="text" class="form-control " id="" placeholder="" [required]="(job_description.employment_type===constants.c2h  || job_description.employment_type===constants.c2c || job_description.employment_type===constants.w2) ?true:false"
+                                    [(ngModel)]="job_description.contract_duration" 
+                                    name="contract_duration" autocomplete="off">  </textarea>   
+                            </div>
+                            <div class="col form-group-mobile">
+                                <label *ngIf="(job_description.employment_type!==constants.c2h && job_description.employment_type!==constants.fulltime && job_description.employment_type !== constants.w2 ) || !job_description.employment_type">Employment Type Description</label>
+                                <label *ngIf="(job_description.employment_type===constants.c2h  || job_description.employment_type===constants.fulltime || job_description.employment_type===constants.w2) && job_description.employment_type" class="asterisk-if-mandatory">Employment Type Description</label>
+                                <textarea type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.employment_type_description" 
+                                    name="employment_type_description" autocomplete="off"> </textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Details -->
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h6 class="mt-3">Other Details</h6>
+
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Notice period acceptable</label>
+                                <select class="form-control " id="" [(ngModel)]="job_description.notice_period"
+                                    name="notice_period" #notice_period="ngModel"
+                                    [ngClass]="{ 'is-invalid':notice_period.invalid && notice_period.touched }" >
+                                    <option value="undefined">Select Notice period</option>
+                                    <option value="Immediate Joiner">Immediate Joiner</option>
+                                    <option value="Already Serving">Already Serving</option>
+                                    <option value="15 Days">15 Days</option>
+                                    <option value="30 Days">30 Days</option>
+                                    <option value="45 Days">45 Days</option>
+                                    <option value="60 Days">60 Days</option>
+                                    <option value="90 Days">90 Days</option>
+
+                                </select>
+                                <!-- <div *ngIf="notice_period.invalid " class="invalid-feedback">
+                                    <div *ngIf="notice_period.errors.required">Notice is required.</div>
+                                </div> -->
+                            </div>
+                            <div class="col form-group">
+                                <label >Interview process/Mode of interview </label>
+                                <select class="form-control " id="" [(ngModel)]="job_description.mode_of_interview"
+                                    name="mode_of_interview" #mode_of_interview="ngModel"
+                                    [ngClass]="{ 'is-invalid':mode_of_interview.invalid && mode_of_interview.touched }" >
+                                    <option value="undefined">Select Interview Mode</option>
+                                    <option value="Telephonic">Telephonic</option>
+                                    <option value="Video">Video</option>
+                                    <option value="In-Perso">In-Person</option>
+
+                                </select>
+                                <!-- <div *ngIf="status.invalid " class="invalid-feedback">
+                                    <div *ngIf="status.errors.required">Status is required.</div>
+                                </div> -->
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Number of openings </label>
+                               
+                                <input type="number" class="form-control " id="" placeholder=""
+                                [(ngModel)]="job_description.number_of_opening" name="number_of_opening">
+
+
+                                <!-- <div *ngIf="status.invalid " class="invalid-feedback">
+                                    <div *ngIf="status.errors.required">Status is required.</div>
+                                </div> -->
+                            </div>
+                            <div class="col form-group">
+                                <label >Mode of work</label>
+                                <select class="form-control " id="" [(ngModel)]="job_description.mode_of_work"
+                                    name="mode_of_work" #mode_of_work="ngModel"
+                                    [ngClass]="{ 'is-invalid':mode_of_work.invalid && mode_of_work.touched }" >
+                                    <option value="undefined">Select mode of work</option>
+                                    <option value="WFH">WFH</option>
+                                    <option value="WFO">WFO</option>
+                                    <option value="Hybrid">Hybrid</option>
+
+                                </select>
+                                <!-- <div *ngIf="status.invalid " class="invalid-feedback">
+                                    <div *ngIf="status.errors.required">Status is required.</div>
+                                </div> -->
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Location</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.location" #location="ngModel" name="Location"
+                                    [ngClass]="{ 'is-invalid':location.invalid && location.touched }" required>
+                                <div *ngIf="location.invalid " class="invalid-feedback" >
+                                    <div *ngIf="location.errors.required">Location is required.</div>
+                                </div>
+                            </div>
+
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Country</label>
+                                <ng-select class="" name="countryJd" [(ngModel)]="job_description.country" #countryJd="ngModel"
+                                           [ngClass]="{ 'is-invalid': countryJd.invalid && countryJd.touched }" required>
+                                    <ng-option value="">Please select a country</ng-option>
+                                    <ng-option *ngFor="let country of countries" [value]="country.country_code">{{ country.country_name }}</ng-option>
+                                </ng-select>
+                                <div *ngIf="countryJd.invalid" class="invalid-feedback">
+                                    <div *ngIf="countryJd.errors.required">Country is required.</div>
+                                </div>
+                            </div>
+
+
+                            <!-- <div class="col form-group">  
+                                <label class="asterisk-if-mandatory">Country</label>
+                                <select class="form-control" name="country" id="" [(ngModel)]="job_description.country" #country="ngModel"
+                                 [ngClass]="{ 'is-invalid':country.invalid && country.touched }" required>
+                                    <option value="" >Please select a country </option>
+                                    <option *ngFor="let country of countries"  [value]="country.country_code" >{{country.country_name}}</option>
+                                </select>
+                                <div *ngIf="country.invalid " class="invalid-feedback" >
+                                    <div *ngIf="country.errors.required">Country is required.</div>
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Key Fields</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.key_fields" name="key_fields">
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col">
+                                <label class="asterisk-if-mandatory" style="font-weight: 500;">Salary or Rate</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">-->
+                                <!-- [readonly]="job_description.min_rate||job_description.max_rate" -->
+                              <!--  <label >Salary (in $)</label> -->
+                                <!-- <input type="text" class="form-control" appLimitUptoTwoDIgits placeholder="Salary"
+                                 id="salary" name="salary" [(ngModel)]="job_description.salary"> -->
+                                 <!-- <div class="form-row">
+                                    <div class="col">
+                                        <input class="form-control" id="min_salary"  
+                                        appLimitUptoTwoDIgits name="min_salary" [(ngModel)]="job_description.min_salary" 
+                                        placeholder="min" type="text" [required]="job_description.max_salary?true:false" autocomplete="off"  />
+                                    </div> -->
+                                    <!-- <div class="col">
+                                        <input class="form-control" id="max_salary" appLimitUptoTwoDIgits 
+                                        name="max_salary" [(ngModel)]="job_description.max_salary" placeholder="max" 
+                                        type="text" [required]="job_description.min_salary?true:false" autocomplete="off"  />
+                                    </div>
+                                </div>   
+                            </div>
+                            <div class="col form-group"> -->
+                                <!-- <label >Rate (in $)</label> -->
+                                <!-- [readonly]="job_description.salary"  -->
+                            <!--    <div class="form-row">
+                                    <div class="col">
+                                        <input class="form-control" id="min_rate"  
+                                        appLimitUptoTwoDIgits name="min_rate" [(ngModel)]="job_description.min_rate" 
+                                        placeholder="min" type="text"  [required]="job_description.max_rate?true:false" autocomplete="off" />
+                                    </div>
+                                    <div class="col">
+                                        <input class="form-control" id="max_rate" appLimitUptoTwoDIgits 
+                                        name="max_rate" [(ngModel)]="job_description.max_rate" placeholder="max" 
+                                        type="text"  [required]="job_description.min_rate ?true:false" autocomplete="off" />
+                                    </div>
+                                </div>   
+                             </div> 
+                             <div class="col form-group">
+
+                                <label class="asterisk-if-mandatory">Rate($)</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.Rate" name="Rate"  #rate="ngModel"
+                                    name="rate"  appLimitUptoTwoDIgits
+                                    [ngClass]="{ 'is-invalid':rate.invalid && rate.touched }"
+                                    required>
+                                <div *ngIf="rate.invalid " class="invalid-feedback">
+                                    <div *ngIf="rate.errors.required">Rate is required.</div>
+                                </div>
+                            </div> 
+                          
+                        </div>
+                        <div class="row"> -->
+
+                            <!-- <div class="row">
+                                <div class="col form-group">
+                                    <label>Salary range</label>
+                                    <input type="text" class="form-control " id="" placeholder=""
+                                        [(ngModel)]="job_description.salay_range" name="key_fields">
+                                </div>
+                            </div> -->
+
+                            <div class="row form-group">
+                            <div class="col">
+                                <div class="row ">
+                                    <div class="col">
+                                        <label class="asterisk-if-mandatory">Salary or rate (in {{currencyTag}})</label>
+                                    </div>
+                                </div> 
+                                <div class="form-row">
+                                    <div class="col ">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" value="Yes" id="anyOfferInHand"
+                                             name="salaryRate" (click)="selectSalaryOrRate('salary')" [(ngModel)]="job_description.isSalary" />
+                                            <label class="form-check-label" for="inlineRadio1">Salary</label>
+            
+                                            <input class="form-check-input ml-3" type="radio"    value="No" id="anyOfferInHand"
+                                             name="salaryRate" (click)="selectSalaryOrRate('rate')" [(ngModel)]="job_description.isSalary" />
+                                            <label class="form-check-label" for="inlineRadio1">Rate</label>
+
+                                           
+                                        </div>    
+                                    </div>
+                                    
+                                </div> 
+                                 <div class="row mt-1" *ngIf="selectSalaryRateFlag===true">
+                                    <div class="col">
+                                        <input class="form-control" id="min_salary"  
+                                        appLimitUptoTwoDIgits name="min_salary" [(ngModel)]="job_description.min_salary" [formControl]="form.get('min_salary')"
+                                        placeholder="min" type="text" autocomplete="off" />
+                                        <div *ngIf="form.get('min_salary').hasError('invalidSalaryFormat')" class="text-danger">
+                                            Invalid salary format (e.g. Salary must not start with 0).
+                                          </div>
+                                    </div>
+                                    <!-- [readonly]="candidate.salary" -->
+                                    <!-- [required]="candidate.min_salary?true:false" -->
+                                    <div class="col">
+                                        <input class="form-control" id="max_salary" appLimitUptoTwoDIgits 
+                                        name="max_salary" [(ngModel)]="job_description.max_salary" [formControl]="form.get('max_salary')" placeholder="max" 
+                                        type="text" autocomplete="off"  />
+                                        <div *ngIf="form.get('max_salary').hasError('invalidSalaryFormat')" class="text-danger">
+                                            Invalid salary format (e.g. Salary must not start with 0).
+                                          </div>
+                                    </div>
+                                    <!-- [readonly]="candidate.salary" -->
+                                </div>
+                                <div class="row mt-1" *ngIf="selectSalaryRateFlag===false">
+                                    <div class="col">
+                                        <input class="form-control" id="min_rate"  
+                                        appLimitUptoTwoDIgits name="min_rate" [(ngModel)]="job_description.min_rate" [formControl]="form.get('min_salary')"
+                                   placeholder="min" type="text"  autocomplete="off"  />
+                                   <div *ngIf="form.get('min_salary').hasError('invalidSalaryFormat')" class="text-danger">
+                                    Invalid salary format (e.g. Salary must not start with 0).
+                                  </div>
+                                    </div>
+                                    <!-- [readonly]="candidate.salary" -->
+                                    <div class="col">
+                                        <input class="form-control" id="max_rate" appLimitUptoTwoDIgits 
+                                        name="max_rate" autocomplete="off" [(ngModel)]="job_description.max_rate" [formControl]="form.get('max_salary')" placeholder="max" 
+                                        type="text"  />
+                                        <div *ngIf="form.get('max_salary').hasError('invalidSalaryFormat')" class="text-danger">
+                                            Invalid salary format (e.g. Salary must not start with 0).
+                                          </div>
+                                    </div>
+                                    <!-- [readonly]="candidate.salary" -->
+                                </div>
+                            </div>
+                        </div>
+                            <!-- [readonly]="candidate.min_rate||candidate.max_rate" -->
+                                        
+                        <!-- </div> -->
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>No of Requests</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.no_of_requests" name="no_of_requests">
+                            </div>
+                            <div class="col form-group">
+                                <label>Visa Type</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.visa_type" name="visa_type">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Projected Revenue ({{currencyTag}})</label>
+                                <input type="text" class="form-control " id="" appLimitUptoTwoDIgits
+                                 placeholder="" [(ngModel)]="job_description.projected_revenue" name="projected_revenue" autocomplete="off" required>
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Revenue Frequency</label>
+                                <!-- <input type="text" class="form-control " id="" placeholder=""> -->
+                                <select class="form-control " [(ngModel)]="job_description.revenue_frequency" name="revenue_frequqney" required>
+                                    <option disabled>Select Frequency</option>
+                                    <option value="One Time">One Time</option>
+                                    <option value="Recurring">Recurring</option>
+                                </select>
+                                <!-- <p>{{job_description.revenue_frequency}}</p> -->
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Status</label>
+                                <select class="form-control " id="" [(ngModel)]="job_description.status" 
+                                    name="status" #status="ngModel" (ngModelChange)="onChange($event)"
+                                    [ngClass]="{ 'is-invalid':status.invalid && status.touched }" required>
+                                    <option disabled>Select Status</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">In Active</option>
+                                    <option value="Rejected">Rejected</option>
+                                    <option value="SubmissionNotAccepted">Not Accepting Submissions</option>
+                                    <option value="RejectedForRate">Rejected for Rate</option>
+
+
+                                </select>
+                                <div *ngIf="status.invalid " class="invalid-feedback">
+                                    <div *ngIf="status.errors.required">Status is required.</div>
+                                </div>
+                                <span *ngIf="reviewError" id='reviewError' style="color:red">{{reviewError}}</span>
+                            </div>
+                            <div class="col form-group">
+                                <label>Job Posted Date</label>
+                                <div class="input-group date-input">
+                                    <input type="text" class="form-control " id="" placeholder="{{job_posted_date | date: 'MM-dd-yyyy'}}"
+                                        ngbDatepicker #d2="ngbDatepicker" [(ngModel)]="job_description.job_posted_date"
+                                        #c2="ngModel" name="job_posted_date" [readonly] = "true"  (click)="d2.toggle()">
+        
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="d2.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                            <label>Nice to Have Skills</label>
+                            <input type="text" class="form-control " id="" placeholder=""
+                                [(ngModel)]="job_description.nice_to_have_skills" name="nice_to_have_skills">
+                            </div>
+                        </div>
+
+                        <!-- <div class="row">
+                            <div class="col form-group">
+                                <label>Notes</label>
+                                <app-editor [id]="'editor3'" [content]="job_description.notes" [hasTags]="false"
+                                    (contentChanged)="job_description.notes = $event"></app-editor>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col form-group-mobile">
+                                <label class="asterisk-if-mandatory">Default Assignee</label>
+                                <app-users-inline   [item]="job_description.default_assignee" [actionName]= constants.JD (changeItemEvt)="job_description.default_assignee = $event"></app-users-inline>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row button-sec">
+                    <!-- <div class="col-auto ml-auto">
+                        <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId==='add'">Save &
+                            add another</button>
+                    </div> -->
+                    
+                    <div class="col-auto ml-auto" *ngIf="eventId==='add'">
+                        <button type="submit" [disabled]="f.invalid||!job_description.client_name||!job_description.country||
+                        form.get('min_salary').hasError('invalidSalaryFormat')||
+                        form.get('max_client_rate').hasError('invalidRate')||
+                        form.get('min_client_rate').hasError('invalidRate')||
+                        form.get('max_salary').hasError('invalidSalaryFormat')||
+                        !job_description.default_assignee||
+                        ((!job_description.min_salary && !job_description.max_salary)&&
+                        (!job_description.min_rate && !job_description.max_rate))
+                        || (!job_description.min_years_of_experience&& !job_description.max_years_of_experience)||
+                        (job_description.employment_type!==constants.c2c && !job_description.employment_type_description)
+                        ||(job_description.revenue_frequency !=='One Time' && job_description.revenue_frequency !=='Recurring')
+                        ||(job_description.currency == 'NULL')|| ( job_description.isSalary === 'Yes' && job_description.max_salary !==null  && job_description.max_salary  < 1) 
+                        || ( job_description.isSalary === 'Yes' && job_description.min_salary !==null && job_description.min_salary  < 1)
+                        || ( job_description.isSalary === 'No' && job_description.min_rate !==null  && job_description.min_rate  < 1)
+                        || ( job_description.isSalary=== 'No' && job_description.max_rate !==null  && job_description.max_rate  < 1)"
+                        (click)="onSubmit();f.resetForm();"
+                            class="btn btn-primary">Save</button>
+                    </div>
+                    <div class="col-auto ml-auto" *ngIf="eventId==='edit'|| eventId==='edit_pop'">
+                        <button type="submit" [disabled]="f.invalid||!job_description.client_name||!job_description.country||
+                        form.get('min_salary').hasError('invalidSalaryFormat')||
+                        form.get('max_client_rate').hasError('invalidRate')||
+                        form.get('min_client_rate').hasError('invalidRate')||
+                        form.get('max_salary').hasError('invalidSalaryFormat')||
+                        !job_description.default_assignee
+                        ||((!job_description.min_salary && !job_description.max_salary)&&
+                        (!job_description.min_rate && !job_description.max_rate))
+                        ||(!job_description.min_years_of_experience && !job_description.max_years_of_experience)||
+                        (job_description.employment_type!==constants.c2c && !job_description.employment_type_description)
+                        ||(job_description.revenue_frequency !=='One Time' && job_description.revenue_frequency !=='Recurring')
+                        ||(job_description.currency == 'NULL') || ( job_description.isSalary === 'Yes' && job_description.max_salary !==null  && job_description.max_salary  < 1) 
+                        || ( job_description.isSalary === 'Yes' && job_description.min_salary !==null && job_description.min_salary  < 1)
+                        || ( job_description.isSalary === 'No' && job_description.min_rate !==null  && job_description.min_rate  < 1)
+                        || ( job_description.isSalary=== 'No' && job_description.max_rate !==null  && job_description.max_rate  < 1) || !canInactivate"
+                        (click)="onEdit();f.resetForm();"
+                            class="btn btn-primary">Modify</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

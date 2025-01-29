@@ -1,0 +1,256 @@
+<!--
+<div id="addEmail" class="sideCandidate">
+   //<a href="javascript:void(0)" class="closebtn" (click)="closeAddEmail()">&times;</a>
+  <app-add-emails
+    *ngIf="eventId === constants.ADD"
+    (closeAddEditPage)="closeAddEmail(); eventId = undefined"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+  >
+  </app-add-emails>
+  <app-add-emails
+    *ngIf="eventId === constants.EDIT"
+    (closeAddEditPage)="closeAddEmail(); eventId = undefined"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+    [indexAsInput]="indexAsInput"
+  ></app-add-emails>
+</div>
+-->
+
+<app-filter #filter [params]="filterOn" (filterEvt)="
+    displayFilter = $event.displayFilter; fetchCollectionList($event.path)
+  ">
+</app-filter>
+
+<div id="sendMail" class="sideCandidate">
+  <a href="javascript:void(0)" class="closebtn" (click)="closeSendMail()">&times;</a>
+  <app-send-mail [tagName]="tagName" (refreshListEvt)="refreshEmailPage()" [mailAddress]="mailAddress"></app-send-mail>
+</div>
+
+<div class="search-wrap">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="row mt-3 page-header">
+          <div class="col-auto">
+            <h4 class="page-title mb-0">Custom Fields</h4>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a> Campaign</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Custom Fields
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <div class="col-auto ml-auto">
+
+
+            <button type="button" class="btn btn-primary" (click)="doAction()"><i class="fa fa-user-plus"></i> Add
+              Custom Field </button>
+          </div>
+        </div>
+
+        <div class="bg-gray mt-2 p-4 rounded">
+          <form (ngSubmit)="fetchCollectionList()">
+            <div class="search-box">
+              <div class="form-row">
+                <div class="col">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span href="" class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                    </div>
+                    <input class="form-control" type="text" name="searchbox" [(ngModel)]="search"
+                      placeholder="Search by field name" />
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-3">
+  <app-display-filter [displayFilter]="displayFilter" (removeFilter)="removeFilter($event)"></app-display-filter>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <!-- Designation -->
+      <div class="form-row shortby-section">
+        <div class="col-auto">
+          <div class="form-check form-group mt-2">
+            <input class="form-check-input" [(ngModel)]="masterSelected" name="email_list" type="checkbox" value="c1"
+              (change)="checkUncheckAll()" id="" />
+            <label class="form-check-label"> Select All </label>
+          </div>
+        </div>
+
+        <!--Actions-->
+        <div class="col-auto">
+          <select id="actionType" class="form-control">
+            <option>Select Action</option>
+            <option value="delete">Delete</option>
+            <!-- <option value="sendMail">Send Mail to Selected</option> -->
+          </select>
+        </div>
+        <div class="col-auto">
+          <button *ngIf="count === 0" type="submit" id="goButton" disabled (click)="selectHandler()"
+            class="btn btn-primary">
+            Go
+          </button>
+
+          <button *ngIf="count !== 0" type="submit" (click)="selectHandler()" class="btn btn-primary">
+            Go
+          </button>
+        </div>
+
+        <!--Record Count-->
+        <div class="col-auto line-height-38">
+          {{ count }} of {{ collectionSize }} selected
+        </div>
+
+        <!--Sorting-->
+        <div class="col-auto ml-auto shortby-dropdown">
+          <select id="sortAs" class="form-control" (change)="changeSortingOrder(); fetchCollectionList()">
+            <option value="" disabled>Sort by date</option>
+            <option value="true">Latest</option>
+            <option value="false">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <!--Records List and Functions-->
+      <div class="card mb-1 candidate-details bg-green-light border-green-light" [ngClass]="{
+          'bg-green-light': selectedItemIndex === index,
+          'border-green-light': selectedItemIndex === index
+        }" *ngFor="let a of collection; let index = index">
+        <div class="card-body">
+          <div class="form-row">
+            <div class="col-auto candidate-checkbox">
+              <div class="form-check form-group">
+                <input class="form-check-input" [(ngModel)]="a.isSelected" type="checkbox" value="{{ a.id }}"
+                  name="card_list" (change)="isAllSelected()" id="" />
+              </div>
+            </div>
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.field_name ? a.field_name : "--" }}
+              </div>
+              <div class="label-name">Field Name</div>
+            </div>
+
+            <div class="col pl-0" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.field_type }}
+              </div>
+              <div class="label-name">Field Type</div>
+            </div>
+
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.field_size }}
+              </div>
+              <div class="label-name">Field Size</div>
+            </div>
+
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.created_at | date: "medium" }}
+              </div>
+              <div class="label-name">Created at</div>
+            </div>
+
+            <!-- <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ a.status ? a.status : "--" }}
+              </div>
+              <div class="label-name">Status</div>
+            </div> -->
+
+            <!--  <div class="col" (click)="openListDetailsModel(a.id)">
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-light dropdown-item"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  View List
+                </button>
+              </div>
+            </div>
+                  -->
+            <div class="col-auto ml-auto">
+              <div class="btn-group">
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+                  Action
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a class="dropdown-item" *ngIf="selectedItemIndex !== index" (click)="openRowDetail(index)"><i
+                      class="fa fa-eye" aria-hidden="true"></i> View</a>
+                  <!-- <a
+                    class="dropdown-item"
+                    (click)="sendMailToList(a.id, a.list_name?.id)"
+                    ><i class="fas fa-envelope"></i> Send Mail</a
+                  >
+
+                  <a class="dropdown-item" (click)="openListDetailsModel(a.id)"
+                    ><i class="fa fa-eye" aria-hidden="true"></i> List View</a
+                  > -->
+
+                  <!-- <a
+                    class="dropdown-item"
+                    (click)="resendList(a.id, a.list_name, a.list_size)"
+                    ><i class="fa fa-retweet"></i> Rechurn</a
+                  > -->
+
+                  <a class="dropdown-item" (click)="openDeleteModel(a.field_name, a.id)" *ngIf="canLoad()"><i
+                      class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="candidate-details-full border-top" *ngIf="selectedItemIndex === index">
+          <div class="row">
+            <div class="col">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ a.field_desc ?? '-' }}
+                    </div>
+                    <div class="label-name">Description</div>
+
+                  </div>
+                </div>
+                <!-- <div class="row mb-3">
+                  <div class="col">
+
+
+                    <div class="label-value">
+                      {{ a.data_type ?? '-' }}
+                    </div>
+                    <div class="label-name">Data Type</div>
+                  </div>
+                </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <app-paging [page]="page" [pageSize]="limit" [collectionSize]="collectionSize"
+        (pageChangeEvt)="page = $event; fetchCollectionList()"></app-paging>
+    </div>
+  </div>
+</div>

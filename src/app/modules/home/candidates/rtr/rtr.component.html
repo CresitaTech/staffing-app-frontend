@@ -1,0 +1,309 @@
+<div id="addRTR" class="sideCandidate">
+  <a href="javascript:void(0)" class="closebtn" (click)="closeAddRTR()"
+    >&times;</a
+  >
+  <app-add-rtr
+    *ngIf="eventId === constants.ADD"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+  ></app-add-rtr>
+  <app-add-rtr
+    *ngIf="eventId === constants.EDIT"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+    [indexAsInput]="indexAsInput"
+  ></app-add-rtr>
+</div>
+
+<div class="search-wrap">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="row mt-3 page-header">
+          <div class="col-auto">
+            <h4 class="page-title mb-0">RTR</h4>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a>Candidates</a></li>
+                <li class="breadcrumb-item active" aria-current="page">RTR</li>
+              </ol>
+            </nav>
+          </div>
+          <div class="col ml-auto">
+            <div class="form-row">
+              <div class="col-auto ml-auto">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="openAddRTR(constants.ADD, undefined)"
+                >
+                  <i class="fa fa-user-plus" aria-hidden="true"></i> Add RTR
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray mt-2 p-4 rounded">
+          <form (ngSubmit)="fetchCollectionList()">
+            <div class="search-box">
+              <div class="form-row">
+                <div class="col">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span href="" class="input-group-text"
+                        ><i class="fa fa-search" aria-hidden="true"></i
+                      ></span>
+                    </div>
+                    <input
+                      class="form-control"
+                      [(ngModel)]="search"
+                      name="searchbox"
+                      type="text"
+                      placeholder="Search by candidate first name"
+                    />
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <!-- Designation -->
+      <div class="form-row shortby-section">
+        <div class="col-auto">
+          <div class="form-check form-group mt-2">
+            <input
+              class="form-check-input"
+              [(ngModel)]="masterSelected"
+              name="client_list"
+              type="checkbox"
+              value="c1"
+              (change)="checkUncheckAll()"
+              id=""
+            />
+            <label class="form-check-label"> Select All </label>
+          </div>
+        </div>
+
+        <div class="col-auto">
+          <select id="actionType" class="form-control">
+            <option>Select Action</option>
+            <option value="delete">Delete Selected RTRs</option>
+            <!-- <option value="export">Export Selected</option>
+                        <option value="sendMail">Send Mail to Selected</option> -->
+          </select>
+        </div>
+        <div class="col-auto">
+          <button
+            type="submit"
+            *ngIf="count === 0"
+            disabled
+            id="goButton"
+            (click)="selectHandler()"
+            class="btn btn-primary"
+          >
+            Go
+          </button>
+          <button
+            type="submit"
+            *ngIf="count !== 0"
+            id="goButton"
+            (click)="selectHandler()"
+            (click)="selectHandler()"
+            class="btn btn-primary"
+          >
+            Go
+          </button>
+        </div>
+        <div class="col-auto line-height-38">
+          {{ count }} of {{ collectionSize }} selected
+        </div>
+        <div class="col-auto ml-auto shortby-dropdown">
+          <select
+            id="sortAs"
+            class="form-control"
+            (change)="changeSortingOrder(); fetchCollectionList()"
+          >
+            <option value="" disabled>Sort by date</option>
+            <option value="true">Latest</option>
+            <option value="false">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <div
+        class="card mb-1 candidate-details bg-green-light border-green-light"
+        [ngClass]="{
+          'bg-green-light': selectedItemIndex === index,
+          'border-green-light': selectedItemIndex === index
+        }"
+        *ngFor="let r of collection; let index = index"
+      >
+        <div class="card-body">
+          <div class="form-row">
+            <div class="col-auto candidate-checkbox">
+              <div class="form-check form-group">
+                <!-- <input class="form-check-input" type="checkbox" value="" id=""> -->
+                <input
+                  class="form-check-input"
+                  [(ngModel)]="r.isSelected"
+                  type="checkbox"
+                  value="{{ r.id }}"
+                  name="cient_list"
+                  (change)="isAllSelected()"
+                  id=""
+                />
+              </div>
+            </div>
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">{{ r.job_title }}</div>
+              <div class="label-name">Job Title</div>
+            </div>
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{
+                  r.consultant_full_legal_name
+                    ? r.consultant_full_legal_name
+                    : "--"
+                }}
+              </div>
+              <div class="label-name">Candidate Name</div>
+            </div>
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">{{ r.rate }}</div>
+              <div class="label-name">Rate($)</div>
+            </div>
+
+            <div class="col-auto ml-auto">
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-light dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Action
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a
+                    class="dropdown-item"
+                    *ngIf="selectedItemIndex !== index"
+                    (click)="openRowDetail(index)"
+                    ><i class="fa fa-eye" aria-hidden="true"></i> View</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    (click)="openAddRTR(constants.EDIT, index)"
+                    ><i class="fas fa-user-edit"></i> Edit</a
+                  >
+                  <a class="dropdown-item" (click)="openDeleteModel(r.id)"
+                    ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a
+                  >
+                  <div class="dropdown-divider"></div>
+                  <!-- <a class="dropdown-item"  onclick="openRTRMail()">Send Mail</a> -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="candidate-details-full border-top"
+          *ngIf="selectedItemIndex === index"
+        >
+          <div class="row">
+            <div class="col">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ r.consultant_full_legal_name }}
+                    </div>
+                    <div class="label-name">Candidate Full Legal Name</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ r.address ? r.address : "--" }}
+                    </div>
+                    <div class="label-name">Address</div>
+                  </div>
+                </div>
+                <div class="row mb-3" (click)="openRowDetail(index)">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ r.phone_no ? r.phone_no : "--" }}
+                    </div>
+                    <div class="label-name">Phone</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ r.email ? r.email : "--" }}
+                    </div>
+                    <div class="label-name">Email</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ r.last_4_ssn ? r.last_4_ssn : "--" }}
+                    </div>
+                    <div class="label-name">Last 4 SSN</div>
+                  </div>
+                  <div class="col" (click)="openRowDetail(index)">
+                    <!-- <div class="label-value">{{r.rtr_doc}}
+                                            <button type="button" class="btn btn-sm btn-primary ml-2">View
+                                                Doc</button>
+                                        </div> -->
+                    <div class="label-value">
+                      {{ r.rtr_doc ? r.rtr_doc : "--" }}
+                      <!-- <a class="btn-link">View Resume</a> -->
+                      <!--<a type="button" class="btn btn-sm btn-primary ml-2" *ngIf="r.rtr_doc"
+                                                href="http://207.180.198.237:8004/appserver{{r.rtr_doc}}" target="_blank">View
+                                                RTR</a>-->
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="r.rtr_doc"
+                        href="https://staff.opallius.com/appserver/api{{
+                          r.rtr_doc
+                        }}"
+                        target="_blank"
+                        >View RTR</a
+                      >
+                    </div>
+                    <div class="label-name">RTR Doc</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col" (click)="openRowDetail(index)">
+                    <div class="label-value">
+                      {{ r.created_at | date: "medium" }}
+                    </div>
+                    <div class="label-name">Created At</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-paging
+        [page]="page"
+        [pageSize]="limit"
+        [collectionSize]="collectionSize"
+        (pageChangeEvt)="page = $event; fetchCollectionList()"
+      ></app-paging>
+    </div>
+  </div>
+</div>

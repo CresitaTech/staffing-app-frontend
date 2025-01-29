@@ -1,0 +1,127 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD ||eventId===constants.POP_UP">Add Job Description Submission</h5>
+                    <h5 class="card-title" *ngIf="eventId===constants.EDIT">Edit Job Description Submission</h5>
+                </div>
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                        another</button>
+                </div> -->
+               
+                <div class="col-auto">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+
+                </div>
+
+                <button *ngIf="eventId===constants.POP_UP" #closebutton type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+           
+
+            <!-- Other Details -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form #f="ngForm">
+                        <div class="row">
+                            <div class="col form-group">
+                               
+                                <app-candidate-inline  [actionName]=constants.SUBMISSION  [item]="submission.candidate_name" [eventId]="eventId"
+                                (changeItemEvt)="submission.candidate_name = $event" 
+                                 >
+                            </app-candidate-inline>
+                            <!-- (getResumeEvt)="submission.candidate_resume= $event" -->
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col form-group">
+                               
+
+                                <label>Recruiter Name</label>
+                               
+                                <app-users-inline  [item]="submission.recruiter_name" 
+                                [actionName]=constants.SUBMISSION
+                                (changeItemEvt)="submission.recruiter_name = $event"
+                                (changeEmailEvt)="submission.recruiter_email = $event">
+                                </app-users-inline>
+                             
+                            </div>
+                            <div class="col form-group">
+                                <label>Recruiter Email</label>
+                                <input type="text" class="form-control" placeholder="" id="recruiter_email" [(ngModel)]="submission.recruiter_email" name="recruiter_email"          
+                                #recruiter_email="ngModel"  >
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Assignee Name</label>
+                                <input type="text" class="form-control" placeholder="" id="assignee_name" [(ngModel)]="submission.assignee_name" name="assignee_name"          
+                                #assignee_name="ngModel"  >
+                            </div>
+                            <div class="col form-group">
+                                <label>Assignee Email</label>
+                                <input type="text" class="form-control" placeholder="" id="assignee_email" [(ngModel)]="submission.assignee_email" name="assignee_email"          
+                                #assignee_email="ngModel"  >
+                            </div>
+                        </div>
+                        <div class="form-row ">
+                            <div class="col form-group">
+                                <label>Remarks</label>
+                                <app-editor [id]="'editor1'" [content]="submission.remarks" [hasTags]="false"
+                                (contentChanged)="submission.remarks = $event"></app-editor>
+                                <!-- <div class="form-row">
+                                    <div class="col">
+                                        <input type="text" class="form-control" placeholder="Remarks" id="remarks" [(ngModel)]="submission.remarks" name="remarks"          
+                                        #remarks="ngModel" > -->
+                                        <!-- <img src="images/remark-img.jpg" width="100%"> -->
+                                    <!-- </div>
+
+                                </div> -->
+                            </div>
+                        </div>
+                        <!-- <div class="form-row">
+                            <div class="col">
+                                <label>Candidate Resume</label>
+                                <div *ngIf="submission.candidate_resume" class="label-value" [(ngModel)]="submission.candidate_resume" required>{{submission.candidate_resume?
+                                    submission.candidate_resume : '--'}}
+                                    <a type="button" style="color: #26ae61;" *ngIf="submission.candidate_resume"
+                                        href="http://207.180.198.237:8004{{submission.candidate_resume}}" target="_blank">View PDF</a>
+                                </div>
+                    
+                                <div *ngIf="!submission.candidate_resume" class="custom-file">
+                                    <input type="file" class="custom-file-input" id="customFile"  [(ngModel)]="submission.candidate_resume"
+                                        name="filename">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                                <small class="form-text text-muted">Selected candidate resume will be attached</small>
+                            </div>
+                        </div> -->
+                        
+                        
+
+                    </form>
+                </div>
+            </div>
+
+            
+            <div class="form-row button-sec">
+                 <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                        another</button>
+                </div> -->
+                
+                <div class="col-auto">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

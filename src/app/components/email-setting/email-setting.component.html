@@ -1,0 +1,225 @@
+<div class="p-4">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="form-row mb-3 heading-sec">
+        <div class="col">
+          <h5 class="card-title">Add Email Configurations</h5>
+        </div>
+
+        <div class="col-auto ml-auto">
+          <button
+            type="submit"
+            [disabled]="f.invalid"
+            (click)="onSubmit()"
+            class="btn btn-primary"
+          >
+            Save
+          </button>
+        </div>
+
+        <button
+          #closebutton
+          type="button"
+          class="close"
+          aria-label="Close"
+          (click)="activeModal.dismiss()"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <!-- Created -->
+      <div class="card mb-2">
+        <div class="card-body">
+          <form #f="ngForm" [appPasswordMatch]="['password', 'cnfm_password']">
+            <div class="form-row">
+              <div class="col form-group">
+                <label>First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="emailSetting.first_name"
+                  id="first_name"
+                  placeholder=""
+                  name="first_name"
+                />
+              </div>
+              <div class="col form-group">
+                <label>Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="emailSetting.last_name"
+                  id="last_name"
+                  placeholder=""
+                  name="last_name"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col form-group">
+                <label>Email From</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="emailSetting.email"
+                  id="email"
+                  placeholder=""
+                  name="email"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col form-group">
+                <label>Email CC</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="emailSetting.email_cc"
+                  id="email_cc"
+                  placeholder=""
+                  name="email_cc"
+                />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col form-group">
+                <label>Send By </label>
+                <select
+                  class="form-control"
+                  id="send_by"
+                  [(ngModel)]="emailSetting.send_by"
+                  name="send_by"
+                  #send_by="ngModel"
+                  [ngClass]="{ 'is-invalid': send_by.invalid && send_by.touched }"
+                >
+                  <option value="API" selected>API</option>
+                  <option value="SMTP">SMTP</option>
+                  
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="emailSetting.password"
+                  id="password"
+                  placeholder=""
+                  name="password"
+                  #password="ngModel"
+                  [ngClass]="{
+                    'is-invalid': password.invalid && password.touched
+                  }"
+                  minlength="6"
+                />
+                <div
+                  *ngIf="password.invalid && password.touched"
+                  class="invalid-feedback"
+                >
+                  <!-- <div *ngIf="password.errors?.required">{{constants.PASSWORD_REQUIRED}}</div> -->
+                  <div *ngIf="password.errors?.minlength">
+                    {{ constants.PASSWORD_MINLENGTH }}
+                  </div>
+                </div>
+              </div>
+              <div class="col form-group">
+                <label>Confirm Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  [(ngModel)]="emailSetting.cnfm_password"
+                  id="cnfm_password"
+                  placeholder=""
+                  name="cnfm_password"
+                  #cnfm_password="ngModel"
+                  [ngClass]="{
+                    'is-invalid': cnfm_password.invalid && cnfm_password.touched
+                  }"
+                />
+                <!-- <div *ngIf="confirmPassword.invalid && confirmPassword.touched"
+                                class="invalid-feedback"> -->
+                <div
+                  *ngIf="
+                    cnfm_password.touched &&
+                    cnfm_password.errors?.passwordMismatch
+                  "
+                  class="invalid-feedback"
+                >
+                  Passwords doesnot match
+                </div>
+                <!-- <div *ngIf="confirmPassword.errors.required">Confirm Password is required</div> -->
+                <!-- <div *ngIf="emailSetting.password !== emailSetting.cnfm_password">Confirm Password
+                                    doesn't match with
+                                    password.</div> -->
+                <!-- </div> -->
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col form-group">
+                <label>Port</label>
+                <select
+                  class="form-control"
+                  id="port"
+                  [(ngModel)]="emailSetting.port"
+                  name="port"
+                  #port="ngModel"
+                  [ngClass]="{ 'is-invalid': port.invalid && port.touched }"
+                >
+                  <option disabled>Select Port</option>
+                  <option value="587">587</option>
+                  <option value="25">25</option>
+                  <option value="465">465</option>
+                </select>
+                <!-- <input type="text" class="form-control" [(ngModel)]="emailSetting.port"
+                                 id="port" placeholder="" name="port"> -->
+              </div>
+              <div class="col form-group">
+                <label>Host</label>
+                <select
+                  class="form-control"
+                  id="host_name"
+                  [(ngModel)]="emailSetting.host_name"
+                  name="host_name"
+                  #host_name="ngModel"
+                  [ngClass]="{
+                    'is-invalid': host_name.invalid && host_name.touched
+                  }"
+                >
+                  <option disabled>Select Host</option>
+                  <option value="mail.opallioslabs.com">
+                    mail.opallioslabs.com
+                  </option>
+                  <option value="mail.opalliosforce.com">
+                    mail.opalliosforce.com
+                  </option>
+                  <option value="postal.opallius.com">
+                    postal.opallius.com
+                  </option>
+                  <option value="smtp.gmail.com">smtp.gmail.com</option>
+                </select>
+                <!-- <input type="text" class="form-control" 
+                                 [(ngModel)]="emailSetting.host_name" id="host" placeholder="" name="host" > -->
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="form-row button-sec">
+        <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                        another</button>
+                </div>
+                 -->
+        <!-- <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD||eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+
+                </div> -->
+      </div>
+    </div>
+  </div>
+</div>

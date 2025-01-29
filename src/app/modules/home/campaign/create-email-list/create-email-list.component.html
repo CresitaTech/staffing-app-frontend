@@ -1,0 +1,120 @@
+<!-- Created -->
+
+<div class="p-4">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <div class="form-row mb-3 heading-sec">
+        <div class="col">
+          <h5 class="card-title">Create Email List</h5>
+        </div>
+
+        <div>
+          <button
+            #closebutton
+            type="button"
+            class="close"
+            aria-label="Close"
+            (click)="activeModal.dismiss()"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div class="card mb-2">
+        <div class="card-body">
+          <form #f="ngForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <div class="col form-group">
+                <label class="asterisk-if-mandatory">Email List Name</label>
+
+                <input
+                  class="form-control"
+                  id="emailListName"
+                  name="listName"
+                  [(ngModel)]="emailList.list_name"
+                  #listName="ngModel"
+                  [ngClass]="{
+                    'is-invalid': listName.invalid && listName.touched
+                  }"
+                  required
+                />
+                <div
+                  *ngIf="listName.touched && listName.invalid"
+                  class="invalid-feedback"
+                >
+                  <div *ngIf="listName.errors.required">
+                    Email List name is required
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col">
+                <div>
+                  <!--
+                  <app-template-inline
+                    [item]="emailList.email_template"
+                    (changeItemEvt)="emailList.email_template = $event"
+                  >
+                  </app-template-inline>
+                  -->
+                </div>
+                <div *ngIf="tagName === constants.VENDOR_LIST">
+                  <app-email-temp-inline
+                    [item]="emailList.template_name"
+                    (changeItemEvt)="emailList.template_name = $event"
+                    required
+                  >
+                  </app-email-temp-inline>
+
+                  <!--  -->
+                </div>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="col form-group">
+                <b>List Size :</b>
+                {{ emailList.list_size }}
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="col form-group">
+                <label>Description</label>
+                <textarea
+                  class="form-control"
+                  name="listDescription"
+                  id="emailListDescription"
+                  [(ngModel)]="emailList.list_description"
+                  rows="3"
+                ></textarea>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="form-row button-sec">
+        <div class="col-auto ml-auto">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-dismiss="modal"
+            (click)="activeModal.close('Close click')"
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            [disabled]="f.invalid || emailList.template_name === null"
+            (click)="onSubmit()"
+            class="btn btn-primary ml-2"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

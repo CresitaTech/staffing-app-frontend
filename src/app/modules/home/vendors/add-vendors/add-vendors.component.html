@@ -1,0 +1,167 @@
+<a href="javascript:void(0)"  class="closebtn" *ngIf="eventId===constants.ADD||eventId===constants.EDIT"
+(click)="closeVendor();f1.resetForm();f.resetForm();">&times;</a>
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD">Add Vendor</h5>
+                    <h5 class="card-title" *ngIf="eventId===constants.EDIT">Edit Vendor Details</h5>
+                </div>
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save
+                        & add another</button>
+                </div> -->
+               
+                <div class="col-auto">
+                    <button type="submit" [disabled]="f.invalid || f1.invalid" (click)="onSubmit() ;f.resetForm();f1.resetForm();"
+                        class="btn btn-primary" *ngIf="eventId===constants.ADD ">Save</button>
+                    <button type="submit" [disabled]="f.invalid || f1.invalid" (click)="onEdit();f.resetForm();f1.resetForm();"
+                        class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+                </div>
+            </div>
+
+               <!-- Other Details -->
+               <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Company Details</h6>
+                        </div>
+
+                    </div>
+
+                    <form #f1="ngForm">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Company Name</label>
+                                <input type="text" class="form-control" placeholder="" id="company_name"  [(ngModel)]="vendor.company_name" name="company_name">
+                            </div>
+                            <div class="col form-group">
+                                <label>Specialize In</label>
+                                <input type="text" class="form-control" placeholder="" id="specialised_in"  [(ngModel)]="vendor.specialised_in" name="specialised_in">
+                            </div>
+                        </div>
+                       
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Company Address</label>
+                                <input type="text" class="form-control" placeholder="" id="company_address"  [(ngModel)]="vendor.company_address" name="company_address">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label>About Company</label>
+                                <textarea class="form-control" id="" rows="3" id=""  [(ngModel)]="vendor.about_company" name="about_company"></textarea>
+                            </div>                                       
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- Designation -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Personal Details</h6>
+                        </div>
+
+                    </div>
+                    <form #f="ngForm">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Contact Person First Name</label>
+                                <input type="text" class="form-control" placeholder="" id="firstName"
+                                    [(ngModel)]="vendor.contact_person_first_name" name="firstName" #firstName="ngModel"
+                                    [ngClass]="{ 'is-invalid':firstName.invalid&& firstName.touched }" required />
+                                <div *ngIf="firstName.invalid && firstName.touched" class="invalid-feedback">
+                                    <div *ngIf="firstName.errors.required ">First Name is required</div>
+                                </div>
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Contact Person Last Name</label>
+                                <input type="text" class="form-control" placeholder="" id="lastName"
+                                    [(ngModel)]="vendor.contact_person_last_name" name="lastName" #lastName="ngModel"
+                                    [ngClass]="{ 'is-invalid':lastName.invalid && lastName.touched }" required />
+                                <div *ngIf="lastName.invalid && lastName.touched" class="invalid-feedback">
+                                    <div *ngIf="lastName.errors.required ">Last Name is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Primary Email</label>
+                                <input type="text" class="form-control" placeholder="" id="primaryEmail"
+                                    [(ngModel)]="vendor.primary_email" name="primaryEmail" #primaryEmail="ngModel"
+                                    [ngClass]="{ 'is-invalid':primaryEmail.invalid && primaryEmail.touched }" required
+                                    email />
+                                <div *ngIf="primaryEmail.invalid && primaryEmail.touched" class="invalid-feedback">
+                                    <div *ngIf="primaryEmail.errors.required ">Primary Mail Id is required</div>
+                                    <div *ngIf="primaryEmail.errors.email">Mail Id should be valid</div>
+                                </div>
+                            </div>
+                            <div class="col form-group">
+                                <label>Alternate Email</label>
+                                <input type="text" class="form-control" placeholder=""
+                                    id="secondaryEmail" [(ngModel)]="vendor.alternate_email" name="secondaryEmail"
+                                    #secondaryEmail="ngModel" [ngClass]="{ 'is-invalid':secondaryEmail.invalid  }"
+                                    email />
+                                <div *ngIf="secondaryEmail.invalid " class="invalid-feedback">
+                                    <div *ngIf="secondaryEmail.errors.email">Mail Id should be valid</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group-mobile">
+                                <!-- <app-designation-inline [item]="vendor.designation"
+                                (changeItemEvt)="vendor.designation = $event"></app-designation-inline> -->
+                                <label>Designation</label>
+                                <input type="text" class="form-control" placeholder="" id="primaryPhone" [(ngModel)]="vendor.designation"
+                                    name="designation" #primaryPhone="ngModel" />
+                            </div>
+                            <div class="col form-group-mobile">
+                                <label class="asterisk-if-mandatory">Phone Number</label>
+                                <input type="text" class="form-control" placeholder="" id="primaryPhone"
+                                    [(ngModel)]="vendor.phone_number" name="primaryPhone" #primaryPhone="ngModel"
+                                   
+                                    (input)="phoneNumberRef($event,inp,f)"
+                                (keypress)="preventEnter($event,primaryPhone)" #inp  
+                                minlength="12" maxlength="12"
+                                    [ngClass]="{ 'is-invalid':primaryPhone.invalid && primaryPhone.touched }"
+                                    required />
+                                <div *ngIf="primaryPhone.invalid && primaryPhone.touched" class="invalid-feedback">
+                                    <div *ngIf="primaryPhone.errors.required ">Valid  Phone number required</div>
+                                    <!-- <div *ngIf="primaryPhone.errors.pattern">Phone number should be valid</div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+         
+
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save
+                        & add another</button>
+                </div> -->
+                <!-- <div class="col-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save
+                        & Continue editing</button>
+                </div> -->
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid || f1.invalid" (click)="onSubmit()
+                    ;f.resetForm();f1.resetForm();"
+                        class="btn btn-primary"
+                        *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid || f1.invalid" (click)="onEdit()
+                    ;f.resetForm();f1.resetForm();"
+                        class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

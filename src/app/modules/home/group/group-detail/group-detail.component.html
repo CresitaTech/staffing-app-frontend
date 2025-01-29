@@ -1,0 +1,93 @@
+<button class="btn btn-link closebtn" (click)="closeDetail(false)">&times;</button>
+
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 *ngIf="eventId===constants.ADD || eventId===constants.POP_UP" class="card-title">Add Group</h5>
+                    <h5 *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP" class="card-title">Edit Group</h5>
+                </div>
+                <!-- <div class="col-auto ml-auto" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">
+                    <button type="button" class="btn btn-primary btn-primary-dark">Save & add another</button>
+                </div> -->
+                
+
+                <div class="col-auto ml-auto" *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSave(false)"
+                        class="btn btn-primary">Modify</button>
+                </div>
+
+                <div class="col-auto ml-auto" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSave(true)"
+                        class="btn btn-primary">Save</button>
+                </div>
+            </div>
+
+            <div class="card mb-2 ">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Group</h6>
+                        </div>
+                    </div>
+                    <form #f="ngForm">
+                        <div class="form-row">
+                            <div class="col form-group" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP" >
+                                <label class="asterisk-if-mandatory">Name</label>
+                                <input type="text" class="form-control" id="name" [(ngModel)]="group.name"
+                                    placeholder="Group Name" name="name" #name="ngModel"
+                                    [ngClass]="{ 'is-invalid':name.invalid&& name.touched }" required />
+                                <div *ngIf="name.invalid && name.touched" class="invalid-feedback">
+                                    <div *ngIf="name.errors.required ">Name is required</div>
+                                </div>
+                               
+                                
+                            </div>
+                            <div  class="col form-group"  *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">
+                                <label class="asterisk-if-mandatory">Name</label>
+                                <input type="text" class="form-control" id="name" [(ngModel)]="group.name"
+                                placeholder="Group Name" name="name"  [readonly]="true"
+                                 />
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group addGroup-section">
+                                <label>Permissions</label>
+                                <app-select-deselect 
+                                [available_all]="collection_all" 
+                                [choosen_all]="group?.permissions"
+                                [available_title]="'Available Permissions'"
+                                [choosen_title]="'Chosen Permissions'"
+                                [available_hint]="'This is the list of available permissions. You may choose some by selecting them in the box below and then clicking the \'Choose\' arrow between the two boxes.'"
+                                [choosen_hint]="'This is the list of chosen permissions. You may remove some by selecting them in the box below and then clicking the \'Remove\' arrow between the two boxes.'"
+                                (onChangeEvt)="group.permissions = $event;"></app-select-deselect>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <small class="form-text text-muted">Hold down “Control”, or “Command” on a
+                                    Mac, to select more than one.</small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save & add
+                        another</button>
+                </div>
+                -->
+                <div class="col-auto ml-auto" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSave(true)"
+                        class="btn btn-primary">Save</button>
+                </div>
+                <div class="col-auto ml-auto" *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSave(false)"
+                        class="btn btn-primary">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

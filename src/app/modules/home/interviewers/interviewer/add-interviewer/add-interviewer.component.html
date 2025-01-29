@@ -1,0 +1,312 @@
+<a href="javascript:void(0)"  class="closebtn" *ngIf="eventId===constants.ADD||eventId===constants.EDIT"
+(click)="closeInterviewer();f1.resetForm();f.resetForm();">&times;</a>
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Add Interviewer</h5>
+                    <h5 class="card-title" *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">Modify</h5>
+
+                </div>
+              
+               
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid||f1.invalid||!interviewer.designation" (click)="onSubmit();f.resetForm();f1.resetForm();"
+                        class="btn btn-primary" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP ">Save</button>
+                    <button type="submit" [disabled]="f.invalid||f1.invalid||!interviewer.designation" (click)="onEdit();f.resetForm();f1.resetForm();"
+                        class="btn btn-primary" *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">Modify</button>
+                </div>
+                <button  *ngIf="eventId==='pop' || eventId==='edit_pop'" type="button" #closebutton class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <!-- Designation -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Personal Details</h6>
+                        </div>
+
+                    </div>
+                    <form #f="ngForm">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory" >First Name</label>
+                                <input type="text" class="form-control" id="firstName"
+                                [(ngModel)]="interviewer.first_name" placeholder="" name="firstName"
+                                #firstName="ngModel"
+                                [ngClass]="{ 'is-invalid':firstName.invalid&& firstName.touched }" required />
+                            <div *ngIf="firstName.invalid && firstName.touched" class="invalid-feedback">
+                                <div *ngIf="firstName.errors.required ">First Name is required</div>
+                            </div>
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" [(ngModel)]="interviewer.last_name"
+                                    placeholder="" name="lastName" #lastName="ngModel"
+                                    [ngClass]="{ 'is-invalid':lastName.invalid && lastName.touched }" required />
+                                <div *ngIf="lastName.invalid && lastName.touched" class="invalid-feedback">
+                                    <div *ngIf="lastName.errors.required ">Last Name is required</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <app-designation-inline [item]="interviewer.designation"
+                                (changeItemEvt)="interviewer.designation = $event"></app-designation-inline>
+                        </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Primary Email</label>
+                                <input type="email" class="form-control" placeholder="" id="primaryEmail"
+                                [(ngModel)]="interviewer.primary_email" name="primaryEmail" #primaryEmail="ngModel"
+                                [ngClass]="{ 'is-invalid':primaryEmail.invalid && primaryEmail.touched }" required
+                                [pattern]=constants.emailPattern />
+                            <div *ngIf="primaryEmail.invalid && primaryEmail.touched" class="invalid-feedback">
+                                <div *ngIf="primaryEmail.errors.required ">Primary Mail Id is required</div>
+                                <div *ngIf="primaryEmail.errors.pattern">Mail Id should be valid</div>
+                            </div>
+                            </div>
+                            <div class="col form-group">
+                                <label >Secondary Email</label>
+                                <input type="email" class="form-control" placeholder=""
+                                    id="secondaryEmail" [(ngModel)]="interviewer.secondary_email" name="secondaryEmail"
+                                    #secondaryEmail="ngModel" [ngClass]="{ 'is-invalid':secondaryEmail.invalid  }"
+                                    [pattern]=constants.emailPattern />
+                                <div *ngIf="secondaryEmail.invalid " class="invalid-feedback">
+                                    <div *ngIf="secondaryEmail.errors.email">Mail Id should be valid</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- <div class="col form-group">
+                                <label class="asterisk-if-mandatory" >Phone Number</label>
+                                <input type="text" class="form-control" placeholder=""
+                                id="primaryPhone"  (input)="phoneNumberRef($event,inp,f)"
+                                (keypress)="preventEnter($event,primaryPhone)" #inp 
+                                [(ngModel)]="interviewer.phone_number" name="primaryPhone"
+                                #primaryPhone="ngModel" minlength="12" maxlength="12"
+                                [ngClass]="{ 'is-invalid':primaryPhone.invalid && primaryPhone.touched }"
+                                required />
+                           <div *ngIf="primaryPhone.invalid && primaryPhone.touched" class="invalid-feedback">
+                                <div *ngIf="primaryPhone.errors.required ">Valid Phone number required</div>
+                                <div *ngIf="primaryPhone.errors.pattern">Phone number should be valid</div> 
+                            </div>
+                            </div> -->
+
+
+                            <div class="col form-group">
+                                <!-- (input)="phoneNumberRef($event,inp,f1)" -->
+                                <!-- (keypress)="preventEnter($event,primaryPhone)" #inp  -->
+                                <label class="asterisk-if-mandatory">Primary Phone Number</label>
+                                <input type="text" class="form-control" 
+                                 placeholder=""
+                                 [(ngModel)]="interviewer.phone_number" 
+                                 
+                                    id="primaryPhone" [pattern]="constants.newPhonePattern"  name="primaryPhone"
+                                    #primaryPhone="ngModel"  
+                                    [ngClass]="{ 'is-invalid':primaryPhone.invalid && primaryPhone.touched }"
+                                    required  />
+                                <div *ngIf="primaryPhone.invalid && primaryPhone.touched" class="invalid-feedback">
+                                    <div *ngIf="primaryPhone.errors.required ">Valid Phone number is required</div>
+                                    <div *ngIf="primaryPhone.errors.pattern">Invalid phone number. Valid pattern can be like xxx-xxx-xxxx OR (xxx) xxx-xxxx</div>
+                                </div>
+                            </div>
+
+
+                        
+                           
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <label class="asterisk-if-mandatory">Time Slots</label>
+                                <div class="form-row">
+                                    <div class="col">
+                                        <app-timeslott-inline  [isMultipleSelect] = true
+                                            (changeItemsEvt)="addTimeSlot($event)"></app-timeslott-inline>
+                                        </div>
+                                   
+                                </div>
+
+                                <div class="row mt-2" *ngIf="interviewer.time_slots && interviewer.time_slots.length > 0">
+                                    <div class="col interviewer-otherName">
+                                      <table class="table table-sm">
+                                          <thead>
+                                              <tr>
+                                                  <th scope="col" class="border-top-0">Time Slot</th>
+                                                  
+                                                  <th scope="col" class="border-top-0">Action</th>
+                                              </tr>
+                                          </thead>
+                                          <tbody>
+                                              <tr *ngFor="let intvr of interviewer.time_slots">
+                                                  <td>{{intvr.time_slot}}</td>
+                                                 
+                                                  <td >
+                                                      <button type="button" class="btn btn-sm btn-danger" data-tooltip="tooltip"
+                                                      data-placement="bottom"
+                                                      title="Delete Selected Job Description and Stage" (click)="removeSlot(intvr.time_slot)"><i
+                                                          class="fa fa-trash"></i></button>
+                                                          <!-- <button type="button" class="ml-2 btn btn-sm btn-warning" data-tooltip="tooltip"
+                                                      data-placement="bottom"
+                                                      title="Change Selected edit Job Description"><i
+                                                          class="fas fa-highlighter text-light"></i></button> -->
+                                                  </td>
+                                              </tr>
+                                            
+                                             
+                                          </tbody>
+                                      </table>
+                                  </div>
+                                  </div>
+                                
+                            </div>
+
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+            <!-- Other Details -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Zoom Details</h6>
+                        </div>
+
+                    </div>
+
+                    <form #f1="ngForm">
+                        
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Zoom Username</label>
+                                <!-- [pattern]=constants.zoomUsername -->
+                                <input type="text" class="form-control" placeholder="" id="zoom_username"
+                                    [(ngModel)]="interviewer.zoom_username" name="zoom_username"     #zoom_username="ngModel"
+                                    [ngClass]="{ 'is-invalid':zoom_username.invalid&& zoom_username.touched }"  />
+                                <!-- <div *ngIf="zoom_username.invalid && zoom_username.touched" class="invalid-feedback">
+                                    <div *ngIf="zoom_username.errors.required ">Username is required</div> -->
+                                    <!-- <div *ngIf="zoom_username.errors.pattern">Username should be valid</div> -->
+                                <!-- </div> -->
+                            </div>
+                            <div class="col form-group">
+                                <!-- [pattern]=constants.password -->
+                                <label >Zoom Password</label>
+                                <input type="password" class="form-control" placeholder="" id="zoom_password"
+                                [(ngModel)]="interviewer.zoom_password" name="zoom_password"    #zoom_password="ngModel"
+                                [ngClass]="{ 'is-invalid':zoom_password.invalid&& zoom_password.touched }"  />
+                            <!-- <div *ngIf="zoom_password.invalid && zoom_password.touched" class="invalid-feedback">
+                                <div *ngIf="zoom_password.errors.required ">Password is required</div> -->
+                                <!-- <div *ngIf="zoom_password.errors.pattern">Password should be valid</div> -->
+                            <!-- </div> -->
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label  >Zoom API Key</label>
+                                <!-- <input type="text" class="form-control" placeholder="Zoom API Key"> -->
+                                <input type="text" class="form-control" placeholder="" id="zoom_api_key"
+                                    [(ngModel)]="interviewer.zoom_api_key" name="zoom_api_key" >
+                            </div>
+                            <div class="col form-group">
+                                <label >Zoom API Secret</label>
+                                <input type="text" class="form-control" placeholder="" id="zoom_api_secret"
+                                    [(ngModel)]="interviewer.zoom_api_secret" name="zoom_api_secret" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Zoom Token</label>
+                                <textarea class="form-control" rows="3" type="text" class="form-control" placeholder="" id="zoom_token"
+                                [(ngModel)]="interviewer.zoom_token" name="zoom_token" ></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h6 class="card-title">Google Meet Details</h6>
+                        </div>
+
+                    </div>
+
+                    <form #f2="ngForm">
+                        
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Google Meet Username</label>
+                                <!-- [pattern]=constants.zoomUsername -->
+                                <input type="text" class="form-control" placeholder="" id="gmeet_username"
+                                    [(ngModel)]="interviewer.gmeet_username" name="gmeet_username"     #gmeet_username="ngModel"
+                                    [ngClass]="{ 'is-invalid':gmeet_username.invalid&& gmeet_username.touched }"  />
+                                <!-- <div *ngIf="gmeet_username.invalid && gmeet_username.touched" class="invalid-feedback">
+                                    <div *ngIf="gmeet_username.errors.required ">Username is required</div> -->
+                                    <!-- <div *ngIf="gmeet_username.errors.pattern">Username should be valid</div> -->
+                                <!-- </div> -->
+                            </div>
+                            <div class="col form-group">
+                                <!-- [pattern]=constants.password -->
+                                <label >Google Meet Password</label>
+                                <input type="password" class="form-control" placeholder="" id="gmeet_password"
+                                [(ngModel)]="interviewer.gmeet_password" name="gmeet_password"    #gmeet_password="ngModel"
+                                [ngClass]="{ 'is-invalid':gmeet_password.invalid&& gmeet_password.touched }"  />
+                            <!-- <div *ngIf="gmeet_password.invalid && gmeet_password.touched" class="invalid-feedback">
+                                <div *ngIf="gmeet_password.errors.required ">Password is required</div> -->
+                                <!-- <div *ngIf="gmeet_password.errors.pattern">Password should be valid</div> -->
+                            <!-- </div> -->
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label  >Google Meet API Key</label>
+                                <!-- <input type="text" class="form-control" placeholder="gmeet API Key"> -->
+                                <input type="text" class="form-control" placeholder="" id="gmeet_api_key"
+                                    [(ngModel)]="interviewer.gmeet_api_key" name="gmeet_api_key" >
+                            </div>
+                            <div class="col form-group">
+                                <label >Google Meet API Secret</label>
+                                <input type="text" class="form-control" placeholder="" id="gmeet_api_secret"
+                                    [(ngModel)]="interviewer.gmeet_api_secret" name="gmeet_api_secret" >
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label >Google Meet Token</label>
+                                <textarea class="form-control" rows="3" type="text" class="form-control" placeholder="" id="gmeet_token"
+                                [(ngModel)]="interviewer.gmeet_token" name="gmeet_token" ></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save
+                        & add another</button>
+                </div> -->
+             
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid||!interviewer.designation" (click)="onSubmit();f.resetForm();f1.resetForm();f2.resetForm();"
+                        class="btn btn-primary" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP ">Save</button>
+                    <button type="submit" [disabled]="f.invalid||!interviewer.designation" (click)="onEdit();f.resetForm();f1.resetForm();f2.resetForm();"
+                        class="btn btn-primary" *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

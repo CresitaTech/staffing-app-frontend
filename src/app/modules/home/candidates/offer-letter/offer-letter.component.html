@@ -1,0 +1,482 @@
+
+ <app-filter
+ #filter
+ [params]="filterOn"
+ (filterEvt)="
+   displayFilter = $event.displayFilter; fetchCollectionList($event.path)
+ "
+>
+</app-filter>
+
+<div id="addOfferLetter" class="sideCandidate">
+  <a href="javascript:void(0)" class="closebtn" (click)= "closeOfferLetter()">&times;</a>
+
+ <app-add-offer-letter
+   *ngIf="eventId === constants.ADD"
+   (closeAddEditPage)="closeOfferLetter(); eventId = 'ADD'"
+   (refreshListEvt)="refreshPage()"
+   [eventId]="eventId"
+ >
+ </app-add-offer-letter>
+ 
+ <app-add-offer-letter
+   *ngIf="eventId === constants.EDIT"
+   (closeAddEditPage)="closeOfferLetter(); eventId = 'EDIT'"
+   [eventId]="eventId"
+   (refreshListEvt)="refreshPage()"
+   [indexAsInput]="indexAsInput"
+ ></app-add-offer-letter>
+</div>
+
+
+
+<div class="search-wrap">
+   <div class="container-fluid">
+     <div class="row">
+       <div class="col">
+         <div class="row mt-3 page-header">
+           <div class="col-auto">
+             <h4 class="page-title mb-0">Offer Letter Request</h4>
+             <nav aria-label="breadcrumb">
+               <ol class="breadcrumb mb-0">
+                 <li class="breadcrumb-item"><a>Home</a></li>
+                 <li class="breadcrumb-item active" aria-current="page">
+                     Offer Letter Requests
+                 </li>
+               </ol>
+             </nav>
+           </div>
+           <div class="col ml-auto">
+             <div class="form-row">
+               <div class="col-auto ml-auto">
+
+
+                 <button
+                   type="button"
+                   class="btn btn-primary"
+                   (click)="openOfferLetter(constants.ADD,undefined); eventId === constants.ADD"
+                 >
+                   <i class="fa fa-user-plus" aria-hidden="true"></i> Add Offer Letter Requests
+                 </button>
+               </div>
+             </div>
+           </div>
+         </div>
+
+         <div class="bg-gray mt-2 p-4 search-box-section rounded">
+           <form #f1="ngForm" (ngSubmit)="fetchCollectionList()">
+             <div class="search-box">
+               <div class="form-row">
+                 <div class="col">
+                   <div class="input-group">
+                     <div class="input-group-prepend">
+                       <span href="" class="input-group-text"
+                         ><i class="fa fa-search" aria-hidden="true"></i
+                       ></span>
+                     </div>
+                     <input
+                       class="form-control"
+                       type="text"
+                       [(ngModel)]="search"
+                       name="searchbox"
+                       placeholder="Search by Candidates first name "
+                     />
+                   </div>
+                 </div>
+                 <div class="col-auto">
+                   <button type="submit" class="btn btn-primary">Search</button>
+                 </div>
+                 <div class="col-auto">
+                   <button
+                     type="button"
+                     class="btn btn-primary"
+                     (click)="openFilter()"
+                   >
+                     Filters
+                   </button>
+                 </div>
+                 <div
+                   *ngIf="
+                     presentRole === role.RECRUITER ||
+                     presentRole === role.RECRUITERMANAGER ||
+                     presentRole === role.BDMMANAGER ||
+                     presentRole === role.ADMIN
+                   "
+                   class="col-auto"
+                 >
+
+                 </div>
+               </div>
+             </div>
+           </form>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+
+ <div class="container-fluid mt-3">
+   <app-display-filter
+     [displayFilter]="displayFilter"
+     (removeFilter)="removeFilter($event)"
+   ></app-display-filter>
+
+   <div class="row">
+     <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+       <!-- Designation -->
+       <div class="form-row shortby-section">
+         <div class="col-auto">
+           <div class="form-check form-group mt-2">
+             <input
+               class="form-check-input"
+               [(ngModel)]="masterSelected"
+               name="candidate_list"
+               type="checkbox"
+               value="c1"
+               (change)="checkUncheckAll()"
+               id=""
+             />
+             <label class="form-check-label"> Select All </label>
+           </div>
+         </div>
+
+         <div class="col-auto">
+           <select id="actionType" class="form-control">
+             <option>Select Action</option>
+             <option value="delete">Delete Selected Candidates</option>
+
+           </select>
+         </div>
+         <div class="col-auto">
+           <button
+             type="submit"
+             *ngIf="count === 0"
+             (click)="selectHandler()"
+             disabled
+             id="goButton"
+             class="btn btn-primary"
+           >
+             Go
+           </button>
+           <button
+             *ngIf="count !== 0"
+             type="button"
+             id="goButton"
+             (click)="selectHandler()"
+             class="btn btn-primary"
+           >
+             Go
+           </button>
+         </div>
+         <div class="col-auto line-height-38">
+           {{ count }} of {{ collectionSize }} selected
+         </div>
+         <div class="col-auto line-height-38 ml-auto">Page Size:</div>
+         <div class="col-auto">
+           <select id="page-size" class="form-control" (change)="setPageSize()">
+             <option value="10" selected="">10</option>
+             <option value="20">20</option>
+             <option value="50">50</option>
+             <option value="100">100</option>
+             <option value="500">500</option>
+             <option value="1000">1000</option>
+           </select>
+         </div>
+         <div class="col-auto shortby-dropdown">
+           <select
+             id="sortAs"
+             class="form-control"
+             (change)="changeSortingOrder(); fetchCollectionList()"
+           >
+             <option value="" disabled>Sort by date</option>
+             <option value="true">Latest</option>
+             <option value="false">Oldest</option>
+           </select>
+         </div>
+       </div>
+       <div
+         class="card mb-1 candidate-details"
+         [ngClass]="{
+           'bg-green-light': selectedItemIndex === index,
+           'border-green-light': selectedItemIndex === index
+         }"
+         *ngFor="let c of collection; let index = index"
+       >
+         <div class="card-body">
+           <div class="form-row">
+             <div class="col-auto candidate-checkbox">
+               <div class="form-check form-group">
+                 <input
+                   class="form-check-input"
+                   [(ngModel)]="c.isSelected"
+                   type="checkbox"
+                   value="{{ c.id }}"
+                   name="candidate_list"
+                   (change)="isAllSelected()"
+                   id=""
+                 />
+                 <!-- <input class="form-check-input" type="checkbox" value="" id=""> -->
+               </div>
+             </div>
+             <div class="col" (click)="openRowDetail(index)">
+               <div class="label-value" *ngIf="c.candidate_name">
+                 {{ c.candidate_name }}
+               </div>
+               <div class="label-value" *ngIf="!c.candidate_name">
+                 --
+               </div>
+               <div class="label-name">Candidate Name</div>
+             </div>
+             <div class="col" (click)="openRowDetail(index)">
+               <div class="label-value">
+                 {{ c.email ? c.email : "--" }}
+               </div>
+               <div class="label-name">Email</div>
+             </div>
+             <div class="col" (click)="openRowDetail(index)">
+               <div class="label-value">
+                 {{ c.contact_no ? c.contact_no : "--" }}
+               </div>
+               <div class="label-name">Contact Number</div>
+             </div>
+             <div class="col-auto mr-4" (click)="openRowDetail(index)">
+               <div class="label-value">
+                 {{
+                   c.years_of_exp ? c.years_of_exp : "--"
+                 }}
+                 Year(s)
+               </div>
+               <div class="label-name">Years of Experience</div>
+             </div>
+             <div class="col-auto ml-auto">
+               <div class="btn-group">
+                 <button
+                   type="button"
+                   class="btn btn-light dropdown-toggle"
+                   data-toggle="dropdown"
+                   aria-haspopup="true"
+                   aria-expanded="false"
+                 >
+                   Action
+                 </button>
+                 <div class="dropdown-menu dropdown-menu-right">
+                   <!-- <a class="dropdown-item" *ngIf="selectedItemIndex !== index" (click)="openRowDetail(index)"><i
+                       class="fa fa-eye" aria-hidden="true"></i> View</a> -->
+                   <!--<a
+                     class="dropdown-item"
+                     (click)="openOfferLetter(constants.EDIT, index)"
+                     ><i class="fas fa-user-edit"></i> Edit</a
+                   >-->
+                   <a
+                     class="dropdown-item"
+                     (click)="doAction(constants.DELETE, c.id)"><i class="fa fa-trash" aria-hidden="true"></i> Delete</a>
+
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
+         <div class="candidate-details-full border-top" *ngIf="selectedItemIndex === index">
+             <div class="row">
+                 <div class="col">
+                     <div class="card-body">
+                         <div class="row">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.skill_set ? c.skill_set : "--"
+                                 }}</div>
+                                 <div class="label-name">Skill Set</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.date_of_birth ? c.date_of_birth : "--"
+                                 }}</div>
+                                 <div class="label-name">Date of Birth</div>
+                             </div>
+                         </div>
+                         <div class="row ">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.degree ? c.degree : "--"
+                                 }}</div>
+                                 <div class="label-name">Highest Education (Degree)</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.percentage ? c.percentage : "--"
+                                 }}</div>
+                                 <div class="label-name">Highest Education (CGPA / Percentage)</div>
+                             </div>
+                         </div>
+
+                         <div class="row">
+
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.university_name ? c.university_name : "--"
+                                 }}</div>
+                                 <div class="label-name">Highest Education (University Name)</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.pan_no ? c.pan_no : "--"
+                                 }}
+                                 </div>
+                                 <div class="label-name">PAN Number</div>
+                             </div>
+                         </div>
+                         <div class="row">
+
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.qualification_completion ? c.qualification_completion : "--"
+                                 }}</div>
+                                 <div class="label-name">Highest Qualification Completion Month and year</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.current_location ? c.current_location : "--"
+                                 }}</div>
+                                 <div class="label-name">Current Location</div>
+                             </div>
+
+                         </div>
+                         <div class="row">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.tentative_joining_date ? c.tentative_joining_date : "--"
+                                 }}</div>
+                                 <div class="label-name">Tentative DOJ with Client</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.client_name ? c.client_name : "--"
+                                 }}</div>
+                                 <div class="label-name">Name of the Client</div>
+                             </div>
+                         </div>
+                         <div class="row ">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.client_location ? c.client_location : "--"
+                                 }}</div>
+                                 <div class="label-name">Client Location</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.ecms_id ? c.ecms_id : "--"
+                                 }}</div>
+                                 <div class="label-name">ECMS ID</div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.candidate_ctc ? c.candidate_ctc : "--"
+                                 }}</div>
+                                 <div class="label-name">Our submission rate (LPA) - CTC of the candidate</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.client_rate ? c.client_rate : "--"
+                                 }}</div>
+                                 <div class="label-name">Client rate - billing rate</div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.joining_date ? c.joining_date : "--"
+                                 }}</div>
+                                 <div class="label-name">Joining Date</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.contract_duration ? c.contract_duration : "--"
+                                 }}</div>
+                                 <div class="label-name">Contract Duration</div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.expected_start_date ? c.expected_start_date : "--"
+                                 }}</div>
+                                 <div class="label-name">Expected Start date</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.bgc_steps ? c.bgc_steps : "--"
+                                 }}</div>
+                                 <div class="label-name">BGC Steps if any</div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.expected_working_hours ? c.expected_working_hours : "--"
+                                 }}</div>
+                                 <div class="label-name">Expected working hours/timing on the projects</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.laptop_provided ? c.laptop_provided : "--"
+                                 }}</div>
+                                 <div class="label-name">Details about whether the laptop will be provided by the client or otherwise</div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col mb-3">
+                                 <div class="label-value"> {{ c.candidate_information_sheet ? c.candidate_information_sheet : "--" }}
+                                     <button type="button" class="btn btn-sm btn-primary ml-2" (click)="
+                                     openResumePopUp(c.candidate_information_sheet, index, c.email)
+                                   ">View
+                                     </button>
+                                 </div>
+                                 <div class="label-name">Candidate Information sheet</div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value"> {{ c.resume ? c.resume : "--" }}
+                                     <button type="button" class="btn btn-sm btn-primary ml-2" (click)="
+                                     openResumePopUp(c.resume, index, c.email)
+                                   "
+                                   data-tooltip="tooltip"
+                                   data-placement="bottom"
+                                   >View
+                                     </button>
+                                 </div>
+                                 <div class="label-name">Resume in pdf format </div>
+                             </div>
+                         </div>
+                         <div class="row">
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.provident_fund ? c.provident_fund : "--"
+                                 }}</div>
+                                 <div class="label-name">Candidate is opting for Provident Fund. </div>
+                             </div>
+                             <div class="col mb-3">
+                                 <div class="label-value">{{
+                                   c.created_at ? c.created_at : "--"
+                                 }}</div>
+                                 <div class="label-name">Created At</div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+       </div>
+       <app-paging
+         [page]="page"
+         [pageSize]="limit"
+         [collectionSize]="collectionSize"
+         (pageChangeEvt)="page = $event; fetchCollectionList()"
+       ></app-paging>
+     </div>
+   </div>
+ </div>
+
+
+
+

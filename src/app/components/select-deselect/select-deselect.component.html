@@ -1,0 +1,100 @@
+<div class="form-row">
+  <div class="col">
+    <div class="card available-permissions-height">
+      <div class="card-header p-2">
+        {{available_title}} <i class="fas fa-question-circle" data-tooltip="tooltip" data-placement="bottom" title=""
+          [attr.data-original-title]="available_hint"></i>
+      </div>
+      <div class="card-body p-0">
+        <div class="form-row p-2">
+          <div class="col">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend">
+                <span href="" class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+              </div>
+              <input class="form-control" type="text" placeholder="Filter" [(ngModel)]="search">
+            </div>
+          </div>
+        </div>
+        <div class="border-top">
+          <div class="form-row">
+            <div class="col">
+              <select multiple="" class="form-control form-control-sm" id="all_collection"
+                [(ngModel)]="collection_selected">
+                <ng-container *ngIf="avoid_pipe">
+                  <option *ngFor="let p of available_all | groupFilterPipe:search" [ngValue]="p">{{p.name}}</option>
+                </ng-container>
+                <ng-container *ngIf="!avoid_pipe">
+                  <option *ngFor="let p of available_all | permissionFilterPipe:search" [ngValue]="p">
+                    {{p | permissionPipe | titlecase}}
+                  </option>
+                </ng-container>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="form-row mt-1">
+      <div class="col text-center">
+        <a class="btn-link" (click)="chooseAll()">Choose All <i class="fas fa-arrow-alt-circle-right"
+            data-tooltip="tooltip" data-placement="bottom" title=""
+            data-original-title="Click to choose all permissions at once."></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="col-auto">
+    <div class="arrow-button">
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-sm btn-secondary form-group" (click)="addPermission()">
+            <i class="fas fa-arrow-alt-circle-right"></i>
+          </button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button type="button" class="btn btn-sm btn-secondary form-group" (click)="removePermission()">
+            <i class="fas fa-arrow-alt-circle-left"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="col">
+    <div class="card chosen-permissions-height">
+      <div class="card-header bg-green-light p-2">
+        {{choosen_title}} <i class="fas fa-question-circle" data-tooltip="tooltip" data-placement="bottom" title=""
+          [attr.data-original-title]="choosen_hint"></i>
+      </div>
+      <div class="card-body p-0">
+        <div class="form-row">
+          <div class="col">
+            <select multiple="" class="form-control form-control-sm" id="all_collection"
+              [(ngModel)]="permitted_selected">
+              <ng-container *ngIf="avoid_pipe">
+                <option *ngFor="let p of choosen_all" [ngValue]="p">{{p.name}}</option>
+              </ng-container>
+              <ng-container *ngIf="!avoid_pipe">
+                <option *ngFor="let p of choosen_all" [ngValue]="p">
+                  {{p | permissionPipe | titlecase}}
+                </option>
+              </ng-container>
+            </select>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="form-row mt-1">
+      <div class="col text-center">
+        <a class="btn-link" (click)="removeAll()"><i class="fas fa-arrow-alt-circle-left" data-tooltip="tooltip"
+            data-placement="bottom" title="" data-original-title="Click to remove all chosen permissions at once."></i>
+          Remove All</a>
+      </div>
+    </div>
+  </div>
+</div>

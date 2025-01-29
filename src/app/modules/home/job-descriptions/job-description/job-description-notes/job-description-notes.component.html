@@ -1,0 +1,99 @@
+<button class="btn btn-link closebtn" (click)="closeFunction(true);f.resetForm();" *ngIf="!isPopup">&times;</button>
+<!-- <button class="btn btn-link closebtn" (click)="activeModal.dismiss()" *ngIf="isPopup">&times;</button> -->
+
+
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <form #f="ngForm">
+                <div class="form-row mb-3 heading-sec">
+                    <div class="col">
+                        <h5 *ngIf="eventId==='add'" class="card-title">Add Job Description</h5>
+                        <h5 *ngIf="eventId==='edit' || eventId==='edit_pop'" class="card-title">Add Job Notes</h5>
+                        <h5 *ngIf="action==='view'" class="card-title">View Job Description</h5>
+                    </div>
+                    <!-- <div class="col-auto ml-auto" *ngIf="eventId==='add'">
+                        <button type="button" class="btn btn-primary btn-primary-dark">Save & add another</button>
+                    </div> -->
+                   
+
+                    <div class="col-auto ml-auto" *ngIf="eventId==='update'|| eventId==='edit_pop'">
+                        <button type="submit" [disabled]="f.invalid||!job_description.client_name||!job_description.default_assignee ||
+                        ((!job_description.min_salary && !job_description.max_salary)&&
+                        (!job_description.min_rate && !job_description.max_rate))||
+                        (!job_description.min_years_of_experience&& !job_description.max_years_of_experience)||
+                        (job_description.employment_type!==constants.c2c && !job_description.employment_type_description)
+                        ||(job_description.revenue_frequency !=='One Time' && job_description.revenue_frequency !=='Recurring')" (click)="onEdit();f.resetForm();"
+                            class="btn btn-primary">Modify</button>
+                    </div>
+
+                    <div class="col-auto ml-auto" *ngIf="eventId==='edit'">
+                        <button type="submit" [disabled]="f.invalid||!job_description.client_name
+                        ||!job_description.job_description_notes" (click)="onSubmit();f.resetForm()"
+                            class="btn btn-primary">Save</button>
+                    </div>
+
+                    <!-- <button type="button" class="close" (click)="activeModal.dismiss()" *ngIf="isPopup">&times;</button> -->
+                    <div class="col-auto">
+                        <button   type="button" class="close" aria-label="Close" #closebutton (click)="activeModal.dismiss()" *ngIf="isPopup">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        
+                    </div>
+                   
+                   
+                </div>
+
+                <!-- Details -->
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h6>Details</h6>
+                        <div>
+                            <label>Job Id: <strong>{{job_description.job_id}}</strong></label>
+                        </div>
+
+                        <app-client-inline [item]="job_description.client_name"  readonly disabled>
+                        </app-client-inline>
+
+                        
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Job Title</label>
+                                <input type="text" class="form-control " id="" placeholder=""
+                                    [(ngModel)]="job_description.job_title" #jobTitle="ngModel" name="job_title"
+                                    [ngClass]="{ 'is-invalid':jobTitle.invalid && jobTitle.touched }" required readonly>
+                                <div *ngIf="jobTitle.invalid " class="invalid-feedback">
+                                    <div *ngIf="jobTitle.errors.required">Job title is required.</div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Job Description Notes</label>
+                                <app-editor [id]="'editor1'" [content]="job_description.job_description_notes" [hasTags]="false"
+                                    (contentChanged)="job_description.job_description_notes = $event"></app-editor>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="form-row button-sec">
+                  
+                    <div class="col-auto ml-auto" *ngIf="eventId==='edit'">
+                        <button type="submit" [disabled]="f.invalid||!job_description.job_description_notes"
+                        (click)="onSubmit();f.resetForm();" 
+                            class="btn btn-primary">Save</button>
+                    </div>
+                    <div class="col-auto ml-auto" *ngIf="eventId==='update'|| eventId==='edit_pop'">
+                        <button type="submit" [disabled]="f.invalid||!job_description.job_description_notes"
+                        (click)="onEdit();f.resetForm();"
+                            class="btn btn-primary">Modify</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

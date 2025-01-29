@@ -1,0 +1,58 @@
+
+<div class="modal-header">
+  <h5 class="modal-title">Resume</h5>
+
+ <!--<div class="col-auto ml-auto">
+   
+               <div class="btn-group">
+                <button type="button" class="btn btn-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+                  Action
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                 
+                  <a class="dropdown-item" (click)="selectAction(constants.EMAIL)">Send Mail</a> 
+                  <a class="dropdown-item" (click)="selectAction(constants.RTR)">Create RTR</a>
+                  <a class="dropdown-item" (click)="selectAction(constants.ACTIVITY)">Candidate Status</a>
+                  <a class="dropdown-item" (click)="selectAction(constants.REPOSITORY)"> Repository</a>
+                  <a class="dropdown-item" (click)="selectAction(constants.CARD)">Placement Card</a>
+                </div>
+              </div> 
+</div>-->
+<!-- <div class="col-auto ml-auto">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span href="" class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+    </div>
+    <input class="form-control" type="text" id="keyword"  name="searchbox" (keyup.enter)="searchKeyWord()"
+      placeholder="Search by Keywords ">
+  </div>
+</div> -->
+<div class="col-auto pl-0">
+  <button type="button"  class="close pl-0 pr-0" aria-label="Close" (click)="activeModal.dismiss()"> 
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+</div>
+
+<!-- 
+<ngx-doc-viewer [url]="url" viewer="mammoth" style="width:100%;height:500vh;">
+</ngx-doc-viewer> -->
+
+<ngx-doc-viewer [url]="url" viewer="google"   style="width:100%;height:93vh;">
+</ngx-doc-viewer>
+
+<!-- <script type="text/javascript">
+  var eventMethod = window.addEventListener
+  ? "addEventListener"
+  : "attachEvent";
+  var eventer = window[eventMethod];
+  var messageEvent = eventMethod === "attachEvent"
+  ? "onmessage"
+  : "message";
+  eventer(messageEvent, function (e) {
+  //data you receive from parent is stored inside e.data
+  $('#output').text(e.data);
+  });
+ 
+ </script> -->

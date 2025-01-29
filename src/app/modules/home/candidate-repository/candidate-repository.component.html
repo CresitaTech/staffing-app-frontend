@@ -1,0 +1,400 @@
+<div id="addCandidateRepositery" class="sideCandidate">
+  <a
+    href="javascript:void(0)"
+    class="closebtn"
+    (click)="closeAddCandidateRepositery()"
+    >&times;</a
+  >
+
+  <app-add-repository
+    *ngIf="eventId === constants.ADD"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [eventId]="eventId"
+  >
+  </app-add-repository>
+  <app-add-repository
+    *ngIf="eventId === constants.EDIT"
+    [eventId]="eventId"
+    (refreshListEvt)="refreshPage(); eventId = undefined"
+    [indexAsInput]="indexAsInput"
+  ></app-add-repository>
+</div>
+
+<div class="search-wrap">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <div class="row mt-3 page-header">
+          <div class="col-auto">
+            <h4 class="page-title mb-0">Candidate Repositery</h4>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a>Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">
+                  Candidate Repositery
+                </li>
+              </ol>
+            </nav>
+          </div>
+          <div class="col ml-auto">
+            <div class="form-row">
+              <div class="col-auto ml-auto">
+                <!-- <button type="button" class="btn btn-primary" onclick="openImport()">
+                                                <i class="fa fa-download" aria-hidden="true"></i> Import
+                                            </button>
+                                            <button type="button" class="btn btn-primary" onclick="openExport()">
+                                                <i class="fa fa-share-square" aria-hidden="true"></i> Export
+                                            </button> -->
+                <!--<button type="button" class="btn btn-primary" (click)="openAddCandidateRepositery(constants.ADD, undefined)">
+                                                <i class="fa fa-user-plus" aria-hidden="true"></i> Add Candidate Repositery
+                                            </button>-->
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-gray mt-2 p-4 rounded">
+          <form (ngSubmit)="fetchCollectionList()">
+            <div class="search-box">
+              <div class="form-row">
+                <div class="col">
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span href="" class="input-group-text"
+                        ><i class="fa fa-search" aria-hidden="true"></i
+                      ></span>
+                    </div>
+                    <input
+                      class="form-control"
+                      type="text"
+                      [(ngModel)]="search"
+                      name="searchbox"
+                      placeholder="Search by candidate first name, repo name"
+                    />
+                  </div>
+                </div>
+                <div class="col-auto">
+                  <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt-3">
+  <div class="row">
+    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+      <!-- Designation -->
+      <div class="form-row shortby-section">
+        <div class="col-auto">
+          <div class="form-check form-group mt-2">
+            <input
+              class="form-check-input"
+              [(ngModel)]="masterSelected"
+              name="candidate_list"
+              type="checkbox"
+              value="c1"
+              (change)="checkUncheckAll()"
+              id="candidate_list"
+            />
+            <label class="form-check-label"> Select All </label>
+          </div>
+        </div>
+
+        <div class="col-auto">
+          <select id="actionType" class="form-control">
+            <option>Select Action</option>
+            <option value="delete">Delete Selected Repository</option>
+          </select>
+        </div>
+        <div class="col-auto">
+          <button
+            type="button"
+            *ngIf="count === 0"
+            disabled
+            (click)="selectHandler()"
+            id="goButton"
+            class="btn btn-primary"
+          >
+            Go
+          </button>
+          <button
+            *ngIf="count !== 0"
+            type="button"
+            id="goButton"
+            (click)="selectHandler()"
+            class="btn btn-primary"
+          >
+            Go
+          </button>
+        </div>
+        <div class="col-auto line-height-38">
+          {{ count }} of {{ collectionSize }} selected
+        </div>
+        <div class="col-auto ml-auto shortby-dropdown">
+          <select
+            id="sortAs"
+            class="form-control"
+            (change)="changeSortingOrder(); fetchCollectionList()"
+          >
+            <option value="" disabled>Sort by date</option>
+            <option value="true">Latest</option>
+            <option value="false">Oldest</option>
+          </select>
+        </div>
+      </div>
+
+      <div
+        class="card mb-1 candidate-details"
+        [ngClass]="{
+          'bg-green-light': selectedItemIndex === index,
+          'border-green-light': selectedItemIndex === index
+        }"
+        *ngFor="
+          let c of collection | filter: searchedKeyword;
+          let index = index
+        "
+      >
+        <div class="card-body">
+          <div class="form-row">
+            <div class="col-auto candidate-checkbox">
+              <div class="form-check form-group">
+                <input
+                  class="form-check-input"
+                  [(ngModel)]="c.isSelected"
+                  type="checkbox"
+                  value="{{ c.id }}"
+                  name="isSelected"
+                  (change)="isAllSelected()"
+                  id="isSelected"
+                />
+              </div>
+            </div>
+            <div class="col pl-0" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ c.repo_name ? c.repo_name : "--" }}
+              </div>
+              <div class="label-name">Repo Name</div>
+            </div>
+
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">
+                {{ c.candidate_name ? c.candidate_name.first_name : "--" }}
+                {{ c.candidate_name ? c.candidate_name.last_name : "--" }}
+              </div>
+              <div class="label-name">Candidate Name</div>
+            </div>
+
+            <div class="col" (click)="openRowDetail(index)">
+              <div class="label-value">{{ c.created_at | date: "medium" }}</div>
+              <div class="label-name">Created At</div>
+            </div>
+            <div class="col-auto ml-auto">
+              <div class="btn-group">
+                <button
+                  type="button"
+                  class="btn btn-light dropdown-toggle"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  Action
+                </button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <a
+                    class="dropdown-item"
+                    *ngIf="selectedItemIndex !== index"
+                    (click)="openRowDetail(index)"
+                    ><i class="fa fa-eye" aria-hidden="true"></i> View</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    (click)="openAddCandidateRepositery(constants.EDIT, index)"
+                    ><i class="fas fa-user-edit"></i> Edit</a
+                  >
+                  <a class="dropdown-item" (click)="deleteCollectionItem(c.id)"
+                    ><i class="fa fa-trash" aria-hidden="true"></i> Delete</a
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="candidate-details-full border-top"
+          *ngIf="selectedItemIndex === index"
+        >
+          <div class="row">
+            <div class="col">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.resume ? c.resume : "--" }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.resume"
+                        href="{{ ip }}{{ c.resume }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">Resume</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.driving_license ? c.driving_license : "--" }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.driving_license"
+                        href="{{ ip }}{{ c.driving_license }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">Driving License</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.offer_letter ? c.offer_letter : "--" }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.offer_letter"
+                        href="{{ ip }}{{ c.offer_letter }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">Offer Letter</div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.passport ? c.passport : "--" }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.passport"
+                        href="{{ ip }}{{ c.passport }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">Passport</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.rtr ? c.rtr : "--" }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.rtr"
+                        href="{{ ip }}{{ c.rtr }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">RTR</div>
+                  </div>
+                </div>
+                <div class="row mb-3"></div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.salary_slip ? c.salary_slip : "--" }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.salary_slip"
+                        href="{{ ip }}{{ c.salary_slip }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">Salary Slip</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.i94_document ? c.i94_document : "--" }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.i94_document"
+                        href="{{ ip }}{{ c.i94_document }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">I94 Document</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{ c.visa_copy ? c.visa_copy : "--" }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.visa_copy"
+                        href="{{ ip }}{{ c.visa_copy }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">Visa Copy</div>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col">
+                    <div class="label-value">
+                      {{
+                        c.educational_document ? c.educational_document : "--"
+                      }}
+                      <a
+                        type="button"
+                        class="btn btn-sm btn-primary ml-2"
+                        *ngIf="c.educational_document"
+                        href="{{ ip }}{{ c.educational_document }}"
+                        target="_blank"
+                        >View</a
+                      >
+                    </div>
+                    <div class="label-name">Educational Document</div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    <div class="label-value">{{ c.description }}</div>
+                    <div class="label-name">Description</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <app-paging
+        [page]="page"
+        [pageSize]="limit"
+        [collectionSize]="collectionSize"
+        (pageChangeEvt)="page = $event; fetchCollectionList()"
+      ></app-paging>
+    </div>
+  </div>
+</div>

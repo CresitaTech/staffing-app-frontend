@@ -1,0 +1,342 @@
+<!-- Sidebar  -->
+
+<div class="left_col scroll-view">
+  <!-- sidebar menu -->
+  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+      <div class="navbar nav_title" style="border: 0">
+        <a class="site_title">
+          <i>
+            <img src="/assets/images/logo-icon.png" />
+          </i>
+          <span>
+            <img src="/assets/images/01-logo-white-text.png" />
+          </span>
+        </a>
+      </div>
+      <div class="clearfix"></div>
+      <!-- <h3>General</h3> -->
+      <ul class="nav side-menu">
+        <li routerLink="/home/dashboard" routerLinkActive="active">
+          <a class="main-li">
+            <i class="fas fa-home"></i>
+            <span>Home </span>
+          </a>
+        </li>
+
+        <li routerLinkActive="active" *ngIf="
+            canLoad([
+              predefined_permissions.CANDIDATES,
+              predefined_permissions.ACTIVITY_STATUS_MODEL,
+              predefined_permissions.CANDIDATE_EMAIL_TEMPLATE,
+              predefined_permissions.CANDIDATE_PLACEMENT_CARD,
+              predefined_permissions.RTR,
+              predefined_permissions.CANDIDATE_REPOSITORY
+            ])
+          ">
+          <a class="main-li" href="#candidatesSubmenu" data-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-users"></i>
+            Candidates <span class="fa fa-chevron-down"></span>
+          </a>
+
+          <ul class="nav child_menu" id="candidatesSubmenu">
+            <li routerLink="/home/candidates/candidate" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.CANDIDATES])">
+              <a> Candidates </a>
+            </li>
+            <li routerLink="/home/candidates/activity" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.ACTIVITY_STATUS_MODEL])">
+              <a> Candidates Status </a>
+            </li>
+            <li routerLink="/home/candidates/email-template" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.CANDIDATE_EMAIL_TEMPLATE])">
+              <a> Email Templates </a>
+            </li>
+            <li routerLink="/home/candidates/placement" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.CANDIDATE_PLACEMENT_CARD])">
+              <a> Placement Cards </a>
+            </li>
+            <li routerLink="/home/candidates/rtr" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.RTR])">
+              <a> RTR </a>
+            </li>
+            <li routerLink="/home/candidate-repository" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.CANDIDATE_REPOSITORY])">
+              <a> Candidate Repository </a>
+            </li>
+            <li routerLink="/home/candidates/offer-letter" routerLinkActive="active">
+              <a> Offer Letter Request </a>
+            </li>
+          </ul>
+        </li>
+
+        <li routerLinkActive="active" routerLink="/home/client" *ngIf="canLoad([predefined_permissions.CLIENT])">
+          <a class="main-li">
+            <i class="fas icon-clients"></i>
+            Clients
+          </a>
+        </li>
+
+
+
+        
+
+        <li routerLinkActive="active" routerLink="/home/job-descriptions/job-description"
+          *ngIf="canLoad([predefined_permissions.JOB])">
+          <a class="main-li">
+            <i class="fas icon-active-jobs"></i>
+            Jobs
+          </a>
+        </li>
+
+
+
+<!-- 
+        <li routerLinkActive="active" *ngIf="
+            canLoad([
+              predefined_permissions.JOB
+            ])
+          ">
+          <a class="main-li" href="#jobSubmenu" data-toggle="collapse" aria-expanded="false">
+            <i class="fas icon-interviews"></i>
+            Jobs <span class="fa fa-chevron-down"></span>
+          </a>
+          <ul class="nav child_menu" id="jobSubmenu">
+            <li routerLink="/home/job-descriptions/job-description" routerLinkActive="active">
+              <a> Job Descriptions </a>
+            </li> 
+            <li routerLink="/home/job-descriptions/job-email-template" routerLinkActive="active">
+              <a> Email templates </a>
+            </li>
+            <li routerLink="/home/job-descriptions/job-custom-fields" routerLinkActive="active">
+              <a> Custom Fields </a>
+            </li>
+
+           </ul>
+        </li> -->
+
+
+
+
+
+
+        <!-- <li routerLinkActive="active" *ngIf="canLoad([predefined_permissions.JOB,predefined_permissions.JOB_ASSIGNMENT])">
+                    <a class="main-li" href="#jobDescriptionSubmenu" data-toggle="collapse" aria-expanded="false" >
+                        <i class="fas fa-users"></i>
+                        Jobs<span class="fa fa-chevron-down"></span>
+                    </a>
+                    <ul class="nav child_menu" id="jobDescriptionSubmenu">
+                        <li routerLink="/home/job-descriptions/job-description"  *ngIf="canLoad([predefined_permissions.JOB])"
+                        routerLinkActive="active">
+                            <a>
+                                Jobs
+                            </a>
+                        </li>
+                        <li routerLink="/home/job-descriptions/assignment-list"  *ngIf="canLoad([predefined_permissions.JOB_ASSIGNMENT])"
+                        routerLinkActive="active">
+                            <a>
+                              Assignment History
+                            </a>
+                        </li> -->
+
+        <!-- <li routerLink="/home/job-descriptions/submission-list" routerLinkActive="active">
+                            <a>
+                                <span>&#9881; Submission List</span>
+                            </a>
+                        </li> -->
+        <!-- </ul>
+                </li> -->
+        <li routerLinkActive="active" routerLink="/home/interviewers/interviewer"
+          *ngIf="canLoad([predefined_permissions.INTERVIEWER])">
+          <a class="main-li">
+            <i class="fas icon-interviewed"></i>
+            Interviewer
+          </a>
+        </li>
+        <!-- <li routerLinkActive="active">
+                    <a href="#interviewerSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+                        <i class="fas icon-interviewed"></i>
+                        <span>Interviewer</span>
+                    </a>
+                    <ul class="collapse list-unstyled" id="interviewerSubmenu">
+                        <li routerLink="/home/interviewers/interviewer" routerLinkActive="active">
+                            <a>
+                                <span>&#9881; Interviewer</span>
+                            </a>
+                        </li>
+                        <li routerLink="/home/interviewers/designation" routerLinkActive="active">
+                            <a>
+                                <span>&#9881; Designation</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li> -->
+
+        <li routerLinkActive="active" *ngIf="
+            canLoad([
+              predefined_permissions.INTERVIEWS,
+              predefined_permissions.FEEDBACK
+            ])
+          ">
+          <a class="main-li" href="#interviewSubmenu" data-toggle="collapse" aria-expanded="false">
+            <i class="fas icon-interviews"></i>
+            Interview <span class="fa fa-chevron-down"></span>
+          </a>
+          <ul class="nav child_menu" id="interviewSubmenu">
+            <li routerLink="/home/interviews/interview" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.INTERVIEWS])">
+              <a> Interview </a>
+            </li>
+            <!-- <li routerLink="/home/interviews/feedback" routerLinkActive="active"
+                            *ngIf="canLoad([predefined_permissions.FEEDBACK])">
+                            <a>
+                                Feedback
+                            </a>
+                        </li> -->
+            <!-- <li routerLink="/home/interviews/source" routerLinkActive="active">
+                            <a>
+                                <span>&#9881; Interview Mode</span>
+                            </a>
+                        </li> -->
+          </ul>
+        </li>
+
+        <li routerLinkActive="active" *ngIf="role !== roles.RECRUITER">
+          <a class="main-li" href="#reports" data-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-chart-bar"></i>
+            Reports <span class="fa fa-chevron-down"></span>
+          </a>
+          <ul class="nav child_menu" id="reports">
+            <li routerLink="/home/reports/recruiter-performance" routerLinkActive="active">
+              <a> Recruiter Performance </a>
+            </li>
+            <li routerLink="/home/reports/recruiter-submission" routerLinkActive="active">
+              <a> Recruiter Submission </a>
+            </li>
+            <li routerLink="/home/reports/bdm-performance" routerLinkActive="active">
+              <a> BDM Performance </a>
+            </li>
+            <li routerLink="/home/reports/candidate-report" routerLinkActive="active">
+              <a> Candidate Report </a>
+            </li>
+            <li routerLink="/home/reports/job-summary" routerLinkActive="active">
+              <a> Job Summary </a>
+            </li>
+
+            <li routerLink="/home/reports/bdm-jobs" routerLinkActive="active">
+              <a> BDM Jobs </a>
+            </li>
+            <li routerLink="/home/reports/job-aging" routerLinkActive="active">
+              <a> Active Job Aging </a>
+            </li>
+            <li routerLink="/home/reports/client-revenue" routerLinkActive="active">
+              <a> Client Revenue </a>
+            </li>
+            <li routerLink="/home/reports/jobs-by-client" routerLinkActive="active">
+              <a> Jobs by Client </a>
+            </li>
+          </ul>
+        </li>
+
+        <li routerLinkActive="active" *ngIf="
+            canLoad([
+              predefined_permissions.VENDOR,
+              predefined_permissions.VENDOR_EMAIL_TEMPLATE,
+              predefined_permissions.VENDOR_LIST
+            ])
+          ">
+          <a class="main-li" href="#vendors" data-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-building"></i>
+            Vendors <span class="fa fa-chevron-down"></span>
+          </a>
+          <ul class="nav child_menu" id="vendors">
+            <li routerLink="/home/vendors" routerLinkActive="active" *ngIf="canLoad([predefined_permissions.VENDOR])">
+              <a> Vendors </a>
+            </li>
+            <li routerLink="/home/vendors/email-template" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.VENDOR_EMAIL_TEMPLATE])">
+              <a> E-mail Template </a>
+            </li>
+            <li routerLink="/home/vendors/vendor-list" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.VENDOR_LIST])">
+              <a> Vendor List </a>
+            </li>
+          </ul>
+        </li>
+        <li routerLinkActive="active">
+          <!-- *ngIf="
+          canLoad([
+            predefined_permissions.CAMPAIGN,
+            predefined_permissions.CAMPAIGN_LIST
+          ])
+        "-->
+          <a class="main-li" href="#campaign" data-toggle="collapse" aria-expanded="false">
+            <i class="fas icon-unique--open"></i>
+            <!-- <i class="fa-solid fa-envelope-open-text"></i> -->
+            Email Campaign <span class="fa fa-chevron-down"></span>
+          </a>
+          <ul class="nav child_menu" id="campaign">
+            <li routerLink="/home/campaign" routerLinkActive="active" *ngIf="canLoad([predefined_permissions.VENDOR])">
+              <a>Campaign Dashboard</a>
+            </li>
+            <li routerLink="/home/campaign/custom-fields" routerLinkActive="active">
+              <a>Custom Fields</a>
+            </li>
+            <li routerLink="/home/campaign/email-template" routerLinkActive="active"
+              *ngIf="canLoad([predefined_permissions.VENDOR_EMAIL_TEMPLATE])">
+              <a> E-mail Template </a>
+            </li>
+            <li routerLink="/home/campaign/email-list" routerLinkActive="active">
+              <a>List</a>
+            </li>
+            <li routerLink="/home/campaign/campaigns" routerLinkActive="active">
+              <a>Campaigns</a>
+            </li>
+
+          </ul>
+        </li>
+        <li routerLinkActive="active" *ngIf="
+            canLoad([predefined_permissions.GROUP, predefined_permissions.USER])
+          ">
+          <a class="main-li" href="#auth" data-toggle="collapse" aria-expanded="false">
+            <i class="fas fa-cog"></i>
+            User Management<span class="fa fa-chevron-down"></span>
+          </a>
+          <ul class="nav child_menu" id="auth">
+            <li routerLink="/home/groups" routerLinkActive="active" *ngIf="canLoad([predefined_permissions.GROUP])">
+              <a> Groups </a>
+            </li>
+            <li routerLink="/home/users" routerLinkActive="active" *ngIf="canLoad([predefined_permissions.USER])">
+              <a> Users </a>
+            </li>
+          </ul>
+        </li>
+
+        <li *ngIf="role === roles.ADMIN" routerLink="/home/administration" routerLinkActive="active">
+          <a class="main-li">
+            <i class="fas fa-cog"></i>
+            <span> Administration </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!-- /sidebar menu -->
+
+  <!-- /menu footer buttons -->
+  <div class="sidebar-footer hidden-small">Version 2.6</div>
+  <!-- /menu footer buttons -->
+</div>
+
+<!-- <script>
+document.querySelector('.child_menu').addEventListener('click', closeNav)
+function closeNav() {
+    console.log("onclick")
+    document.getElementById("candidatesSubmenu").style.width = "0";
+    document.getElementById("interviewSubmenu").style.width = "0";
+    document.getElementById("vendors").style.width = "0";
+    document.getElementById("reports").style.width = "0";
+    document.getElementById("auth").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
+    }
+</script> -->

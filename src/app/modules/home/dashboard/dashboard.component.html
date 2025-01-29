@@ -1,0 +1,618 @@
+<div id="addComponent" class="sideCandidate">
+    <button *ngIf="component == 'job'"  class="btn btn-link closebtn" (click)="closeComponent()">&times;</button>
+    <app-job-description-detail *ngIf="component == 'job'" (closeAddEditPage)="closeComponent();eventId=undefined;" (refreshListEvt)="closeComponent();getInitialData(role);eventId=undefined; " [isPopup]="false"
+        [eventId]="eventId"></app-job-description-detail>
+        <!-- [current_job_id]="jobs[0].job_id" -->
+    <app-add-client *ngIf="component == 'client'" (closeAddEditPage)="closeComponent();eventId=undefined;" (refreshListEvt)="getInitialData(role);eventId=undefined; " [eventId]="eventId">
+    </app-add-client>
+    <app-add-candidate *ngIf="component == 'candidate'" (closeAddEditPage)="closeComponent();eventId=undefined;" (refreshListEvt)="getInitialData(role);" [eventId]="eventId">
+    </app-add-candidate>
+</div>
+
+<div class="search-wrap">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <div class="row mt-3 page-header">
+                    <div class="col">
+                        <h4 class="page-title mb-0">Dashboard</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid mt-3">
+    <div class="dashboard">
+        <div class="form-row dashboard-statistics">
+            <div class="col-sm-12 col-md-6 col-lg-3 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <ng-container *ngIf="role === roles.BDMMANAGER || role === roles.MANAGER || role === roles.RECRUITERMANAGER || role == roles.ADMIN">
+                                    <div class="statistics-label">Active Clients</div>
+                                    <div class="statistics-value">{{aggrated?.active_clients}}</div>
+                                </ng-container>
+                                <ng-container *ngIf="role === roles.RECRUITER">
+                                    <div class="statistics-label">Total Candidates</div>
+                                    <div class="statistics-value">{{aggrated?.interviewed}}</div>
+                                </ng-container>
+                            </div>
+                            <div class="col-auto">
+                                <div class="statistics-icon bg-orange-light">
+                                    <i class="icon icon-active-clients" *ngIf="role !== roles.RECRUITER"></i>
+                                    <i class="icon icon-total-candidates" *ngIf="role === roles.RECRUITER"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-3 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <ng-container *ngIf="role === roles.BDMMANAGER || role === roles.MANAGER || role === roles.RECRUITERMANAGER || role == roles.ADMIN">
+                                    <div class="statistics-label">Active Jobs</div>
+                                    <div class="statistics-value">{{aggrated?.active_jobs}}</div>
+                                </ng-container>
+                                <ng-container *ngIf="role === roles.RECRUITER">
+                                    <div class="statistics-label">Candidate Submitted</div>
+                                    <div class="statistics-value">{{aggrated?.submissions}}</div>
+                                </ng-container>
+                            </div>
+                            <div class="col-auto">
+                                <div class="statistics-icon bg-pink-light">
+                                    <i class="icon icon-active-jobs" *ngIf="role !== roles.RECRUITER"></i>
+                                    <i class="icon icon-submission" *ngIf="role === roles.RECRUITER"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-3 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <ng-container *ngIf="role === roles.ADMIN">
+                                    <div class="statistics-label">Candidate Placed</div>
+                                    <div class="statistics-value">{{aggrated?.placed}}</div>
+                                </ng-container>
+                                <ng-container *ngIf="role === roles.BDMMANAGER || role === roles.MANAGER || role === roles.RECRUITERMANAGER">
+                                    <div class="statistics-label">Candidate Submitted</div>
+                                    <div class="statistics-value">{{aggrated?.submissions}}</div>
+                                </ng-container>
+                                <ng-container *ngIf="role === roles.RECRUITER">
+                                    <div class="statistics-label">Send Out</div>
+                                    <div class="statistics-value">{{aggrated?.sendOut}}</div>
+                                </ng-container>
+                            </div>
+                            <div class="col-auto">
+                                <div class="statistics-icon bg-green-light">
+                                    <i class="icon icon-placed" *ngIf="role === roles.ADMIN"></i>
+                                    <i class="icon icon-submission" *ngIf="role === roles.BDMMANAGER || role === roles.MANAGER || role === roles.RECRUITERMANAGER"></i>
+                                    <i class="icon icon-sent-out" *ngIf="role === roles.RECRUITER"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-3 mb-3">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <ng-container *ngIf="role === roles.BDMMANAGER || role === roles.MANAGER || role === roles.RECRUITERMANAGER || role === roles.RECRUITER">
+                                    <div class="statistics-label">Placed</div>
+                                    <div class="statistics-value">{{aggrated?.placed}}</div>
+                                </ng-container>
+                                <ng-container *ngIf="role === roles.ADMIN">
+                                    <div class="statistics-label">Revenue</div>
+                                    <div class="statistics-value">{{aggrated?.revenue | currency:'INR'}}</div>
+                                </ng-container>
+                            </div>
+                            <div class="col-auto">
+                                <div class="statistics-icon bg-blue-light">
+                                    <i class="icon icon-placed" *ngIf="role === roles.BDMMANAGER || role === roles.MANAGER || role === roles.RECRUITERMANAGER || role === roles.RECRUITER"></i>
+                                    <i class="icon icon-revenue" *ngIf="role === roles.ADMIN"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Manager row start here -->
+        <div class="form-row" *ngIf="role === roles.BDMMANAGER || role === roles.MANAGER || role === roles.RECRUITERMANAGER">
+            <div class="col-sm-12 col-md-12 col-lg-6 mb-3 table-LastFiveJobs">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-auto">
+                                <h5 class="card-title mb-0">Last Five Jobs</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a class="btn-link" style="cursor:pointer" (click)="openComponent('job')">+ Add New
+                                    </a>
+                                <span class="ml-1 mr-1">|</span>
+                                <a (click)="openUnassignedJobs()" style="cursor:pointer" class="btn-link">View Unassigned Jobs</a>
+                                <!-- <a routerLink="/home/job-descriptions/job-description" class="btn-link">View Unassigned Jobs </a> -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                               <div class="table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Job Title</th>
+                                            <th scope="col">Primary Recruiter</th>
+                                            <th scope="col">Posted On</th>
+                                            <th scope="col">Assigned On</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- (click)="openModal(job.id)" -->
+                                        <tr *ngFor="let job of jobs | slice:0:5" (click)="openModal(job.id,'Jd')">
+                                            <td>{{job.job_title}}</td>
+                                            <!-- <td *ngIf="job.default_assignee">
+                                                {{job.default_assignee?.first_name}}
+                                                {{job.default_assignee?.last_name}}
+                                            </td>
+                                            <td *ngIf="!job.default_assignee">--</td> -->
+                                            <td *ngIf="job.primary_recruiter_name">
+                                                {{job.primary_recruiter_name}}
+                                               
+                                            </td>
+                                            <td *ngIf="!job.primary_recruiter_name">--</td>
+                                            <td>{{job.posted_date | date:'MM/dd/yyyy'}}</td>
+                                            <td *ngIf="job.assinged_date" >{{job.assinged_date | date:'MM/dd/yyyy'}}</td>
+                                            <td *ngIf="!job.assinged_date" >--</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                               </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="col-sm-12 col-md-12 col-lg-6 mb-3 table-BDM-Clients">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-auto">
+                                <h5 class="card-title mb-0">Clients</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a class="btn-link" style="cursor:pointer" (click)="openComponent('client')">+ Add New
+                                    Client </a>
+                                <span class="ml-1 mr-1">|</span>
+                                <!--<a routerLink="/home/client" class="btn-link">View All </a>-->
+                                <a (click)="openClients()" style="cursor:pointer" class="btn-link">View All</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col table-responsive">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Client Name</th>
+                                            <th scope="col">Jobs</th>
+                                            <th scope="col">Submitted</th>
+                                            <th scope="col">Placed</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let client of clients | slice:0:5">
+                                            <td>{{client.client_name}}</td>
+                                            <td>{{client.job_title}}</td>
+                                            <td>{{client.submissions}}</td>
+                                            <td>{{client.placed}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             
+        </div>
+        <div class="row" *ngIf="role === roles.BDMMANAGER || role === roles.MANAGER || role === roles.RECRUITERMANAGER">
+            <div class="col-sm-12 col-md-12 col-lg-12 mb-3 table-BDM-HighPriorityJobs">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-auto">
+                                <h5 class="card-title mb-0"  *ngIf="role === roles.MANAGER || role === roles.RECRUITERMANAGER">High Priority Jobs</h5>
+                                <h5 class="card-title mb-0" *ngIf="role === roles.BDMMANAGER">Recent Submissions</h5>
+                            </div>
+                            <div class="col text-right">
+                                <!-- <a class="btn-link" (click)="openComponent('job')">+ Add New
+                                    Job </a>
+                                <span class="ml-1 mr-1">|</span> -->
+                                <a [routerLink]="['/home/job-descriptions/job-description']"
+                                [queryParams]="{ priority:true }"
+                                class="btn-link">View All </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body" *ngIf="role === roles.MANAGER || role === roles.RECRUITERMANAGER">
+                        <div class="row">
+                            <div class="col ">
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Job Title</th>
+                                                <!-- <th scope="col">Default Assignee</th> -->
+                                                <th scope="col">Assigned To</th>
+                                                <th scope="col">Posted</th>
+                                                <th scope="col">Set Priority</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let job of priority_jobs | slice:0:5" (click)="openModal(job.id,'Jd')">
+                                                <td>{{job.job_title}}</td>
+                                                <td *ngIf="job.default_assignee">
+                                                    {{job.default_assignee?.first_name}}
+                                                    {{job.default_assignee?.last_name}}
+                                                </td>
+                                                <td *ngIf="!job.default_assignee">--</td>
+                                                <td>{{job.created_at | date:'MM/dd/yyyy'}}</td>
+                                                <td class="toggle-box">
+                                                    <label class="switch">
+                                                        <input type="checkbox"  *ngIf="job.priority===true" checked [value]="job.priority" (click)="onPriorityChange(job.id)"  >
+                                                        <input type="checkbox"  *ngIf="job.priority===false" [value]="job.priority" (click)="onPriorityChange(job.id)"  >
+                    
+                                                        <div class="slider round" id="togBtn" >
+                                                            <!--ADDED HTML -->
+                                                            <span value="true" class="on">High</span>
+                                                            <span value="false" class="off">Low</span>
+                                                            <!--END-->
+                                                        </div>
+                    
+                                                       
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body hightpriority-table" *ngIf="role === roles.BDMMANAGER">
+                        <div class="row">
+                            <div class="col ">
+                                <div class="table-responsives">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Client Name</th>
+                                                <th scope="col">Job Title</th>
+                                                <th scope="col">Candidate Name</th>
+                                                <th scope="col">Submitted By</th>
+
+                                                <th scope="col">Submission Date</th>
+                                                <th scope="col">Current Status</th>
+                                                <th scope="col">Last Updated</th>
+                                                <!-- <th scope="col">Default Assignee</th> -->
+                                                <!-- <th scope="col">Assigned To</th>
+                                                <th scope="col">Posted</th>
+                                                <th scope="col">Set Priority</th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let job of priorityJobs | slice:0:5" (click)="openModal(job.candidate_id,'Candidate Status')">
+                                                <td>{{job.client_name}}</td>
+                                                <td>{{job.job_title}}</td>
+                                                <td>{{job.candidate_name}}</td>
+                                                <td>{{job.recruiter_name}}</td>
+                                                <td>{{job.submission_date | date:'MM/dd/yyyy'}}</td>
+                                                <td>{{job.current_status}}</td>
+                                                <!-- <td *ngIf="!job.default_assignee">--</td> -->
+                                                <td>{{job.last_updated | date:'MM/dd/yyyy'}}</td>
+                                               
+                                                
+                                               
+                                             
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          
+        </div>
+        <!-- ./ Manager row start here -->
+
+
+        <!-- Recruiter row start here -->
+        <div class="form-row" *ngIf="role === roles.RECRUITER">
+            <div class="col-sm-12 col-md-12 col-lg-12 mb-3 table-candidates">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-auto">
+                                <h5 class="card-title mb-0">My Candidates</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a class="btn-link" style="cursor:pointer" (click)="openComponent('candidate')">+ Add New
+                                    Candidate </a>
+                                <span class="ml-1 mr-1">|</span>
+                                <a (click)="openMyCandidates()" class="btn-link">View All </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col ">
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Submission Date</th>
+                                                <th scope="col">Candidate Name</th>
+                                                <th scope="col">Job Title</th>
+                                                <th scope="col">Client Name</th>
+                                                <th scope="col">Current Status</th>
+                                                <th scope="col">BDM Name</th>
+                                                <th scope="col">Last Updated</th>
+                
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let candidate of candidates | slice:0:5" (click)="openModal(candidate.id,'Candidate')">
+                                                <td>{{candidate.submission_date | date:'MM/dd/yyyy'}}</td>
+                                                <td>{{candidate.candidate_name}}</td>
+                                                <!-- <td>{{candidate.designation?.name}}</td> -->
+                                                <td>{{candidate.job_title?candidate.job_title:'--'}}</td>
+                                                <td>{{candidate.client_name?candidate.client_name:'--'}}</td>
+                                                <td>{{candidate.current_status?candidate.current_status:'--'}}</td>
+                                                <td>{{candidate.bdm_name?candidate.bdm_name:'--'}}</td>
+                                                <td>{{candidate.last_updated| date:'MM/dd/yyyy'}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 mb-3 table-MyJobs">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-auto">
+                                <h5 class="card-title mb-0">My Jobs</h5>
+                            </div>
+                            <div class="col text-right">
+                                <!-- <a routerLink="/home/job-descriptions/job-description" class="btn-link">View All </a> -->
+                                <a  class="btn-link" style="cursor:pointer" (click)="openMyJobs()">View All </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col ">
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Assigned Date</th>
+                                                <th scope="col">Job Title</th>
+                                                <th scope="col">Client</th>
+                                                <th scope="col">Assigned By</th>
+                                                <th scope="col">BDM Name</th>
+                                                <th scope="col">Total Submissions</th>
+                                                <th scope="col">Placed</th>
+                                                <th scope="col">Job Status</th>
+    
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let job of recruiterJobs | slice:0:5" (click)="openModal(job.id,'Jd')">
+                                                <td>{{job.assinged_date | date:'MM/dd/yyyy'}}</td>
+                                                <td>{{job.job_title}}</td>
+                                                <td>{{job.company_name}}</td>
+                                                <td *ngIf="job.assignee_name">
+                                                    {{job.assignee_name}}
+                                                   
+                                                </td>
+                                                <td *ngIf="!job.assignee_name">--</td>
+                                                <td>{{job.bdm_name}}</td>
+                                                <td>{{job.total_submissions?job.total_submissions:'--'}}</td>
+                                                <td>{{job.placed?job.placed:'--'}}</td>
+                                                <td>{{job.status?job.status:'--'}}</td>
+    
+    
+                                                
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ./ Recruiter row start here -->
+
+
+        <!-- admin row start here -->
+        <div class="form-row" *ngIf="role === roles.ADMIN">
+            <div class="col-sm-12 col-md-12 col-lg-6 mb-3 table-lastFivePlacements">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-auto">
+                                <h5 class="card-title mb-0">Last Five Placements</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a routerLink="/home/candidates/placement" class="btn-link">View All </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                              
+                                                <th scope="col">Candidate</th>
+                                                <th scope="col">Client</th>
+                                                <th scope="col">Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- (click)="openModal(p.id,'Placement Card')" -->
+                                            <tr *ngFor="let p of placement | slice:0:5" >
+                                                <td>{{p.candidate_name}}</td>
+                                                <td>{{p.client_name}}</td>
+                                                <td>{{p.status}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-6 mb-3 table-LastFiveJobs">
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-auto">
+                                <h5 class="card-title mb-0">Last Five Jobs</h5>
+                            </div>
+                            <div class="col text-right">
+                                <a class="btn-link" style="cursor:pointer" (click)="openComponent('job')">+ Add New
+                                    </a>
+                                <span class="ml-1 mr-1">|</span>
+                                <!-- <a routerLink="/home/job-descriptions/job-description" class="btn-link">View All </a> -->
+                                <a (click)="openUnassignedJobs()" style="cursor:pointer" class="btn-link">View Unassigned Jobs </a>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col ">
+                                <!-- <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Job Title</th>
+                                            <th scope="col">Assigned To</th>
+                                            <th scope="col">Posted</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let job of jobs | slice:0:5" (click)="openModal(job.id)">
+                                            <td>{{job.job_title}}</td>
+                                            <td *ngIf="job.default_assignee">
+                                                {{job.default_assignee?.first_name}}
+                                                {{job.default_assignee?.last_name}}
+                                            </td>
+                                            <td *ngIf="!job.default_assignee">--</td>
+                                            <td>{{job.created_at | date:'MM/dd/yyyy'}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table> -->
+                                <div class="table-responsive">
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Job Title</th>
+                                                <th scope="col">Primary Recruiter</th>
+                                                <th scope="col">Posted On</th>
+                                                <th scope="col">Assigned On</th>
+                                            </tr>
+                                        </thead>
+                                        <!-- (click)="openModal(job.id)" -->
+                                        <tbody>
+                                            <tr *ngFor="let job of jobs | slice:0:5" (click)="openModal(job.id,'Jd')" >
+                                                <td>{{job.job_title}}</td>
+                                                <!-- <td *ngIf="job.default_assignee">
+                                                    {{job.default_assignee?.first_name}}
+                                                    {{job.default_assignee?.last_name}}
+                                                </td>
+                                                <td *ngIf="!job.default_assignee">--</td>
+                                                <td>{{job.created_at | date:'MM/dd/yyyy'}}</td> -->
+                                                <td *ngIf="job.primary_recruiter_name">
+                                                    {{job.primary_recruiter_name}}
+                                                
+                                                </td>
+                                                <td *ngIf="!job.primary_recruiter_name">--</td>
+                                                <td>{{job.posted_date | date:'MM/dd/yyyy'}}</td>
+                                                <td *ngIf="job.assinged_date" >{{job.assinged_date | date:'MM/dd/yyyy'}}</td>
+                                                <td *ngIf="!job.assinged_date" >--</td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- ./ admin row start here -->
+
+
+
+
+        <div class="form-row" *ngIf="role === roles.ADMIN || role === roles.BDMMANAGER || role === roles.MANAGER ">
+            <div class="col mb-3 jobs-table">
+                <app-bdm-performance [pageToBeLoaded]=pageToBeLoaded  [title]="role === roles.ADMIN ? 'BDM Monthly Trends' : 'Monthly Trends'" [show_download]="false"
+                    [show_tabular]="false">
+                </app-bdm-performance>
+            </div>
+        </div>
+        <div class="form-row" *ngIf="role === roles.ADMIN || role === roles.RECRUITER || role === roles.RECRUITERMANAGER">
+            <div class="col mb-3 jobs-table">
+                <app-recruiter-submission [pageToBeLoaded]=pageToBeLoaded  [title]="role === roles.ADMIN ? 'Recruiter Monthly Trends' : 'Monthly Trends'"
+                    [show_download]="false" [show_tabular]="false">
+                </app-recruiter-submission>
+            </div>
+        </div>
+        <div class="form-row" *ngIf="role === roles.ADMIN || role === roles.RECRUITER || role === roles.RECRUITERMANAGER">
+            <div class="col mb-3 jobs-table">
+                <app-candidate-report [pageToBeLoaded]=pageToBeLoaded  [title]="role === roles.ADMIN ? 'Candidate added Monthly Trends' : 'Monthly Trends'"
+                    [show_download]="false" [show_tabular]="false">
+                </app-candidate-report>
+            </div>
+        </div>
+    </div>
+</div>

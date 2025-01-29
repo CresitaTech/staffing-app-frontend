@@ -1,0 +1,501 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row  mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title"
+                        *ngIf="eventId===constants.ADD ||eventId===constants.POP_UP||eventId===constants.EDIT">
+                        {{candidate.first_name}} {{candidate.last_name}}</h5>
+
+                </div>
+
+
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                        another</button>
+                </div> -->
+
+                <div class="col-auto ml-auto">
+                    <!-- <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD|| eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button> -->
+                    <!--  <button type="submit" #closebutton type="button" aria-label="Close" (click)="addJobToArray()" class="btn btn-primary"
+                     *ngIf="(eventId===constants.ADD||eventId===constants.POP_UP||eventId===constants.EDIT)&& action==='add'">OK</button>
+                    <button type="submit" #closebutton type="button" aria-label="Close" (click)="onEditJob()"class="btn btn-primary"
+                     *ngIf="(eventId===constants.ADD||eventId===constants.POP_UP ||eventId===constants.EDIT)&& action==='edit'">OK</button>-->
+
+                </div>
+
+                <button #closebutton type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+
+
+            <div class="row">
+                <div class="col table-candidate-addjob">
+                    <table class="table table-sm table-bordered mb-2">
+                        <thead class="thead-dark">
+                            <tr>
+                                <!--*ngIf="job_descriptions.length>0"-->
+                                <th scope="col" class="border-top-0">Submitted On</th>
+                                <th scope="col" class="border-top-0">Job Description</th>
+                                <th scope="col" class="border-top-0">Recruiter Name</th>
+                                <th scope="col" class="border-top-0">Status</th>
+                                <th scope="col" class="border-top-0 width-100">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let jobs of job_descriptions">
+                                <td>{{jobs.display_date}}</td>
+                                <td>{{jobs.jd_name}}</td>
+                                <td>{{jobs.recruiter_name}}</td>
+                                <td>{{jobs.stage_name}}</td>
+                                <td class="width-100">
+
+                                    <button *ngIf="checkEdit(jobs)" type="button" class="ml-2 btn btn-sm btn-warning" data-tooltip="tooltip"
+                                        data-placement="bottom" title="Edit Selected Job Description and Stage"
+                                        (click)="modifyJob(jobs.job_description)"><i
+                                            class="fas fa-highlighter text-light"></i></button>
+                                  
+                                </td>
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            
+
+            <!-- Created -->
+            <div *ngIf="statusFormDisplay" class="mt-5 mb-2">
+                <div class="row">
+                    <div class="col">
+                        
+                        <h5 class="card-title" >Internal Candidate Status</h5>
+
+                    </div>
+                </div>
+
+                <form #f="ngForm">
+                    <!---<div class="row">
+                            <div class="col form-group">
+                                <app-candidate-inline 
+                                *ngIf="eventId===constants.ADD||eventId===constants.EDIT" 
+                                [item]="activity.candidate_name" 
+                                [eventId]="eventId"
+                                (changeItemEvt)="activity.candidate_name = $event;
+                                detailsOfSelectedCandidate($event);  changeFormToDirty($event)" 
+                                name="candidateName">
+                                </app-candidate-inline>
+
+                                <app-candidate-inline  
+                                *ngIf="eventId===constants.POP_UP" [itemId]="candidate_id" 
+                                [item]="candidate_id" [eventId]="eventId"
+                                (changeItemEvt)="activity.candidate_name = $event ;
+                                detailsOfSelectedCandidate($event); 
+                                changeFormToDirty($event)" name="candidateName">
+                                </app-candidate-inline>
+                            </div>
+                        </div> -->
+
+                    <div class=" form-group">
+                        <!-- <div class="form-row form-group"> -->
+
+                        <app-job-description-inline *ngIf="action!=='edit'" [item]="activity.job_description"
+                            [stage]="activity.activity_status"
+                            [disabled]="activity.job_description"
+                            (changeItemEvt)="activity.job_description = $event; changeFormToDirty($event)" name="job"
+                            (emitJDName)="activity.jd_name=$event">
+                        </app-job-description-inline>
+
+                        <div class="form-row form-group" *ngIf="action==='edit'">
+                            <label>Job Description</label>
+                            <input type="text" class="form-control " id="jd_name" name="jd_name"
+                                [value]="activity.jd_name" readonly="true">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col">
+                                <label class="asterisk-if-mandatory">Status</label>
+
+                                <app-candidate-stages [item]="activity.activity_status"
+                                    [jobdescription]="activity.job_description" [candidates]="activity.candidate_name"
+                                    [candidate_id]="candidate_id"
+                                    [status_type]="'Internal'"
+                                    (changeItemEvt)="activity.activity_status = $event; changeFormToDirty($event)"
+                                    (reviewStatus)="reviewStatusData=$event"
+                                    (emitStageName)="activity.stage_name=$event" name="Status">
+                                </app-candidate-stages>
+                            </div>
+                            <div class="col form-group">
+                                <label>Submission Date</label>
+                                <div class="input-group date-input">
+                                    <!-- <input type="text" class="form-control " id="start_date" placeholder="{{date | date: 'MM/dd/yyyy'}}"
+                                        ngbDatepicker #d2="ngbDatepicker" [(ngModel)]="activity.submission_date"
+                                        #c2="ngModel" name="start_date">-->
+                                    <input type="text" class="form-control " id="start_date"
+                                        placeholder="{{date | date: 'MM/dd/yyyy'}}" ngbDatepicker #d2="ngbDatepicker"
+                                        [(ngModel)]="activity.submission_date" [readonly]="true" #c2="ngModel"
+                                        name="start_date" (click)="d2.toggle()">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="activity.submission_date = today">Today</a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="d2.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row" *ngIf="activity.activity_status===constants.SEND_OUT">
+                            <div class="col form-group">
+                                <label>SendOut Date</label>
+                                <div class="input-group date-input">
+                                    <input type="text" class="form-control " id="send_out_date"
+                                        placeholder="{{date | date: 'MM/dd/yyyy'}}" ngbDatepicker #d2="ngbDatepicker"
+                                        [readonly]="true" (click)="d2.toggle()" [(ngModel)]="activity.send_out_date"
+                                        #c2="ngModel" name="send_out_date">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="activity.send_out_date = today">Today</a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="d2.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col form-group">
+                                <div class="row">
+                                    <div class="col">
+                                      
+                                        <label
+                                           
+                                            class="asterisk-if-mandatory">Salary (in {{currencyTags}})</label>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col ">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" value="Yes" id="anyOfferInHand"
+                                                name="salaryRate" (click)="selectSalaryOrRate('salary')"
+                                                [(ngModel)]="candidate.isSalary" />
+                                            <label class="form-check-label" for="inlineRadio1">Salary </label>
+
+                                            <input class="form-check-input ml-3" type="radio" value="No"
+                                                id="anyOfferInHand" name="salaryRate"
+                                                (click)="selectSalaryOrRate('rate')" [(ngModel)]="candidate.isSalary" />
+                                            <label class="form-check-label" for="inlineRadio1">Rate</label>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="row" *ngIf="selectSalaryRateFlag===true">
+                                            <div class="col form-group-mobile mt-1">
+                                                <input class="form-control" id="min_salary" appLimitUptoTwoDIgits
+                                                    name="min_salary" [(ngModel)]="candidate.min_salary"
+                                                    placeholder="min" type="number" autocomplete="off"
+                                                    [required]="!candidate.max_salary && candidate.isSalary==='Yes'" />
+                                            </div>
+                                            <!-- [readonly]="candidate.salary" -->
+                                            <!-- [required]="candidate.min_salary?true:false" -->
+                                            <div class="col form-group-mobile mt-1">
+                                                <input class="form-control" id="max_salary" appLimitUptoTwoDIgits
+                                                    name="max_salary" [(ngModel)]="candidate.max_salary"
+                                                    placeholder="max" type="number" autocomplete="off"
+                                                    [required]="!candidate.min_salary && candidate.isSalary==='Yes'" />
+                                            </div>
+                                            <!-- [readonly]="candidate.salary" -->
+                                        </div>
+                                        <div class="row" *ngIf="selectSalaryRateFlag===false">
+                                            <div class="col">
+                                                <div class="form-row">
+                                                    <div class="col form-group-mobile mt-1">
+                                                        <input class="form-control" id="min_rate" appLimitUptoTwoDIgits
+                                                            name="min_rate" [(ngModel)]="candidate.min_rate"
+                                                            placeholder="min" type="number" #minRate="ngModel"
+                                                            autocomplete="off"
+                                                            [required]="( !candidate.max_rate && candidate.isSalary==='No') " />
+                                                    </div>
+                                                  
+                                                    <div class="col form-group-mobile mt-1">
+                                                        <input class="form-control" id="max_rate" appLimitUptoTwoDIgits
+                                                            #maxRate="ngModel" name="max_rate" autocomplete="off"
+                                                            [(ngModel)]="candidate.max_rate" placeholder="max"
+                                                            type="number"
+                                                            [required]="(!candidate.min_rate)  && candidate.isSalary==='No'" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <!-- <div class="col form-group">
+
+                                <label *ngIf="activity.activity_status===constants.DEFAULT_STAGE ">Visa</label>
+                                <label
+                                    *ngIf="(activity.activity_status!==constants.DEFAULT_STAGE && activity.activity_status) "
+                                    class="asterisk-if-mandatory">Visa</label>
+
+                                <select class="form-control" id="visa" [(ngModel)]="candidate.visa" name="visa"
+                                    [required]="(activity.activity_status && activity.activity_status!==constants.DEFAULT_STAGE)">
+                                    <option>Citizen</option>
+                                    <option>Green Card</option>
+                                    <option>TN Visa</option>
+                                    <option>EAD Visa</option>
+                                    <option>H1 B</option>
+                                    <option>OPT</option>
+                                    <option>CPT</option>
+                                    <option>Others</option>
+                                </select>
+                            </div> -->
+
+                            <div class="col form-group">
+                                <label >Resume</label>
+                                <label
+                                    
+                                    class="asterisk-if-mandatory">Resume</label>
+
+                                <div class="custom-file" *ngIf="eventId==='add' || eventId==='pop' || eventId==='edit'">
+                                    <input name="resume" type="file" class="custom-file-upload" id="customFile"
+                                        [(ngModel)]="candidate.resume" #resume="ngModel"
+                                        [ngClass]="{ 'is-invalid':resume.invalid || resume.touched }"
+                                        (change)="readFile($event,'resume')"
+                                        [required]="(!candidate.resume)" />
+                                    <div *ngIf="(resume.invalid && resume.touched)" class="invalid-feedback">
+                                        <div *ngIf="resume.errors.required ">Resume is required</div>
+                                    </div>
+                                    <small *ngIf="eventId=== 'add' || eventId==='pop' || eventId==='edit'"
+                                        class="label-value" [ngModelOptions]="{standalone: true}"
+                                        [(ngModel)]="candidate.resume">{{candidate.resume?
+                                        candidate.resume : '--'}}
+                                        <a type="button" style="color: #26ae61;" *ngIf="candidate.resume"
+                                            href="{{service.ip}}{{candidate.resume}}" target="_blank">View PDF</a>
+                                    </small>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- Interview -->
+                        <!-- <div class="row"
+                            *ngIf="activity.activity_status===constants.CLIENT_INTERVIEW || activity.activity_status===constants.INTERNAL_INTERVIEW || activity.activity_status===constants.CANDIDATE_SUBMISSION">
+
+                            <div class="col form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="asterisk-if-mandatory">Are you want to schedule interview right
+                                            now?</label>
+
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col ">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" value="yes" id="intYes"
+                                                name="yes" (click)="createInterview()"
+                                                [(ngModel)]="activity.schedule_interview_now" />
+                                            <label class="form-check-label" for="inlineRadio1">Yes</label>
+
+
+                                            <input class="form-check-input ml-3" type="radio" value="no" id="intNo"
+                                                name="no" [(ngModel)]="activity.schedule_interview_now" />
+                                            <label class="form-check-label" for="inlineRadio1">No </label>
+
+
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                            </div>
+                        </div> -->
+
+
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Notes</label>
+                                <app-editor [id]="'editor1'" [content]="activity.notes" [hasTags]="false"
+                                    (contentChanged)="activity.notes = $event"></app-editor>
+                                <!-- <img src="assets/images/remark-img.jpg" width="100%"> -->
+                            </div>
+                        </div>
+                        <!-- <div class="form-row">
+                            <div class="col" *ngIf="action==='add'">
+                                <button type="button" class="btn  btn-primary" data-toggle="modal"
+                                    data-target="#popup-AddJobDescription" data-tooltip="tooltip"
+                                    data-placement="bottom" title="Add Another Job" (click)="addJobToArray()"
+                                    [disabled]="f.invalid || !reviewStatusData || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                                    || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                                    || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                                    || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1)
+                                    ||  !activity.job_description || ((activity.activity_status === constants.CANDIDATE_SUBMISSION || activity.activity_status === constants.INTERNAL_INTERVIEW || activity.activity_status === constants.CLIENT_INTERVIEW) && !activity.schedule_interview_now || ((activity.schedule_interview_now ==='yes' && activity.meeting_mode ==='auto' && (!interview || !interview.candidate_name)) || (activity.schedule_interview_now ==='yes' && activity.meeting_mode ==='manual' && !activity.manual_invite)) ) "><i
+                                        class="fas fa-plus-square"></i> Submit</button>
+                            </div>
+                            <div class="col" *ngIf="action==='edit'">
+                                <button type="button" class="btn  btn-primary" data-toggle="modal"
+                                    data-target="#popup-AddJobDescription" data-tooltip="tooltip"
+                                    data-placement="bottom" title="Save" (click)="onEditJob()"
+                                    [disabled]="f.invalid || !reviewStatusData || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                                    || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                                    || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                                    || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1) || ((activity.activity_status === constants.CANDIDATE_SUBMISSION || activity.activity_status === constants.INTERNAL_INTERVIEW || activity.activity_status === constants.CLIENT_INTERVIEW) && !activity.schedule_interview_now || ((activity.schedule_interview_now ==='yes' && activity.meeting_mode ==='auto' && (!interview || !interview.candidate_name)) || (activity.schedule_interview_now ==='yes' && activity.meeting_mode ==='manual' && !activity.manual_invite)) )"><i
+                                        class="fas fa-plus-square"></i>
+                                    Save</button>
+                            </div>
+                        </div> -->
+
+                        <div class="form-row">
+                            <div class="col" *ngIf="!isEdit">
+                                <button type="button" class="btn  btn-primary" data-toggle="modal"
+                                    data-target="#popup-AddJobDescription" data-tooltip="tooltip"
+                                    data-placement="bottom" title="Add Another Job" (click)="addJobToArray()"
+                                    [disabled]="f.invalid || !reviewStatusData || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                                    || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                                    || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                                    || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1)
+                                    ||  !activity.job_description || !activity.activity_status "><i
+                                        class="fas fa-plus-square"></i> Submit</button>
+                            </div>
+                            <div class="col" *ngIf="isEdit">
+                                <button type="button" class="btn  btn-primary" data-toggle="modal"
+                                    data-target="#popup-AddJobDescription" data-tooltip="tooltip"
+                                    data-placement="bottom" title="Save" (click)="onEditJob()"
+                                    [disabled]="f.invalid || !reviewStatusData || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                                    || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                                    || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                                    || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1) || !activity.activity_status "><i
+                                        class="fas fa-plus-square"></i>
+                                    Save</button>
+                            </div>
+                        </div>
+
+                        <!-- <div class="form-row mt-3 heading-sec">
+                            <div class="col">
+                                <h5 class="card-title"> Scheduled interview</h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-bordered">
+                                        <thead class="thead-dark">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Job Title</th>
+                                                <th scope="col">Interviewer</th>
+                                                <th scope="col">Date</th>
+                                                <th scope="col">Time Slot</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           
+                                            <tr *ngFor="let intv of interviews">
+                                                <th scope="row">1</th>
+                                                <td>{{intv.jd_attachment.job_title}}</td>
+                                                <td>{{intv.interviewer_name.first_name}}
+                                                    {{intv.interviewer_name.last_name}}</td>
+                                                <td>{{intv.meeting_time}}</td>
+                                                <td>{{intv.time_slot.time_slot}}</td>
+
+                                            </tr>
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+
+                    <div class="form-row button-sec" *ngIf="statusFormDisplay">
+                        <!-- <div class="col-auto ml-auto">
+                                <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                                    another</button>
+                            </div> 
+                             -->
+                        <!-- <div class="col-auto ml-auto"> 
+                            
+                            <button id="okay-button" name="okay-button" type="submit" (click)="addEditButton(action)"
+                                class="btn btn-primary"
+                                *ngIf="(eventId===constants.ADD||eventId===constants.POP_UP||eventId===constants.EDIT)&& action==='add'"
+                                [disabled]="f.invalid || !reviewStatusData || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                                || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                                || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                                || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1)
+                                ||  !activity.job_description || ((activity.activity_status === constants.CANDIDATE_SUBMISSION || activity.activity_status === constants.INTERNAL_INTERVIEW || activity.activity_status === constants.CLIENT_INTERVIEW) && !activity.schedule_interview_now || ((activity.schedule_interview_now ==='yes' && activity.meeting_mode ==='auto' && (!interview || !interview.candidate_name)) || (activity.schedule_interview_now ==='yes' && activity.meeting_mode ==='manual' && !activity.manual_invite)) ) ">OK</button>
+                            <button id="okay-button1" name="okay-button1" type="submit" (click)="addEditButton(action)"
+                                class="btn btn-primary"
+                                *ngIf="(eventId===constants.ADD||eventId===constants.POP_UP ||eventId===constants.EDIT)&& action==='edit'"
+                                [disabled]="f.invalid || !reviewStatusData || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                                || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                                || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                                || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1) || ((activity.activity_status === constants.CANDIDATE_SUBMISSION || activity.activity_status === constants.INTERNAL_INTERVIEW || activity.activity_status === constants.CLIENT_INTERVIEW) && !activity.schedule_interview_now || ((activity.schedule_interview_now ==='yes' && activity.meeting_mode ==='auto' && (!interview || !interview.candidate_name)) || (activity.schedule_interview_now ==='yes' && activity.meeting_mode ==='manual' && !activity.manual_invite)) )">OK</button>
+                        </div>  -->
+
+
+                        <div class="col-auto ml-auto">
+                           
+                            <button id="okay-button" name="okay-button" type="submit" (click)="addJobToArray()"
+                                class="btn btn-primary"
+                                *ngIf="!isEdit"
+                                [disabled]="f.invalid || !reviewStatusData || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                                || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                                || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                                || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1)
+                                ||  !activity.job_description || !activity.activity_status ">OK</button>
+
+                                
+                            <button id="okay-button1" name="okay-button1" type="submit" (click)="onEditJob()"
+                                class="btn btn-primary"
+                                *ngIf="isEdit"
+                                [disabled]="f.invalid || !reviewStatusData || ( candidate.isSalary === 'Yes' && candidate.max_salary !==null  && candidate.max_salary  < 1) 
+                                || ( candidate.isSalary === 'Yes' && candidate.min_salary !==null && candidate.min_salary  < 1)
+                                || ( candidate.isSalary === 'No' && candidate.min_rate !==null  && candidate.min_rate  < 1)
+                                || ( candidate.isSalary=== 'No' && candidate.max_rate !==null  && candidate.max_rate  < 1) || !activity.activity_status ">OK</button> 
+                        </div>
+
+                        <button *ngIf="eventId===constants.POP_UP" #closebutton type="button"
+                            class="close activity-close" aria-label="Close" (click)="resetTable()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+
+                    </div>
+                </form>
+
+            </div>
+
+
+        </div>
+    </div>
+</div>

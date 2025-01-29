@@ -1,0 +1,68 @@
+
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title"  *ngIf="eventId===constants.ADD|| eventId===constants.POP_UP">Add Interview Mode</h5>
+                  <!--  <h5 class="card-title" *ngIf="eventId===constants.EDIT ||eventId===constants.EDIT_POP_UP">Modify</h5>-->
+                    <h5 class="card-title" *ngIf="eventId===constants.EDIT_POP_UP">Modify</h5>
+                </div>
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                        another</button>
+                </div> -->
+               
+                <!-- <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSubmit(); f.reset();" class="btn btn-primary" *ngIf="eventId===constants.ADD  || eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT || eventId===constants.EDIT_POP_UP">Modify</button>
+
+                </div> -->
+                <button  *ngIf="eventId==='pop' || eventId==='edit_pop'" type="button" #closebutton class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+
+            <!-- Other Details -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form #f="ngForm">
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Interview Mode</label>
+                                <input class="form-control" type="text" [(ngModel)]="source.source" name="source" id="source">
+                                <!-- <select class="form-control" id="source" [(ngModel)]="source.source" name="source">
+                                    <option>Select Mode</option>
+                                    <option>Zoom</option>
+                                    <option>Skype</option>
+                                    <option>Webex</option>
+                                </select> -->
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div class="col">
+                                <label>Remark</label>
+                                <textarea class="form-control" rows="3" id="remark" [(ngModel)]="source.remarks" name="remark"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary btn-primary-dark" *ngIf="eventId===constants.ADD">Save & add
+                        another</button>
+                </div> -->
+               
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT_POP_UP">Modify</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

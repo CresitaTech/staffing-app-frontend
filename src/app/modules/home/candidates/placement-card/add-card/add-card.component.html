@@ -1,0 +1,104 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row  mb-3 heading-sec">
+                <div class="col">
+                    
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD ||eventId===constants.POP_UP ">Add Placement Card</h5>
+                    <h5 class="card-title" *ngIf="eventId===constants.EDIT ||eventId===constants.EDIT_POP_UP">Edit Placement Card Details</h5>
+                </div>
+                
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+
+                </div>
+                <button *ngIf="eventId===constants.POP_UP ||eventId===constants.EDIT_POP_UP" #closebutton type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Created -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form #f="ngForm">
+                        <div class="row">
+
+                            <div class="col form-group">
+                                <app-candidate-inline *ngIf="eventId===constants.ADD||eventId===constants.EDIT"  [item]="card.candidate_name" [eventId]="eventId"
+                                (changeItemEvt)="card.candidate_name = $event" >
+                            </app-candidate-inline>
+                                <app-candidate-inline *ngIf="eventId===constants.POP_UP||eventId===constants.EDIT_POP_UP" [itemId]="candidate_id" [item]="candidate_id" [eventId]="eventId"
+                                (changeItemEvt)="card.candidate_name = $event"
+                                (getAllDetails)="detailsOfSelectedCandidate($event)" >
+                            </app-candidate-inline>
+                            
+                            </div>
+                        </div>
+                        <div class="row">
+                              <div class="col form-group">
+                            <app-client-inline [item]="card.client_name"
+                            (changeItemEvt)="card.client_name = $event">
+                        </app-client-inline>
+                              </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Reminder Date</label>
+                                <div class="input-group date-input">
+                                    <input type="text" class="form-control" id="" placeholder=""
+                                        ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="card.reminder_date"
+                                        #c1="ngModel" name="reminder_date" (click)="d1.toggle()" [readonly]="true" required>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="card.reminder_date = today">Today</a>
+                                        </div>Submission Date
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a (click)="d1.toggle()"><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                <small>Note: You are 5.5 hours ahead of server time.</small>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Payment Amount($)</label>
+                                <input type="text" class="form-control" id="amount" placeholder="" [(ngModel)]="card.payment_amount" name="amount">
+                            </div>
+                            <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Status</label>
+                                <select class="form-control" id="status" placeholder="" [(ngModel)]="card.status" name="status" required>
+                                    <option>Select Status</option>
+                                    <option>Active</option>
+                                    <option>Still In Progress</option>
+                                    <option>Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col form-group-mobile">
+                                <label>Remarks</label>
+                                <app-editor [id]="'editor1'" [content]="card.remarks" [hasTags]="false"
+                                (contentChanged)="card.remarks = $event"></app-editor> 
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="form-row button-sec">   
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSubmit()"  class="btn btn-primary" *ngIf="eventId===constants.ADD||eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()"  class="btn btn-primary" *ngIf="eventId===constants.EDIT||eventId===constants.EDIT_POP_UP">Modify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

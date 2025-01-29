@@ -1,0 +1,205 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row mb-3 heading-sec">
+                <div class="col">
+                    <h5 class="card-title">Add Feedback</h5>
+                </div>
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary">Save & add another</button>
+                </div>
+                -->
+                <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+
+            </div>
+            <!-- Designation -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Candidate Name</label>
+                                <div class="form-row">
+                                    <div class="col">
+
+                                        <select class="form-control" id="">
+                                            <option>Select Candidate</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="openCandidate()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Candidate"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Candidate"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                    
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Candidate"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Interviewed For</label> 
+                                <div class="form-row">
+                                    <div class="col">
+
+                                        <select class="form-control" id="">
+                                            <option>Client Name-Job Title</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary" 
+                                            onclick="openAddInterview()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Interview"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Interview"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                    
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Interview"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                      
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Interview Date</label>
+
+                                <div class="input-group">
+
+                                    <input type="text" class="form-control" id="" placeholder="">
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a href="">Today</a>
+                                        </div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <div class="input-group-text">
+                                            <a href=""><i class="fas fa-calendar-plus"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <small>Note: You are 5.5 hours ahead of server time.</small>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Time slot</label>
+                                <div class="form-row">
+                                    <div class="col">
+
+                                        <select class="form-control" id="">
+                                            <option>Select Time slot</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-primary"
+                                            onclick="openTimeSlot()" data-tooltip="tooltip" data-placement="bottom" title="Add Another Time Slot"><i
+                                                class="fas fa-plus-square"></i></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-warning" data-tooltip="tooltip" data-placement="bottom" title="Change Selected Time Slot"><i
+                                                class="fas fa-highlighter text-light"></i></button>
+                                    </div>
+                                    
+
+                                    <div class="col-auto">
+                                        <button type="button" class="btn btn-danger" data-tooltip="tooltip" data-placement="bottom" title="Delete Selected Time Slot"><i
+                                                class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Duration</label>
+                                <select class="form-control" id="">
+                                    <option>Select Duration</option>
+                                </select>
+                            </div>
+                            <div class="col form-group">
+                                <label>Forwarded</label>
+                                <select class="form-control" id="">
+                                    <option>Select Forwarded</option>
+                                </select>
+                            </div>
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Mail From</label>
+                                <input type="text" class="form-control form-control-sm" id="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Mail To</label>
+                                <input type="text" class="form-control form-control-sm" id="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Mail Subject</label>
+                                <input type="text" class="form-control form-control-sm" id="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Mail Cc</label>
+                                <input type="text" class="form-control form-control-sm" id="" placeholder="">
+                            </div>
+                        </div>
+                       
+
+                        <div class="form-row">
+                            <div class="col form-group">
+                                <label>Feedback</label>
+                                <img src="images/remark-img.jpg" width="100%">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col ">
+                                <label>Attachment</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="customFile"
+                                        name="filename">
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="form-row button-sec">
+                <!-- <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary">Save & Add Another</button>
+                </div> -->
+              
+                <div class="col-auto ml-auto">
+                    <button type="button" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

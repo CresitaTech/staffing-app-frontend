@@ -1,0 +1,157 @@
+<div class="p-4">
+    <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+            <div class="form-row  mb-3 heading-sec">
+                <div class="col-sm-12 col-md-12 col-lg-8">
+                    <h5 class="card-title" *ngIf="eventId===constants.ADD || eventId===constants.POP_UP">Add RTR</h5>
+                    <h5 class="card-title" *ngIf="eventId===constants.EDIT">Edit RTR Details</h5>
+
+                </div>
+               <div class="col-sm-12 col-md-12 col-lg-4 d-flex justify-content-end">
+                   <div class="form-row">
+                    <div class="col-auto ">
+                        <button type="submit" [disabled]="f.invalid || !rtr.job_id " (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD ||eventId===constants.POP_UP">Save</button>
+                        <button type="submit" [disabled]="f.invalid || !rtr.job_id " (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+                    </div>
+                    <div class="col-auto">
+                        <button *ngIf="eventId===constants.POP_UP" #closebutton type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                   </div>
+               </div>
+                
+                
+            </div>
+
+
+            <!-- Created -->
+            <div class="card mb-2">
+                <div class="card-body">
+                    <form #f="ngForm">
+                        <div class="row">
+                            <div class="col form-group" *ngIf="eventId!==constants.EDIT">
+                                <!-- <label class="asterisk-if-mandatory">Candidate Name</label>  -->
+                                <!-- <app-candidate-inline *ngIf="eventId===constants.ADD||eventId===constants.EDIT" [item]="rtr.candidate_name" [eventId]="eventId"
+                                (changeItemEvt)="rtr.candidate_name = $event" >
+                                </app-candidate-inline> -->
+                                <app-candidate-inline *ngIf="eventId===constants.ADD||eventId===constants.POP_UP" [itemId]="candidate_id" [item]="candidate_id" [eventId]="eventId"
+                                (changeItemEvt)="rtr.candidate_name = $event"
+                                (getAllDetails)="detailsOfSelectedCandidate($event)" >
+                                </app-candidate-inline>
+                            </div>
+                            <div class="col form-group" *ngIf="eventId===constants.EDIT">
+                                <label>Candidate Name</label>
+                                <input   type="text" class="form-control "   id="candidate_name" name="candidate_name"
+                                [value]="rtr.consultant_full_legal_name" readonly="true">
+                            </div>
+                                
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col form-group" *ngIf="eventId!==constants.EDIT">
+                              <label class="asterisk-if-mandatory">Job Title</label>
+                         
+                                <ng-select [(ngModel)]="rtr.job_id" (ngModelChange)="change($event)" id="jobTitle" name="jobTitle" >
+                                    <ng-option *ngFor="let x of job_description_rtr" [value]="x.id">{{x.job_title}}</ng-option>
+                                 </ng-select>
+                           
+                            </div>
+
+                            <div class="col form-group" *ngIf="eventId===constants.EDIT">
+                                <label>Job Title</label>
+                                <input   type="text" class="form-control "   id="job_title" name="job_title"
+                                [value]="rtr.job_title" readonly="true">
+                            </div>
+                        </div>
+                              
+                         
+                        <!-- <div class="row">
+                             <div class="col form-group">
+                                <label>Job Title</label>
+                                <input type="text" class="form-control"  id="jobTitle" placeholder="" [(ngModel)]="rtr.job_title" name="jobTitle">
+                            </div> -->
+                          
+                           
+                         <!--   <div class="col form-group">
+                                <label class="asterisk-if-mandatory">Rate($)</label>
+                                <input type="text" class="form-control"   id="rate" placeholder="" [(ngModel)]="rtr.rate" name="rate" required>
+                            </div>
+                        </div> -->
+                     
+
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6  form-group">
+                                <label class="asterisk-if-mandatory">Candidate Full Legal Name</label>
+                                <input type="text" class="form-control" 
+                                    placeholder=""id="legalName" [(ngModel)]="rtr.consultant_full_legal_name" 
+                                    name="legalName" #legalName="ngModel"  [ngClass]="{ 'is-invalid':legalName.invalid && legalName.touched }" required/>
+                                    <div *ngIf="legalName.invalid && legalName.touched" class="invalid-feedback">
+                                        <div *ngIf="legalName.errors.required ">Candidate's full legal name is required</div>
+                                    </div>
+                            </div>
+                            <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                <label class="asterisk-if-mandatory">Rate($)</label>
+                                <input type="text" class="form-control"   id="rate" placeholder="" [(ngModel)]="rtr.rate" name="rate" required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group">
+                                <label>Address</label>
+                                <textarea class="form-control" id="exampleFormControlTextarea1" id="address" [(ngModel)]="rtr.address" name="address"
+                                    rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                <label >Last 4 SSN</label>
+                                <input type="text" class="form-control" id="last4SSN" placeholder="" [(ngModel)]="rtr.last_4_ssn" name="last4SSN" #last4SSN="ngModel" [pattern]=constants.last4DigitsSSNPattern [ngClass]="{ 'is-invalid':last4SSN.invalid  }" />
+                                <div *ngIf="last4SSN.invalid " class="invalid-feedback">
+                                    <div *ngIf="last4SSN.errors.pattern">Last 4 digits of SSN should be valid</div>
+                                </div>
+                            </div>
+                            <!-- (input)="phoneNumberRef($event,inp,f)"  (keypress)="preventEnter($event,phone)" #inp  -->
+                            <div class="col-sm-12 col-md-6 col-lg-6 form-group">
+                                <label class="asterisk-if-mandatory">Phone Number</label>
+                                <input type="text" class="form-control" id="phone" placeholder="" id="phone" 
+                                [(ngModel)]="rtr.phone_no" name="phone" 
+                                [pattern]="constants.newPhonePattern"
+                                 #phone="ngModel" 
+                                 id="phone" 
+                                 [ngClass]="{ 'is-invalid':phone.invalid && phone.touched }" required />
+                                 <div *ngIf="phone.invalid && phone.touched" class="invalid-feedback">
+                                    <div *ngIf="phone.errors.required ">Valid Phone number is required</div>
+                                    <div *ngIf="phone.errors.pattern">Invalid phone number. Valid pattern can be like xxx-xxx-xxxx OR (xxx) xxx-xxxx</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col form-group-mobile">
+                                <label class="asterisk-if-mandatory">Email</label>
+                                <input type="email" class="form-control" id="" [pattern]="constants.emailPattern" placeholder="" id="email" [(ngModel)]="rtr.email" name="email" #email="ngModel"  
+                                [ngClass]="{ 'is-invalid':email.invalid && email.touched }" required />
+                                <div *ngIf="email.invalid && email.touched" class="invalid-feedback">
+                                    <div *ngIf="email.errors.required ">Mail Id is required</div>
+                                    <div *ngIf="email.errors.pattern">Mail Id should be valid</div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-row button-sec">
+                <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid || !rtr.job_id " (click)="onSubmit()" class="btn btn-primary" *ngIf="eventId===constants.ADD ||eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid || !rtr.job_id " (click)="onEdit()" class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+
+                </div>
+               
+                <!-- <div class="col-auto ml-auto">
+                    <button type="submit" [disabled]="f.invalid" (click)="onSubmit()"  class="btn btn-primary" *ngIf="eventId===constants.ADD||eventId===constants.POP_UP">Save</button>
+                    <button type="submit" [disabled]="f.invalid" (click)="onEdit()"  class="btn btn-primary" *ngIf="eventId===constants.EDIT">Modify</button>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
