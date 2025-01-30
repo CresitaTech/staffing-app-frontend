@@ -9,7 +9,7 @@ export const environment = {
   // endpoint: 'http://173.212.228.223:8001/api'  //NEW SERVER URL (NOT USED EVER)
   //endpoint: 'https://staff.opallius.com/appserver/api' //production url as on 05-04-2021
   //endpoint: 'https://staging.opallius.com/appserver/api' //staging url as on 13-10-2021
-  endpoint: 'https://api.opallius.com/api'  // production server 16-8-23
+  endpoint: 'https://stagingapiserver.opallius.com/api'  // production server 16-8-23
      // staging url 16-8-23
   // endpoint:'http://127.0.0.1:8000/api'
   //test comment
