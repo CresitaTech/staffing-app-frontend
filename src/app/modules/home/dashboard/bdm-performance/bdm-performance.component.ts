@@ -151,7 +151,7 @@ export class BdmPerformanceComponent extends BaseReportComponent<RecruiterGraphU
     { headerName: "Submission Date", field: "submission_date", sortable: true, filter: true },
     { headerName: "Assignment Date", field: "first_assingment_date", sortable: true, filter: true },
     { headerName: "Job Date", field: "job_date", sortable: true, filter: true },
-    { headerName: "Remarks", field: "remarks", sortable: true, filter: true },
+    { headerName: "Remarks", field: "remarks", sortable: true, filter: true, width: 1000 },
 
   ];
 

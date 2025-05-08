@@ -416,12 +416,12 @@ export class SubmissionReportComponent extends BaseReportComponent<JobSummaryGra
 
   columnDefsAllData = [
     {
-      headerName: "Submission Date", field: "submission_date", sortable: true, filter: true, flex: 2,
+      headerName: "Submission Date", field: "submission_date", sortable: true, filter: true, flex: 1.5,
     },
-    { headerName: "Recruiter Name", field: "recruiter_name", sortable: true, filter: true, flex: 2, },
+    { headerName: "Recruiter Name", field: "recruiter_name", sortable: true, filter: true, flex: 1.5, },
     { headerName: "Candidate Name", field: "candidate_name", sortable: true, filter: true, flex: 2, },
-    { headerName: "Current Status", field: "current_status", sortable: true, filter: true, flex: 2, },
-    { headerName: "Remarks", field: "remarks", sortable: true, filter: true },
+    { headerName: "Current Status", field: "current_status", sortable: true, filter: true, flex: 1.5, },
+    { headerName: "Remarks", field: "remarks", sortable: true, filter: true, flex: 4 },
 
   ];
 

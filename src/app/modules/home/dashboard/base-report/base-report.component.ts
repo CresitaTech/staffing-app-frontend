@@ -1562,7 +1562,7 @@ export class BaseReportComponent<T> implements OnInit {
     { headerName: "Job Type", field: "job_type", sortable: true, filter: true },
     { headerName: "Submission Date", field: "submission_date", sortable: true, filter: true },
     { headerName: "Job Date", field: "job_date", sortable: true, filter: true },
-    { headerName: "Remarks", field: "remarks", sortable: true, filter: true },
+    { headerName: "Remarks", field: "remarks", sortable: true, filter: true, width: 1000 },
   ];
 
   protected getAllXAxisLabel(): Array<string> {

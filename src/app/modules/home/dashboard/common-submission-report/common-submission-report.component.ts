@@ -308,7 +308,7 @@ export class CommonSubmissionReportComponent extends BaseReportComponent<JobSumm
     // { headerName: "Country", field: "country", sortable: true, filter: true },
     { headerName: "Client Name", field: "client_name", sortable: true, filter: true },
     { headerName: "Job Title", field: "job_title", sortable: true, filter: true },
-    { headerName: "Remarks", field: "remarks", sortable: true, filter: true },
+    { headerName: "Remarks", field: "remarks", sortable: true, filter: true, width: 1000 },
 
   ];
 
