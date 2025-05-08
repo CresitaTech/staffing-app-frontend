@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { JobDescription } from 'src/app/models/job-description';
 
 @Injectable({
@@ -87,7 +87,7 @@ setMap(map:Map<number, string>){
   console.log("Map Start");
   console.log(map);
   console.log("Map End");
-  
+
   this.mapInternal = map;
 
   // Iterating over the Map using entries()
@@ -97,7 +97,7 @@ setMap(map:Map<number, string>){
   // }
 }
 
-  
+
 
 // setMapDetails(mapJob:any,mapClient:any){
 //   this.mapJob1 = mapJob;
@@ -110,8 +110,8 @@ setMap(map:Map<number, string>){
 ////sam
 
 
-  //To be called as soon as Select All button clicked. 
-  //Function:Set all clients as Selected and increase the count to display. 
+  //To be called as soon as Select All button clicked.
+  //Function:Set all clients as Selected and increase the count to display.
   countCheckOrUncheck(model: any, masterSelected: boolean, collectionMapForSelectFlag: Map<string, boolean>, collectionMapForEmail: Map<string, string>, collectionMapForId: Map<string, string>, collectionMapForPriority, collectionMapForName: Map<string, string>): number {
     this.count = 0;
     model.forEach((item: any) => {
