@@ -61,13 +61,13 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
     public modalService: NgbModal,
     private router: Router,
     private route: ActivatedRoute
-  ) { 
-    super(_api, modal); 
+  ) {
+    super(_api, modal);
     // this.endDate = this.router.getCurrentNavigation().extras.state.endDate;
     // this.startDate = this.router.getCurrentNavigation().extras.state.startDate;
     // this.dateRange = this.router.getCurrentNavigation().extras.state.dateRange;
     // this.selectedRow = this.router.getCurrentNavigation().extras.state.selectedRow;
-  
+
   }
   public rowData: any;
   private gridColumnApi;
@@ -111,7 +111,7 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
       apiParam = `start_date=${this.startDate}&end_date=${this.endDate}`;
     }
 
-   
+
     if(this.bdmId){
       apiParam += `&bdm_id=${this.bdmId}`;
     }
@@ -119,12 +119,12 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
     apiParam += `&job_id=${this.job_id}&country=${this.clientCountry}&rid=${ this.rId}`;
 
 
-    
+
     // const request = [
     //   this._api.getCollectionItemById(`/reports/job_summary_table_by_title/?${apiParam}`),];
-     
+
     // forkJoin(request).subscribe((res: Array<any>) => {
-     
+
 
     // }, err => {
     //   console.log(err.message);
@@ -134,10 +134,10 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
     console.log(apiParam);
     forkJoin([
       this._api.getReportWithApiLink(`/reports/get_candidate_detail_by_job_id/?${apiParam}`),
-      
+
     ])
       .subscribe((res: Array<any>) => {
-       
+
 
         this.dataSelection(res[0]);
       }, error => {
@@ -154,15 +154,15 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
 
       apiParam = `start_date=${this.startDate}&end_date=${this.endDate}`;
     }
-    
+
     if(this.bdmId){
       apiParam += `&bdm_id=${this.bdmId}`;
     }
 
     apiParam += `&job_id=${this.job_id}&country=${this.clientCountry}&rid=${ this.rId}`;
     var csv_api = `/reports/get_candidate_detail_by_job_id_csv/?${apiParam}`;
-   
-   
+
+
     this._api
       .getReportWithApiLink(`${csv_api}`, 'text')
       .subscribe(res => {
@@ -180,7 +180,7 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
 
 
   dataSelection(data){
-   
+
 
     this.tabularData =data;
     this.tabularData.forEach(_ => {
@@ -231,17 +231,17 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
       if (this.tag === ReportTags.JOBS_BY_CLIENT) {
         this.setForJobsByClient.add(_.client_name);
       }
-      
+
       // if(_.created_by){
       //   _.full_name=_.created_by.first_name+" "+_.created_by.last_name;
       // }
     })
-   
 
-   
+
+
     this.tabularDataForFilter = this.tabularData;
     this.xAxisCountryFilterArray = Array.from(this.setForJobSummaryCountry) as Array<string>;
-   
+
     // if (this.tag === "job_summary") {
     //   this.filterOnTableBdm(this.bdmName, this.clientCountry);
     // }
@@ -338,7 +338,7 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
 
 
 
- 
+
 
 
   columnDefs = [
@@ -351,14 +351,14 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
     // { headerName: "Max Salary($)", field: "max_salary", sortable: true, filter: true },
     // { headerName: "Min Rate($)", field: "min_rate", sortable: true, filter: true },
     // { headerName: "Max Rate($)", field: "max_rate", sortable: true, filter: true },
-    
+
     { headerName: "Total Experience", field: "total_experience", sortable: true, filter: true },
     { headerName: "Visa", field: "visa", sortable: true, filter: true },
     // { headerName: "Rank", field: "rank", sortable: true, filter: true },
     // { headerName: "Location", field: "location", sortable: true, filter: true },
     { headerName: "Country", field: "country", sortable: true, filter: true },
     { headerName: "Client Name", field: "client_name", sortable: true, filter: true },
-    { headerName: "Remarks", field: "remarks", sortable: true, filter: true },
+    { headerName: "Remarks", field: "remarks", sortable: true, filter: true, width: 1000 },
 
   ];
 

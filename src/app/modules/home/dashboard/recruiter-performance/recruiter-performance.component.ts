@@ -697,7 +697,7 @@ export class RecruiterPerformanceComponent extends BaseReportComponent<Recruiter
     { headerName: "Total Exp", field: "total_exp", sortable: true, filter: true },
     { headerName: "Max Salary", field: "max_salary", sortable: true, filter: true },
     { headerName: "Min Salary", field: "min_salary", sortable: true, filter: true },
-    { headerName: "Remarks", field: "remarks", sortable: true, filter: true },
+    { headerName: "Remarks", field: "remarks", sortable: true, filter: true, width: 1000 },
     // { headerName: "Recruiter Name", field: "recruiter_name", sortable: true, filter: true },
   ];
 
