@@ -83,6 +83,19 @@ export class Paging<T> {
             this.routerURL = '';
         }
 
+        if(((this.search !== '' || this.search.toLowerCase().includes('opjd')) && this.mycandidateCheck === true)){
+          this.routerURL = "my-candidates";
+        }
+        if(this.search === '' && this.mycandidateCheck === false){
+            this.routerURL = '';
+        }
+        if(this.search === '' && this.mycandidateCheck === true){
+            this.routerURL = "my-candidates";
+        }
+        if(this.search !== '' && this.mycandidateCheck === false){
+            this.routerURL = '';
+        }
+
         // console.log(this.routerURL);
         if (this.routerURL === "my-candidates") {
             this.fetchCollectionListWithExactAPI(this.api_path + `?action=${this.routerURL}&limit=${this.limit}&offset=${this.offSet()}&search=${this.search}&ordering=${this.sort}${adFilterQueries ? adFilterQueries : ''}`);
@@ -163,7 +176,7 @@ export class Paging<T> {
         }
     }
 
-    setPageSize() {
+    setPageSize(filterPath: string = ''): void {
         console.log(this.allJobsCheck);
         var value = (document.getElementById('page-size') as HTMLSelectElement).value;
         this.limit = Number(value);
@@ -172,9 +185,9 @@ export class Paging<T> {
             url = this.api_path + "?action=alljobs";
         }
         if(this.mycandidateCheck || this.allJobsCheck){
-            this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=&ordering=-created_at`);
+            this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=${this.search}&ordering=-created_at${filterPath}`);
         }else{
-            this.fetchCollectionList()
+            this.fetchCollectionList(filterPath);
         }
 
     }

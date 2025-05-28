@@ -79,11 +79,11 @@
               </div>
               <div class="row">
                 <div class="col">
-                  <app-min-max-range [placeholder]="'min'" (changed)="filters[param.model + '__lt'] = $event">
+                  <app-min-max-range [placeholder]="'min'" (changed)="filters[param.model + '__gt'] = $event">
                   </app-min-max-range>
                 </div>
                 <div class="col">
-                  <app-min-max-range [placeholder]="'max'" (changed)="filters[param.model + '__gt'] = $event">
+                  <app-min-max-range [placeholder]="'max'" (changed)="filters[param.model + '__lt'] = $event">
                   </app-min-max-range>
                 </div>
               </div>
@@ -139,7 +139,7 @@
           <div class="form-group">
             <select class="form-control" name="param" id="{{param.model}}" [(ngModel)]="filters[param.model]">
                <option value="" >Please select status </option>
-               <option *ngFor="let status of candidateStatus"  [value]="status.id" >{{status.stage_name}}</option>
+               <option *ngFor="let status of commonStatus"  [value]="status.id" >{{status.stage_name}}</option>
            </select>
           </div>
         </div>

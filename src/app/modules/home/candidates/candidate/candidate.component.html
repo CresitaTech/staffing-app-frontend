@@ -57,7 +57,7 @@
         </div>
 
         <div class="bg-gray mt-2 p-4 search-box-section rounded">
-          <form (ngSubmit)="fetchCollectionList()">
+          <form (ngSubmit)="searchWithFilters()">
             <div class="search-box">
               <div class="form-row">
                 <div class="col">
@@ -134,7 +134,7 @@
         </div>
         <div class="col-auto line-height-38 ml-auto">Page Size:</div>
         <div class="col-auto">
-          <select id="page-size" class="form-control" (change)="setPageSize()">
+          <select id="page-size" class="form-control" (change)="setPageSize(filter?.path)">
             <option value="10" selected="">10</option>
             <option value="20">20</option>
             <option value="50">50</option>
@@ -144,7 +144,7 @@
           </select>
         </div>
         <div class="col-auto shortby-dropdown">
-          <select id="sortAs" class="form-control" (change)="changeSortingOrder(); fetchCollectionList()">
+          <select id="sortAs" class="form-control" (change)="changeSortingOrder(); fetchCollectionList(filter?.path)">
             <option value="" disabled>Sort by date</option>
             <option value="true">Latest</option>
             <option value="false">Oldest</option>

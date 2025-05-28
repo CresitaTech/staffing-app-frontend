@@ -30,10 +30,10 @@ export class FilterComponent {
   filters: Object = {};
   filterEnum = Filter;
   public countries: any;
-  public candidateStatus: any;
+  public commonStatus: any;
   constructor(private _api: APIProviderService<FilterComponent>) { }
 
-  
+
 
   clearFilters() { this.filters = {}; this.sendFilterEvt(); }
   toggle(): void { document.getElementById('filters').classList.toggle('filter-open'); }
@@ -62,17 +62,27 @@ export class FilterComponent {
   }
 
   getStatus(): void {
-    this._api.getListAPI(APIPath.CANDIDATE_STAGES + '?ordering=-created_at&offset=0&limit=25').subscribe(res => {
-      this.candidateStatus = res.results;
-      console.log(this.candidateStatus)
-    })
+    if (this.allNewJobs) {
+      this.commonStatus = [
+        { id: 'Active', stage_name: 'Active' },
+        { id: 'Inactive', stage_name: 'In Active' },
+        { id: 'Rejected', stage_name: 'Rejected' },
+        { id: 'SubmissionNotAccepted', stage_name: 'Not Accepting Submissions' },
+        { id: 'RejectedForRate', stage_name: 'Rejected for Rate' }
+      ];
+    } else{
+      this._api.getListAPI(APIPath.CANDIDATE_STAGES + '?ordering=-created_at&offset=0&limit=25').subscribe(res => {
+        this.commonStatus = res.results;
+        console.log(this.commonStatus)
+      })
+    }
   }
-  
+
 
   ngOnChanges() {
     console.log("this.isDialog");
-    
-console.log(this.isDialog);
+
+    console.log(this.isDialog);
     for(let i =0; i < this.params.length ; i++){
       if(this.params[i].model == "country"){
         this.getCountriesList();
@@ -80,7 +90,7 @@ console.log(this.isDialog);
       }
     }
     for(let i =0; i < this.params.length ; i++){
-      if(this.params[i].model == "stage"){
+      if(this.params[i].model == "stage" || this.params[i].model == "status"){
         this.getStatus();
         break;
       }

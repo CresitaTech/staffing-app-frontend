@@ -124,6 +124,7 @@ export class JobDescriptionComponent
       { model: 'revenue_frequency' },
       { model: 'employment_type' },
       { model: 'country', type: Filter.PICKER, },
+      { model: 'status', type: Filter.STATUS, },
       { model: 'contract_type' });
   }
 
@@ -334,16 +335,21 @@ export class JobDescriptionComponent
     console.log("value of check")
     console.log(event.checked)
     console.log("value of check")
+    this.sort = '-created_at';
+    const sortSelect = document.getElementById('sortAs') as HTMLSelectElement;
+    if (sortSelect) {
+      sortSelect.value = 'true';
+    }
     var url = "/reports/get_assinged_dashboard_list/" + "?action=myjobs";
-      
+    let filterParams = this.filter?.path ? this.filter.path : '';
     if(check){
-      this.fetchCollectionListWithExactAPI(url + `&limit=10 &offset=${this.offSet()}&search=&ordering=-created_at`);
-      
+      this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=${this.search}&ordering=${this.sort}${filterParams}`);
+
       console.log(this.fetchCollectionListWithExactAPI)
     }
     else if (!check){
       console.log("recruiter job data")
-      this.fetchCollectionList(); 
+      this.fetchCollectionList(filterParams);
       console.log("recruiter job data")
     }
 
@@ -367,15 +373,21 @@ export class JobDescriptionComponent
     // this.myActionFlag = 'myJobs';
     var value = (document.getElementById('page-size') as HTMLSelectElement).value;
     this.limit = Number(value);
-    var url = this.api_path + "?action=alljobs";  
+    this.sort = '-created_at';
+    const sortSelect = document.getElementById('sortAs') as HTMLSelectElement;
+    if (sortSelect) {
+      sortSelect.value = 'true';
+    }
+    var url = this.api_path + "?action=alljobs";
+    let filterParams = this.filter?.path ? this.filter.path : '';
     if(check){
       this.allJobsCheck = true;
-      this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit}&offset=${this.offSet()}&search=${this.search}&ordering=-created_at`);
+      this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit}&offset=${this.offSet()}&search=${this.search}&ordering=${this.sort}${filterParams}`);
     }
     else if (!check){
       url = this.api_path + "?action=myjobs";
       this.allJobsCheck = false;
-      this.fetchCollectionListWithExactAPI(this.api_path + `?limit=${this.limit}&offset=${this.offSet()}&search=${this.search}&ordering=${this.sort}`);
+      this.fetchCollectionListWithExactAPI(this.api_path + `?limit=${this.limit}&offset=${this.offSet()}&search=${this.search}&ordering=${this.sort}${filterParams}`);
     }
 
     // this.router.navigate(['/home/job-descriptions/job-description/alljobs']);
@@ -454,10 +466,10 @@ export class JobDescriptionComponent
   }
 
   onStatusChange(idx: string) {
-    
+
     this.collection.forEach(item => {
       if (item.id === idx) {
-        
+
         console.log(item);
       var oldStatus = item.status ;
         var segment = item.id + "/?action=JobStatus";
@@ -479,7 +491,7 @@ export class JobDescriptionComponent
                     select.nativeElement.value = oldStatus;
                     item.status = oldStatus;
                   }
-                  // 
+                  //
                 });
 
               } else {
@@ -493,7 +505,7 @@ export class JobDescriptionComponent
                   select.nativeElement.value = oldStatus;
                   item.status = oldStatus;
                 }
-                // 
+                //
               });
               console.log(err.message);
 
@@ -653,11 +665,17 @@ export class JobDescriptionComponent
     var value = (document.getElementById('page-size') as HTMLSelectElement).value;
     this.limit = Number(value);
     var url = this.api_path + "?action=alljobs";
+    let filterParams = this.filter?.path ? this.filter.path : '';
     if(this.allJobsCheck){
-        this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=&ordering=-created_at`);
+        this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=${this.search}&ordering=-created_at${filterParams}`);
     }else{
-        this.fetchCollectionList()
+        this.fetchCollectionList(filterParams);
     }
-   }
-  
+  }
+
+  searchWithFilters(): void {
+    const filterParams = this.filter?.path || '';
+    this.fetchCollectionList(filterParams);
+  }
+
 }

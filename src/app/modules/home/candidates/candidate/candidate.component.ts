@@ -103,7 +103,16 @@ export class CandidateComponent
 
 
   ngOnInit(): void {
-    this.routerURL = this.router.url.split("/")[4];
+    const storedChecked = localStorage.getItem('isChecked');
+    this.isChecked = storedChecked ? JSON.parse(storedChecked) : false;
+    if (this.isChecked) {
+      this.routerURL = "my-candidates";
+      this.mycandidateCheck = true;
+    } else {
+      this.routerURL = '';
+      this.mycandidateCheck = false;
+    }
+    // this.routerURL = this.router.url.split("/")[4];
     if (this.routerURL === "my-candidates") {
       console.log(this.routerURL)
       var url = this.api_path + "?action=my-candidates";
@@ -489,6 +498,8 @@ export class CandidateComponent
     console.log(event);
     console.log('inside my candidate')
     let check = event.checked;
+    this.isChecked = check;
+    localStorage.setItem('isChecked', JSON.stringify(check));
     console.log('all candidate')
     console.log(this.isChecked)
     console.log('all candidate')
@@ -496,28 +507,46 @@ export class CandidateComponent
     var value = (document.getElementById('page-size') as HTMLSelectElement).value;
     this.limit = Number(value);
 
+    this.sort = '-created_at';
+    const sortSelect = document.getElementById('sortAs') as HTMLSelectElement;
+    if (sortSelect) {
+      sortSelect.value = 'true';
+    }
+
     var url = this.api_path + "?action=my-candidates";
+    let filterParams = this.filter?.path ? this.filter.path : '';
     if (check) {
       this.mycandidateCheck = true;
-      this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=&ordering=-created_at`);
+      this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=${this.search}&ordering=${this.sort}${filterParams}`);
       console.log("enter into if")
     }
     else if (!check) {
         this.mycandidateCheck = false;
         console.log("enter into else")
-        this.fetchCollectionList();
+        this.fetchCollectionList(filterParams);
         console.log("enter into else")
     }
+    localStorage.setItem('routerURL', this.routerURL);
  }
 
  pageChangeEventFunction(event: any){
   var value = (document.getElementById('page-size') as HTMLSelectElement).value;
   this.limit = Number(value);
+  const sortSelect = document.getElementById('sortAs') as HTMLSelectElement;
+  const sortValue = sortSelect?.value;
+  const ordering = sortValue === 'true' ? '-created_at' : 'created_at';
+  this.sort = ordering;
   var url = this.api_path + "?action=my-candidates";
+  let filterParams = this.filter?.path ? this.filter.path : '';
   if(this.mycandidateCheck){
-      this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=&ordering=-created_at`);
+      this.fetchCollectionListWithExactAPI(url + `&limit=${this.limit} &offset=${this.offSet()}&search=${this.search}&ordering=${this.sort}${filterParams}`);
   }else{
-      this.fetchCollectionList()
+      this.fetchCollectionList(filterParams);
   }
  }
+
+  searchWithFilters(): void {
+    const filterParams = this.filter?.path || '';
+    this.fetchCollectionList(filterParams);
+  }
 }
