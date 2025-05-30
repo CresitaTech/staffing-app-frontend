@@ -227,7 +227,9 @@ export class CommonSubmissionReportComponent extends BaseReportComponent<JobSumm
         this.setForJobsByClient.add(_.client_name);
       }
       if (_.remarks) {
-        _.remarks = _.remarks.replace(/<[^>]+>/g, '');
+        const txt = document.createElement('textarea');
+        txt.innerHTML = _.remarks.replace(/<[^>]+>/g, '');
+        _.remarks = txt.value.replace(/\s+/g, ' ').trim();
       }
 
       // if(_.created_by){
