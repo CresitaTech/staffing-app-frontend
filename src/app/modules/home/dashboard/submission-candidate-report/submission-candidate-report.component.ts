@@ -231,7 +231,11 @@ export class SubmissionCandidateReportComponent extends BaseReportComponent<JobS
       if (this.tag === ReportTags.JOBS_BY_CLIENT) {
         this.setForJobsByClient.add(_.client_name);
       }
-
+      if (_.remarks) {
+        const txt = document.createElement('textarea');
+        txt.innerHTML = _.remarks.replace(/<[^>]+>/g, '');
+        _.remarks = txt.value.replace(/\s+/g, ' ').trim();
+      }
       // if(_.created_by){
       //   _.full_name=_.created_by.first_name+" "+_.created_by.last_name;
       // }
